@@ -1,1 +1,1 @@
-alert(“JS khdam!”);
+alert(“JS khdam mzyan”);
