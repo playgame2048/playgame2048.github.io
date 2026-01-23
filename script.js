@@ -1,4 +1,12 @@
-const board = document.getElementById(“board”);
+
+let board;
+let tiles = [];
+let size = 4;
+
+window.onload = function(){
+  board = document.getElementById(“board”);
+  init();
+};
 let tiles = [];
 let size = 4;
 
@@ -91,5 +99,3 @@ document.addEventListener(“keydown”, e=>{
     updateBoard();
   }
 });
-
-init();
