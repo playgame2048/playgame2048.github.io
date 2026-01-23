@@ -5,46 +5,62 @@
 <title>Play 2048 Online – Free Puzzle Game No Download</title>
 <meta name=“description” content=“Play 2048 online for free. No download, no signup. Enjoy the classic puzzle game directly in your browser.”>
 <meta name=“viewport” content=“width=device-width, initial-scale=1.0”>
+
 <style>
 body{
   font-family: Arial, sans-serif;
   background:#faf8ef;
   text-align:center;
+  margin:0;
+  padding:0;
 }
-h1{color:#776e65;}
+
+h1{
+  color:#776e65;
+  margin-top:20px;
+}
+
 #board{
-  width:320px;
+  width:300px;
+  height:300px;
   margin:20px auto;
   background:#bbada0;
   padding:10px;
   border-radius:5px;
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(4, 1fr);
+  grid-template-rows:repeat(4, 1fr);
   gap:10px;
 }
+
 .cell{
-  width:70px;
-  height:70px;
   background:#cdc1b4;
-  line-height:70px;
+  border-radius:3px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   font-size:24px;
   font-weight:bold;
+  color:#776e65;
 }
 </style>
 </head>
 
 <body>
+
 <h1>Play 2048 Online</h1>
 <p>Combine the tiles and reach 2048!</p>
 
 <div id=“board”></div>
 
 <script>
-const board=document.getElementById(“board”);
-for(let i=0;i<16;i++){
-  let c=document.createElement(“div”);
-  c.className=“cell”;
-  board.appendChild(c);
+const board = document.getElementById(“board”);
+
+for(let i = 0; i < 16; i++){
+  const cell = document.createElement(“div”);
+  cell.className = “cell”;
+  cell.textContent = “”;
+  board.appendChild(cell);
 }
 </script>
 
