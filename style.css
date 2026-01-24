@@ -105,3 +105,14 @@ button {
   color: #1A73E8; /* غير اللون اللي بغيتي */
   font-weight: 800;
 }
+
+.message {
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #d9534f;
+}
+
+.hidden {
+  display: none;
+}
