@@ -1,57 +1,83 @@
-body {
-  background: #faf8ef;
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  margin-top: 40px;
+const grid = document.getElementById("grid");
+const scoreDisplay = document.getElementById("score");
+let board = [];
+let score = 0;
+
+function startGame() {
+  grid.innerHTML = "";
+  board = Array(16).fill(0);
+  score = 0;
+  scoreDisplay.textContent = score;
+
+  addNumber();
+  addNumber();
+  drawBoard();
 }
 
-.container {
-  text-align: center;
+function drawBoard() {
+  grid.innerHTML = "";
+  board.forEach(value => {
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    if (value !== 0) {
+      cell.textContent = value;
+      cell.classList.add(`cell-${value}`);
+    }
+    grid.appendChild(cell);
+  });
 }
 
-h1 {
-  font-size: 48px;
-  margin-bottom: 10px;
+function addNumber() {
+  let empty = board
+    .map((v, i) => v === 0 ? i : null)
+    .filter(v => v !== null);
+
+  if (empty.length === 0) return;
+
+  let index = empty[Math.floor(Math.random() * empty.length)];
+  board[index] = Math.random() > 0.9 ? 4 : 2;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 80px);
-  grid-template-rows: repeat(4, 80px);
-  gap: 10px;
-  background: #bbada0;
-  padding: 10px;
-  border-radius: 6px;
+function moveLeft() {
+  for (let r = 0; r < 4; r++) {
+    let row = board.slice(r * 4, r * 4 + 4);
+    row = row.filter(v => v);
+    for (let i = 0; i < row.length - 1; i++) {
+      if (row[i] === row[i + 1]) {
+        row[i] *= 2;
+        score += row[i];
+        row[i + 1] = 0;
+      }
+    }
+    row = row.filter(v => v);
+    while (row.length < 4) row.push(0);
+    board.splice(r * 4, 4, ...row);
+  }
 }
 
-.cell {
-  width: 80px;
-  height: 80px;
-  background: #cdc1b4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  font-weight: bold;
-  border-radius: 4px;
+function rotate() {
+  const newBoard = [];
+  for (let i = 0; i < 4; i++) {
+    for (let j = 3; j >= 0; j--) {
+      newBoard.push(board[j * 4 + i]);
+    }
+  }
+  board = newBoard;
 }
 
-.cell-2 { background: #eee4da; }
-.cell-4 { background: #ede0c8; }
-.cell-8 { background: #f2b179; color: #fff; }
-.cell-16 { background: #f59563; color: #fff; }
-.cell-32 { background: #f67c5f; color: #fff; }
-.cell-64 { background: #f65e3b; color: #fff; }
-.cell-128 { background: #edcf72; color: #fff; }
-.cell-256 { background: #edcc61; color: #fff; }
-.cell-512 { background: #edc850; color: #fff; }
-.cell-1024 { background: #edc53f; color: #fff; }
-.cell-2048 { background: #edc22e; color: #fff; }
+document.addEventListener("keydown", e => {
+  let oldBoard = [...board];
 
-button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
+  if (e.key === "ArrowLeft") moveLeft();
+  if (e.key === "ArrowUp") { rotate(); moveLeft(); rotate(); rotate(); rotate(); }
+  if (e.key === "ArrowRight") { rotate(); rotate(); moveLeft(); rotate(); rotate(); }
+  if (e.key === "ArrowDown") { rotate(); rotate(); rotate(); moveLeft(); rotate(); }
+
+  if (oldBoard.toString() !== board.toString()) {
+    addNumber();
+    drawBoard();
+    scoreDisplay.textContent = score;
+  }
+});
+
+startGame();
