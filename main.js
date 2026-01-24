@@ -1,133 +1,137 @@
 const grid = document.getElementById("grid");
 const scoreEl = document.getElementById("score");
-const restartBtn = document.getElementById("restart");
+const msg = document.getElementById("message");
+const lbEl = document.getElementById("leaderboard");
+const sound = document.getElementById("moveSound");
 
-let board = [];
-let score = 0;
+let board = JSON.parse(localStorage.getItem("board2048")) || Array(16).fill(0);
+let score = Number(localStorage.getItem("score2048")) || 0;
 
-function startGame() {
-  board = Array(16).fill(0);
-  score = 0;
-  addNumber();
-  addNumber();
-  draw();
+scoreEl.textContent = score;
+
+function saveState() {
+  localStorage.setItem("board2048", JSON.stringify(board));
+  localStorage.setItem("score2048", score);
 }
 
 function draw() {
   grid.innerHTML = "";
-  board.forEach(num => {
-    const cell = document.createElement("div");
-    cell.className = "cell";
-    cell.textContent = num === 0 ? "" : num;
-    grid.appendChild(cell);
+  board.forEach(v => {
+    const d = document.createElement("div");
+    d.className = "cell";
+    if (v) {
+      d.textContent = v;
+      d.classList.add("cell-" + v);
+    }
+    grid.appendChild(d);
   });
-  scoreEl.textContent = score;
 }
 
 function addNumber() {
-  const empty = board
-    .map((v, i) => (v === 0 ? i : null))
-    .filter(v => v !== null);
-
-  if (empty.length === 0) return;
-
-  const index = empty[Math.floor(Math.random() * empty.length)];
-  board[index] = Math.random() < 0.9 ? 2 : 4;
+  let empty = board.map((v,i)=>v===0?i:null).filter(v=>v!==null);
+  if (empty.length) board[empty[Math.floor(Math.random()*empty.length)]] = Math.random()>0.9?4:2;
 }
 
-function slide(row) {
-  row = row.filter(v => v !== 0);
-  for (let i = 0; i < row.length - 1; i++) {
-    if (row[i] === row[i + 1]) {
-      row[i] *= 2;
-      score += row[i];
-      row[i + 1] = 0;
+function slide(arr) {
+  arr = arr.filter(v=>v);
+  for (let i=0;i<arr.length-1;i++) {
+    if (arr[i]===arr[i+1]) {
+      arr[i]*=2;
+      score+=arr[i];
+      arr[i+1]=0;
     }
   }
-  row = row.filter(v => v !== 0);
-  while (row.length < 4) row.push(0);
-  return row;
+  arr = arr.filter(v=>v);
+  while (arr.length<4) arr.push(0);
+  return arr;
 }
 
-function moveLeft() {
+function move(dir) {
   let old = board.toString();
-  for (let i = 0; i < 4; i++) {
-    let row = board.slice(i * 4, i * 4 + 4);
-    row = slide(row);
-    board.splice(i * 4, 4, ...row);
+
+  for (let i=0;i<4;i++) {
+    let line=[];
+    for (let j=0;j<4;j++) {
+      let idx =
+        dir==="left"  ? i*4+j :
+        dir==="right" ? i*4+(3-j) :
+        dir==="up"    ? j*4+i :
+                        (3-j)*4+i;
+      line.push(board[idx]);
+    }
+    line = slide(line);
+    for (let j=0;j<4;j++) {
+      let idx =
+        dir==="left"  ? i*4+j :
+        dir==="right" ? i*4+(3-j) :
+        dir==="up"    ? j*4+i :
+                        (3-j)*4+i;
+      board[idx]=line[j];
+    }
   }
-  if (board.toString() !== old) {
+
+  if (old!==board.toString()) {
     addNumber();
+    sound.play();
+    saveState();
+    scoreEl.textContent=score;
     draw();
   }
 }
 
-function moveRight() {
-  let old = board.toString();
-  for (let i = 0; i < 4; i++) {
-    let row = board.slice(i * 4, i * 4 + 4).reverse();
-    row = slide(row).reverse();
-    board.splice(i * 4, 4, ...row);
-  }
-  if (board.toString() !== old) {
-    addNumber();
-    draw();
-  }
-}
-
-function moveUp() {
-  let old = board.toString();
-  for (let i = 0; i < 4; i++) {
-    let row = [board[i], board[i+4], board[i+8], board[i+12]];
-    row = slide(row);
-    [board[i], board[i+4], board[i+8], board[i+12]] = row;
-  }
-  if (board.toString() !== old) {
-    addNumber();
-    draw();
-  }
-}
-
-function moveDown() {
-  let old = board.toString();
-  for (let i = 0; i < 4; i++) {
-    let row = [board[i], board[i+4], board[i+8], board[i+12]].reverse();
-    row = slide(row).reverse();
-    [board[i], board[i+4], board[i+8], board[i+12]] = row;
-  }
-  if (board.toString() !== old) {
-    addNumber();
-    draw();
-  }
-}
-
-/* KEYBOARD */
-document.addEventListener("keydown", e => {
-  if (e.key === "ArrowLeft") moveLeft();
-  if (e.key === "ArrowRight") moveRight();
-  if (e.key === "ArrowUp") moveUp();
-  if (e.key === "ArrowDown") moveDown();
+document.addEventListener("keydown", e=>{
+  if(e.key==="ArrowLeft")move("left");
+  if(e.key==="ArrowRight")move("right");
+  if(e.key==="ArrowUp")move("up");
+  if(e.key==="ArrowDown")move("down");
 });
 
-/* TOUCH */
-let sx, sy;
-
-document.addEventListener("touchstart", e => {
-  sx = e.touches[0].clientX;
-  sy = e.touches[0].clientY;
+/* Swipe */
+let x1,y1;
+grid.addEventListener("touchstart",e=>{
+  x1=e.touches[0].clientX;
+  y1=e.touches[0].clientY;
 });
-
-document.addEventListener("touchend", e => {
-  let dx = e.changedTouches[0].clientX - sx;
-  let dy = e.changedTouches[0].clientY - sy;
-
-  if (Math.abs(dx) > Math.abs(dy)) {
-    dx > 0 ? moveRight() : moveLeft();
-  } else {
-    dy > 0 ? moveDown() : moveUp();
+grid.addEventListener("touchend",e=>{
+  let dx=e.changedTouches[0].clientX-x1;
+  let dy=e.changedTouches[0].clientY-y1;
+  if(Math.abs(dx)>Math.abs(dy)){
+    dx>30?move("right"):dx<-30&&move("left");
+  }else{
+    dy>30?move("down"):dy<-30&&move("up");
   }
 });
 
-restartBtn.addEventListener("click", startGame);
+/* Leaderboard */
+function updateLeaderboard() {
+  let lb = JSON.parse(localStorage.getItem("lb2048")) || [];
+  lb.push(score);
+  lb = lb.sort((a,b)=>b-a).slice(0,5);
+  localStorage.setItem("lb2048", JSON.stringify(lb));
+  lbEl.innerHTML = lb.map(s=>`<li>${s}</li>`).join("");
+}
 
-startGame();
+function restartGame() {
+  updateLeaderboard();
+  board = Array(16).fill(0);
+  score = 0;
+  saveState();
+  scoreEl.textContent = 0;
+  msg.classList.add("hidden");
+  addNumber(); addNumber();
+  draw();
+}
+
+/* Dark */
+function toggleDarkMode(){
+  document.body.classList.toggle("dark");
+}
+
+/* Fullscreen */
+function enterFullscreen(){
+  if(document.documentElement.requestFullscreen){
+    document.documentElement.requestFullscreen();
+  }
+}
+
+draw();
