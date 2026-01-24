@@ -2,53 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Play 2048 Online – Free Puzzle Game</title>
-  <meta name="description" content="Play 2048 online for free. A clean, fast and addictive number puzzle game.">
+  <title>Play 2048 Online</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <!-- TOP BAR -->
-    <div class="top-bar">
-      <div>
-        <h1>2048</h1>
-        <p class="subtitle">Classic Puzzle Game</p>
-      </div>
-
-      <div class="score-box">
-        <span>SCORE</span>
-        <div id="score">0</div>
-      </div>
+  <div class="top-bar">
+    <div>
+      <h1>2048</h1>
+      <p class="subtitle">Classic Puzzle Game</p>
     </div>
 
-    <!-- CONTROLS -->
-    <div class="controls">
-      <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
-      <button onclick="startGame()">Restart</button>
+    <div class="score-box">
+      <span>SCORE</span>
+      <div id="score">0</div>
     </div>
-
-    <!-- GAME GRID -->
-    <div class="grid" id="grid"></div>
-
-    <!-- MESSAGE -->
-    <div id="message" class="hidden">
-      <h2>Game Over 😢</h2>
-      <p>No more moves!</p>
-    </div>
-
-    <!-- FOOTER -->
-    <footer>
-      © 2026 playgame2048 – All rights reserved
-    </footer>
-
   </div>
 
-  <!-- SOUND -->
-  <audio id="moveSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+  <div class="grid" id="grid"></div>
 
-  <script src="main.js"></script>
+  <div id="message" class="hidden">Game Over 😢</div>
+
+  <div class="bottom-controls">
+    <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
+    <button onclick="startGame(true)">Restart</button>
+  </div>
+
+  <footer>© 2026 playgame2048</footer>
+
+</div>
+
+<audio id="moveSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+<script src="main.js"></script>
 </body>
 </html>
