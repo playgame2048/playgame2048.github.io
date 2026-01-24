@@ -170,5 +170,17 @@ function enterFullscreen() {
   }
 }
 
+function initGame() {
+  if (!board.some(v => v !== 0)) {
+    addNumber();
+    addNumber();
+    saveState();
+  }
+  scoreEl.textContent = score;
+  draw();
+}
+
+initGame();
+
 draw();
 updateLeaderboard();
