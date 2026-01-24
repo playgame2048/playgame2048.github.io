@@ -1,48 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Play 2048 - Game & Tips</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="container">
+    <header>
+      <h1 class="title">Play 2048</h1>
+      <p class="subtitle">Swipe or use arrow keys to merge tiles and reach 2048!</p>
+      <div class="top-buttons">
+        <button onclick="restartGame()">Restart</button>
+        <button onclick="toggleDarkMode()">Dark Mode</button>
+      </div>
+      <div class="scoreboard">
+        <div class="score">Score: <span id="score">0</span></div>
+        <div class="message hidden" id="message"></div>
+      </div>
+    </header>
 
-<div class="container">
+    <main>
+      <div id="grid" class="grid"></div>
 
-  <div class="top-bar">
-    <div>
-      <h1>Play 2048</h1>
-      <p class="subtitle">Classic Puzzle Game</p>
-    </div>
+      <section class="blog">
+        <h2>How to Play 2048</h2>
+        <p>2048 is a sliding tile puzzle game. Your goal is to combine tiles of the same number to reach the 2048 tile.</p>
 
-    <div class="score-box">
-      <span>SCORE</span>
-      <div id="score">0</div>
-    </div>
+        <h3>How to Play</h3>
+        <ul>
+          <li>Use arrow keys on PC or swipe on mobile.</li>
+          <li>Combine tiles with the same number.</li>
+          <li>Every move adds a new tile (2 or 4).</li>
+        </ul>
+
+        <h3>How to Win</h3>
+        <ul>
+          <li>Keep your biggest tile in one corner.</li>
+          <li>Build the row/column around that corner.</li>
+          <li>Avoid moving the big tile away from the corner.</li>
+        </ul>
+
+        <h3>Tips</h3>
+        <ul>
+          <li>Plan 2 moves ahead.</li>
+          <li>Don't swipe randomly.</li>
+          <li>Keep tiles organized by size.</li>
+        </ul>
+
+        <div class="affiliate">
+          <h3>Improve Your Skills</h3>
+          <a href="YOUR_AFFILIATE_LINK" target="_blank">
+            📘 Learn JavaScript & Game Development (Affiliate)
+          </a>
+        </div>
+
+        <div class="donate">
+          <h3>Support the Game</h3>
+          <a href="https://ko-fi.com/YOURNAME" target="_blank">
+            💖 Donate via Ko-fi
+          </a>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <div id="grid" class="grid"></div>
-
-<div id="message" class="message hidden"></div>
-
-  <div id="message" class="hidden">Game Over 😢</div>
-
-  <div class="bottom-controls">
-    <button onclick="toggleDarkMode()">🌙 Dark</button>
-    <button onclick="enterFullscreen()">⛶ Fullscreen</button>
-    <button onclick="restartGame()">Restart</button>
-  </div>
-
-  <div class="leaderboard">
-    <h3>🏆 Leaderboard</h3>
-    <ol id="leaderboard"></ol>
-  </div>
-
-  <footer>© 2026 playgame2048</footer>
-
-</div>
-
-<audio id="moveSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
-<script src="main.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
