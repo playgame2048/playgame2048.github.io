@@ -2,45 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Play 2048 Online</title>
+  <title>2048 Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+
   <div class="container">
+    <h1>2048</h1>
 
-    <!-- TOP -->
-    <div class="top-bar">
-      <h1>2048</h1>
-
-      <div class="score-box">
-        <span>SCORE</span>
-        <div id="score">0</div>
-      </div>
+    <div class="score">
+      Score: <span id="score">0</span>
     </div>
 
-    <!-- GAME -->
     <div id="grid" class="grid"></div>
 
-    <!-- MESSAGE -->
-    <div id="message" class="hidden"></div>
-
-    <!-- CONTROLS -->
-    <div class="controls">
-      <button onclick="restartGame()">Restart</button>
-      <button onclick="toggleDark()">Dark Mode</button>
-      <button onclick="goFullscreen()">Fullscreen</button>
-    </div>
-
-    <!-- LEADERBOARD -->
-    <div class="leaderboard">
-      <h3>Best Score</h3>
-      <div id="bestScore">0</div>
-    </div>
-
-    <footer>© 2026 playgame2048</footer>
+    <button id="restart">Restart</button>
   </div>
 
   <script src="main.js"></script>
