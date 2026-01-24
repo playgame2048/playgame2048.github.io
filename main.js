@@ -1,117 +1,142 @@
 const grid = document.getElementById("grid");
-const message = document.getElementById("message");
 const scoreEl = document.getElementById("score");
-const lbEl = document.getElementById("leaderboard");
-const sound = document.getElementById("moveSound");
+const message = document.getElementById("message");
 
 let board = JSON.parse(localStorage.getItem("board2048")) || Array(16).fill(0);
 let score = Number(localStorage.getItem("score2048")) || 0;
 
-scoreEl.textContent = score;
-
+/* ---------- SAVE ---------- */
 function saveState() {
   localStorage.setItem("board2048", JSON.stringify(board));
   localStorage.setItem("score2048", score);
 }
 
+/* ---------- DRAW ---------- */
 function draw() {
   grid.innerHTML = "";
   board.forEach(v => {
     const d = document.createElement("div");
     d.className = "cell";
-    if (v) {
+    if (v !== 0) {
       d.textContent = v;
       d.classList.add("cell-" + v);
     }
     grid.appendChild(d);
   });
+  scoreEl.textContent = score;
+}
 
-  // ---- Messages ----
-  if (checkWin()) {
-    message.textContent = "🎉 You Win! You reached 2048!";
+/* ---------- ADD NUMBER ---------- */
+function addNumber() {
+  const empty = board
+    .map((v, i) => (v === 0 ? i : null))
+    .filter(v => v !== null);
+
+  if (empty.length === 0) return;
+  const index = empty[Math.floor(Math.random() * empty.length)];
+  board[index] = Math.random() < 0.9 ? 2 : 4;
+}
+
+/* ---------- SLIDE ---------- */
+function slide(row) {
+  row = row.filter(v => v !== 0);
+
+  for (let i = 0; i < row.length - 1; i++) {
+    if (row[i] === row[i + 1]) {
+      row[i] *= 2;
+      score += row[i];
+      row[i + 1] = 0;
+    }
+  }
+
+  row = row.filter(v => v !== 0);
+  while (row.length < 4) row.push(0);
+  return row;
+}
+
+/* ---------- MOVE ---------- */
+function move(dir) {
+  let oldBoard = board.toString();
+
+  for (let i = 0; i < 4; i++) {
+    let line = [];
+
+    for (let j = 0; j < 4; j++) {
+      let index =
+        dir === "left" ? i * 4 + j :
+        dir === "right" ? i * 4 + (3 - j) :
+        dir === "up" ? j * 4 + i :
+        (3 - j) * 4 + i;
+
+      line.push(board[index]);
+    }
+
+    line = slide(line);
+
+    for (let j = 0; j < 4; j++) {
+      let index =
+        dir === "left" ? i * 4 + j :
+        dir === "right" ? i * 4 + (3 - j) :
+        dir === "up" ? j * 4 + i :
+        (3 - j) * 4 + i;
+
+      board[index] = line[j];
+    }
+  }
+
+  if (oldBoard !== board.toString()) {
+    addNumber();
+    saveState();
+    draw();
+    checkStatus();
+  }
+}
+
+/* ---------- GAME STATUS ---------- */
+function checkStatus() {
+  if (board.includes(2048)) {
+    message.textContent = "🎉 You Win!";
     message.classList.remove("hidden");
     return;
   }
 
   if (isGameOver()) {
-    message.textContent = "❌ Game Over! Click Restart";
+    message.textContent = "❌ Game Over";
     message.classList.remove("hidden");
-    return;
+  } else {
+    message.classList.add("hidden");
   }
-
-  message.classList.add("hidden");
-}
-
-function addNumber() {
-  let empty = board.map((v, i) => v === 0 ? i : null).filter(v => v !== null);
-  if (empty.length) board[empty[Math.floor(Math.random() * empty.length)]] = Math.random() > 0.9 ? 4 : 2;
 }
 
 function isGameOver() {
   if (board.includes(0)) return false;
 
   for (let i = 0; i < 16; i++) {
-    if (board[i] === board[i + 1] || board[i] === board[i + 4]) return false;
+    if (
+      board[i] === board[i + 1] ||
+      board[i] === board[i + 4]
+    ) return false;
   }
   return true;
 }
 
-function checkWin() {
-  return board.includes(2048);
+/* ---------- RESTART ---------- */
+function restartGame() {
+  board = Array(16).fill(0);
+  score = 0;
+  addNumber();
+  addNumber();
+  saveState();
+  message.classList.add("hidden");
+  draw();
 }
 
-function slide(arr) {
-  arr = arr.filter(v => v);
-  for (let i = 0; i < arr.length - 1; i++) {
-    if (arr[i] === arr[i + 1]) {
-      arr[i] *= 2;
-      score += arr[i];
-      arr[i + 1] = 0;
-    }
-  }
-  arr = arr.filter(v => v);
-  while (arr.length < 4) arr.push(0);
-  return arr;
+/* ---------- DARK MODE ---------- */
+function toggleDarkMode() {
+  document.body.classList.toggle("dark");
 }
 
-function move(dir) {
-  let old = board.toString();
-
-  for (let i = 0; i < 4; i++) {
-    let line = [];
-    for (let j = 0; j < 4; j++) {
-      let idx =
-        dir === "left" ? i * 4 + j :
-        dir === "right" ? i * 4 + (3 - j) :
-        dir === "up" ? j * 4 + i :
-        (3 - j) * 4 + i;
-
-      line.push(board[idx]);
-    }
-
-    line = slide(line);
-
-    for (let j = 0; j < 4; j++) {
-      let idx =
-        dir === "left" ? i * 4 + j :
-        dir === "right" ? i * 4 + (3 - j) :
-        dir === "up" ? j * 4 + i :
-        (3 - j) * 4 + i;
-
-      board[idx] = line[j];
-    }
-  }
-
-  if (old !== board.toString()) {
-    addNumber();
-    sound.play();
-    saveState();
-    scoreEl.textContent = score;
-    draw();
-  }
-}
-
-/* Keyboard */
+/* ---------- KEYBOARD ---------- */
 document.addEventListener("keydown", e => {
   if (e.key === "ArrowLeft") move("left");
   if (e.key === "ArrowRight") move("right");
@@ -119,73 +144,32 @@ document.addEventListener("keydown", e => {
   if (e.key === "ArrowDown") move("down");
 });
 
-/* Swipe */
-let x1, y1;
+/* ---------- SWIPE (MOBILE) ---------- */
+let xStart = 0;
+let yStart = 0;
+
 grid.addEventListener("touchstart", e => {
-  x1 = e.touches[0].clientX;
-  y1 = e.touches[0].clientY;
+  xStart = e.touches[0].clientX;
+  yStart = e.touches[0].clientY;
 });
 
 grid.addEventListener("touchend", e => {
-  let dx = e.changedTouches[0].clientX - x1;
-  let dy = e.changedTouches[0].clientY - y1;
+  let dx = e.changedTouches[0].clientX - xStart;
+  let dy = e.changedTouches[0].clientY - yStart;
 
   if (Math.abs(dx) > Math.abs(dy)) {
-    dx > 30 ? move("right") : dx < -30 && move("left");
+    if (dx > 30) move("right");
+    if (dx < -30) move("left");
   } else {
-    dy > 30 ? move("down") : dy < -30 && move("up");
+    if (dy > 30) move("down");
+    if (dy < -30) move("up");
   }
 });
 
-/* Leaderboard */
-function updateLeaderboard() {
-  let lb = JSON.parse(localStorage.getItem("lb2048")) || [];
-  lb.push(score);
-  lb = lb.sort((a, b) => b - a).slice(0, 5);
-  localStorage.setItem("lb2048", JSON.stringify(lb));
-  lbEl.innerHTML = lb.map(s => `<li>${s}</li>`).join("");
-}
-
-/* Restart */
-function restartGame() {
-  updateLeaderboard();
-
-  board = Array(16).fill(0);
-  score = 0;
-
+/* ---------- INIT ---------- */
+if (!board.some(v => v !== 0)) {
   addNumber();
   addNumber();
-
-  saveState();
-  scoreEl.textContent = score;
-
-  msg.classList.add("hidden");
-  draw();
 }
-
-/* Dark Mode */
-function toggleDarkMode() {
-  document.body.classList.toggle("dark");
-}
-
-/* Fullscreen */
-function enterFullscreen() {
-  if (document.documentElement.requestFullscreen) {
-    document.documentElement.requestFullscreen();
-  }
-}
-
-function initGame() {
-  if (!board.some(v => v !== 0)) {
-    addNumber();
-    addNumber();
-    saveState();
-  }
-  scoreEl.textContent = score;
-  draw();
-}
-
-initGame();
-
 draw();
-updateLeaderboard();
+checkStatus();
