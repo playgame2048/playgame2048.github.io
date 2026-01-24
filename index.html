@@ -2,23 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>2048 Game</title>
+
+  <title>Play 2048 Online – Free Puzzle Game</title>
+
+  <meta name="description" content="Play 2048 online for free. A clean, fast and addictive number puzzle game.">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <div class="container">
-    <h1>2048</h1>
-    <p>Join the numbers and get to <b>2048</b>!</p>
 
-    <div class="score">
-      Score: <span id="score">0</span>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <div>
+        <h1>2048</h1>
+        <p class="subtitle">Classic Puzzle Game</p>
+      </div>
+
+      <div class="score-box">
+        <span>SCORE</span>
+        <div id="score">0</div>
+      </div>
     </div>
 
+    <!-- GAME GRID -->
     <div class="grid" id="grid"></div>
 
+    <!-- MESSAGE -->
+    <div id="message" class="hidden">Game Over 😢</div>
+
+    <!-- RESTART -->
     <button onclick="startGame()">Restart</button>
+
+    <!-- FOOTER -->
+    <footer>
+      © 2026 playgame2048 – All rights reserved
+    </footer>
+
   </div>
 
   <script src="main.js"></script>
