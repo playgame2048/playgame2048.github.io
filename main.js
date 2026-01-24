@@ -1,137 +1,133 @@
 const grid = document.getElementById("grid");
 const scoreEl = document.getElementById("score");
-const msg = document.getElementById("message");
-const lbEl = document.getElementById("leaderboard");
-const sound = document.getElementById("moveSound");
+const message = document.getElementById("message");
+const bestScoreEl = document.getElementById("bestScore");
 
-let board = JSON.parse(localStorage.getItem("board2048")) || Array(16).fill(0);
-let score = Number(localStorage.getItem("score2048")) || 0;
+let board = [];
+let score = 0;
 
-scoreEl.textContent = score;
+const moveSound = new Audio("https://actions.google.com/sounds/v1/cartoon/pop.ogg");
 
-function saveState() {
-  localStorage.setItem("board2048", JSON.stringify(board));
-  localStorage.setItem("score2048", score);
+function init() {
+  const saved = JSON.parse(localStorage.getItem("game2048"));
+  if (saved) {
+    board = saved.board;
+    score = saved.score;
+  } else {
+    board = Array(16).fill(0);
+    addNumber();
+    addNumber();
+  }
+
+  bestScoreEl.textContent = localStorage.getItem("bestScore") || 0;
+  draw();
 }
 
 function draw() {
   grid.innerHTML = "";
-  board.forEach(v => {
-    const d = document.createElement("div");
-    d.className = "cell";
-    if (v) {
-      d.textContent = v;
-      d.classList.add("cell-" + v);
-    }
-    grid.appendChild(d);
+  board.forEach(n => {
+    const cell = document.createElement("div");
+    cell.className = "cell";
+    cell.textContent = n === 0 ? "" : n;
+    grid.appendChild(cell);
   });
+  scoreEl.textContent = score;
+  saveGame();
 }
 
 function addNumber() {
-  let empty = board.map((v,i)=>v===0?i:null).filter(v=>v!==null);
-  if (empty.length) board[empty[Math.floor(Math.random()*empty.length)]] = Math.random()>0.9?4:2;
+  const empty = board.map((v, i) => v === 0 ? i : null).filter(v => v !== null);
+  if (empty.length === 0) return;
+  board[empty[Math.floor(Math.random() * empty.length)]] = Math.random() > 0.1 ? 2 : 4;
 }
 
-function slide(arr) {
-  arr = arr.filter(v=>v);
-  for (let i=0;i<arr.length-1;i++) {
-    if (arr[i]===arr[i+1]) {
-      arr[i]*=2;
-      score+=arr[i];
-      arr[i+1]=0;
+function slide(row) {
+  row = row.filter(v => v);
+  for (let i = 0; i < row.length - 1; i++) {
+    if (row[i] === row[i + 1]) {
+      row[i] *= 2;
+      score += row[i];
+      row[i + 1] = 0;
+      moveSound.play();
     }
   }
-  arr = arr.filter(v=>v);
-  while (arr.length<4) arr.push(0);
-  return arr;
+  return row.filter(v => v).concat(Array(4 - row.filter(v => v).length).fill(0));
 }
 
 function move(dir) {
   let old = board.toString();
 
-  for (let i=0;i<4;i++) {
-    let line=[];
-    for (let j=0;j<4;j++) {
-      let idx =
-        dir==="left"  ? i*4+j :
-        dir==="right" ? i*4+(3-j) :
-        dir==="up"    ? j*4+i :
-                        (3-j)*4+i;
-      line.push(board[idx]);
-    }
-    line = slide(line);
-    for (let j=0;j<4;j++) {
-      let idx =
-        dir==="left"  ? i*4+j :
-        dir==="right" ? i*4+(3-j) :
-        dir==="up"    ? j*4+i :
-                        (3-j)*4+i;
-      board[idx]=line[j];
+  for (let i = 0; i < 4; i++) {
+    let row;
+    if (dir === "left" || dir === "right") {
+      row = board.slice(i * 4, i * 4 + 4);
+      if (dir === "right") row.reverse();
+      row = slide(row);
+      if (dir === "right") row.reverse();
+      board.splice(i * 4, 4, ...row);
+    } else {
+      row = [board[i], board[i+4], board[i+8], board[i+12]];
+      if (dir === "down") row.reverse();
+      row = slide(row);
+      if (dir === "down") row.reverse();
+      [board[i], board[i+4], board[i+8], board[i+12]] = row;
     }
   }
 
-  if (old!==board.toString()) {
+  if (board.toString() !== old) {
     addNumber();
-    sound.play();
-    saveState();
-    scoreEl.textContent=score;
     draw();
   }
 }
 
-document.addEventListener("keydown", e=>{
-  if(e.key==="ArrowLeft")move("left");
-  if(e.key==="ArrowRight")move("right");
-  if(e.key==="ArrowUp")move("up");
-  if(e.key==="ArrowDown")move("down");
-});
-
-/* Swipe */
-let x1,y1;
-grid.addEventListener("touchstart",e=>{
-  x1=e.touches[0].clientX;
-  y1=e.touches[0].clientY;
-});
-grid.addEventListener("touchend",e=>{
-  let dx=e.changedTouches[0].clientX-x1;
-  let dy=e.changedTouches[0].clientY-y1;
-  if(Math.abs(dx)>Math.abs(dy)){
-    dx>30?move("right"):dx<-30&&move("left");
-  }else{
-    dy>30?move("down"):dy<-30&&move("up");
-  }
-});
-
-/* Leaderboard */
-function updateLeaderboard() {
-  let lb = JSON.parse(localStorage.getItem("lb2048")) || [];
-  lb.push(score);
-  lb = lb.sort((a,b)=>b-a).slice(0,5);
-  localStorage.setItem("lb2048", JSON.stringify(lb));
-  lbEl.innerHTML = lb.map(s=>`<li>${s}</li>`).join("");
-}
-
 function restartGame() {
-  updateLeaderboard();
   board = Array(16).fill(0);
   score = 0;
-  saveState();
-  scoreEl.textContent = 0;
-  msg.classList.add("hidden");
-  addNumber(); addNumber();
+  message.classList.add("hidden");
+  addNumber();
+  addNumber();
   draw();
 }
 
-/* Dark */
-function toggleDarkMode(){
+function toggleDark() {
   document.body.classList.toggle("dark");
 }
 
-/* Fullscreen */
-function enterFullscreen(){
-  if(document.documentElement.requestFullscreen){
-    document.documentElement.requestFullscreen();
-  }
+function saveGame() {
+  localStorage.setItem("game2048", JSON.stringify({ board, score }));
+  const best = Math.max(score, localStorage.getItem("bestScore") || 0);
+  localStorage.setItem("bestScore", best);
+  bestScoreEl.textContent = best;
 }
 
-draw();
+function goFullscreen() {
+  document.documentElement.requestFullscreen();
+}
+
+/* KEYBOARD */
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowLeft") move("left");
+  if (e.key === "ArrowRight") move("right");
+  if (e.key === "ArrowUp") move("up");
+  if (e.key === "ArrowDown") move("down");
+});
+
+/* TOUCH */
+let sx, sy;
+document.addEventListener("touchstart", e => {
+  sx = e.touches[0].clientX;
+  sy = e.touches[0].clientY;
+});
+
+document.addEventListener("touchend", e => {
+  let dx = e.changedTouches[0].clientX - sx;
+  let dy = e.changedTouches[0].clientY - sy;
+
+  if (Math.abs(dx) > Math.abs(dy)) {
+    dx > 0 ? move("right") : move("left");
+  } else {
+    dy > 0 ? move("down") : move("up");
+  }
+});
+
+init();
