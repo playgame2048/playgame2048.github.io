@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Play 2048 Online</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2048 Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -27,8 +27,14 @@
   <div id="message" class="hidden">Game Over 😢</div>
 
   <div class="bottom-controls">
-    <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
-    <button onclick="startGame(true)">Restart</button>
+    <button onclick="toggleDarkMode()">🌙 Dark</button>
+    <button onclick="enterFullscreen()">⛶ Fullscreen</button>
+    <button onclick="restartGame()">Restart</button>
+  </div>
+
+  <div class="leaderboard">
+    <h3>🏆 Leaderboard</h3>
+    <ol id="leaderboard"></ol>
   </div>
 
   <footer>© 2026 playgame2048</footer>
