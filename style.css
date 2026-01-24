@@ -158,3 +158,8 @@ header {
   font-weight: bold;
   text-decoration: none;
 }
+
+.game-wrapper {
+  max-width: 420px;
+  margin: 0 auto 20px;
+}
