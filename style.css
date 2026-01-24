@@ -1,52 +1,100 @@
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
   background: #faf8ef;
+  color: #776e65;
+  font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
+  margin-top: 20px;
+}
+
+body.dark {
+  background: #121212;
+  color: #eee;
 }
 
 .container {
-  margin-top: 40px;
   text-align: center;
 }
 
-h1 {
+/* TOP */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.score {
-  margin-bottom: 10px;
+.score-box {
+  background: #bbada0;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
   font-weight: bold;
 }
 
+/* GRID */
 .grid {
-  background: #bbada0;
-  padding: 10px;
-  border-radius: 10px;
   display: grid;
   grid-template-columns: repeat(4, 80px);
   grid-template-rows: repeat(4, 80px);
   gap: 10px;
+  background: #bbada0;
+  padding: 10px;
+  border-radius: 6px;
 }
 
+/* CELL */
 .cell {
   background: #cdc1b4;
-  border-radius: 5px;
-  font-size: 26px;
-  font-weight: bold;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  font-weight: bold;
+  border-radius: 4px;
+  animation: pop 0.15s ease;
+  color: #000;
+}
+
+body.dark .cell {
+  color: #000; /* أرقام كحل */
+}
+
+/* COLORS */
+.cell-2 { background: #eee4da; }
+.cell-4 { background: #ede0c8; }
+.cell-8 { background: #f2b179; }
+.cell-16 { background: #f59563; }
+.cell-32 { background: #f67c5f; }
+.cell-64 { background: #f65e3b; }
+.cell-128 { background: #edcf72; }
+.cell-256 { background: #edcc61; }
+.cell-512 { background: #edc850; }
+.cell-1024 { background: #edc53f; }
+.cell-2048 { background: #edc22e; }
+
+/* CONTROLS */
+.bottom-controls {
+  margin-top: 15px;
 }
 
 button {
-  margin-top: 15px;
-  padding: 8px 15px;
-  font-size: 14px;
+  margin: 5px;
+  padding: 10px 16px;
   border: none;
-  border-radius: 5px;
   background: #8f7a66;
   color: white;
-  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* LEADERBOARD */
+.leaderboard {
+  margin-top: 15px;
+}
+
+/* MOBILE */
+@media (max-width: 500px) {
+  .grid {
+    grid-template-columns: repeat(4, 65px);
+    grid-template-rows: repeat(4, 65px);
+  }
 }
