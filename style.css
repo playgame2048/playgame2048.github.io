@@ -167,3 +167,8 @@ header {
 body.dark .cell {
   color: #000;
 }
+
+.grid {
+  touch-action: none;
+}
+
