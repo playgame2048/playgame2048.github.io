@@ -98,3 +98,10 @@ button {
     grid-template-rows: repeat(4, 65px);
   }
 }
+
+.title {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #1A73E8; /* غير اللون اللي بغيتي */
+  font-weight: 800;
+}
