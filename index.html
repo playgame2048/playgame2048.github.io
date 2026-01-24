@@ -2,46 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>2048 Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Play 2048 Online</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+  <div class="container">
 
-<div class="container">
-
-  <div class="top-bar">
-    <div>
+    <!-- TOP -->
+    <div class="top-bar">
       <h1>2048</h1>
-      <p class="subtitle">Classic Puzzle Game</p>
+
+      <div class="score-box">
+        <span>SCORE</span>
+        <div id="score">0</div>
+      </div>
     </div>
 
-    <div class="score-box">
-      <span>SCORE</span>
-      <div id="score">0</div>
+    <!-- GAME -->
+    <div id="grid" class="grid"></div>
+
+    <!-- MESSAGE -->
+    <div id="message" class="hidden"></div>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+      <button onclick="restartGame()">Restart</button>
+      <button onclick="toggleDark()">Dark Mode</button>
+      <button onclick="goFullscreen()">Fullscreen</button>
     </div>
+
+    <!-- LEADERBOARD -->
+    <div class="leaderboard">
+      <h3>Best Score</h3>
+      <div id="bestScore">0</div>
+    </div>
+
+    <footer>© 2026 playgame2048</footer>
   </div>
 
-  <div class="grid" id="grid"></div>
-
-  <div id="message" class="hidden">Game Over 😢</div>
-
-  <div class="bottom-controls">
-    <button onclick="toggleDarkMode()">🌙 Dark</button>
-    <button onclick="enterFullscreen()">⛶ Fullscreen</button>
-    <button onclick="restartGame()">Restart</button>
-  </div>
-
-  <div class="leaderboard">
-    <h3>🏆 Leaderboard</h3>
-    <ol id="leaderboard"></ol>
-  </div>
-
-  <footer>© 2026 playgame2048</footer>
-
-</div>
-
-<audio id="moveSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
-<script src="main.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
