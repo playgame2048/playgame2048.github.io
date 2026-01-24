@@ -1,35 +1,25 @@
-:root {
-  --bg: #faf8ef;
-  --text: #776e65;
-  --grid-bg: #bbada0;
-  --cell-bg: #cdc1b4;
-}
-
-.dark {
-  --bg: #1e1e1e;
-  --text: #f5f5f5;
-  --grid-bg: #333;
-  --cell-bg: #444;
-}
-
 body {
-  background: var(--bg);
-  color: var(--text);
+  background: #faf8ef;
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 30px;
+  color: #776e65;
+}
+
+body.dark {
+  background: #1e1e1e;
+  color: #eee;
 }
 
 .container {
   text-align: center;
 }
 
-/* TOP BAR */
+/* TOP */
 .top-bar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-bottom: 10px;
 }
 
@@ -38,20 +28,11 @@ body {
 }
 
 .score-box {
-  background: var(--grid-bg);
-  color: white;
+  background: #bbada0;
+  color: #fff;
   padding: 8px 15px;
   border-radius: 5px;
   font-weight: bold;
-}
-
-/* CONTROLS */
-.controls {
-  margin-bottom: 10px;
-}
-
-.controls button {
-  margin: 5px;
 }
 
 /* GRID */
@@ -60,24 +41,21 @@ body {
   grid-template-columns: repeat(4, 80px);
   grid-template-rows: repeat(4, 80px);
   gap: 10px;
-  background: var(--grid-bg);
+  background: #bbada0;
   padding: 10px;
   border-radius: 6px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 /* CELL */
 .cell {
-  width: 80px;
-  height: 80px;
-  background: var(--cell-bg);
+  background: #cdc1b4;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   font-size: 28px;
   font-weight: bold;
   border-radius: 4px;
-  animation: pop 0.15s ease-in-out;
+  animation: pop 0.15s ease;
 }
 
 @keyframes pop {
@@ -100,20 +78,33 @@ body {
 
 /* MESSAGE */
 #message {
+  margin-top: 10px;
+  font-size: 18px;
+  color: red;
+}
+
+/* BOTTOM */
+.bottom-controls {
   margin-top: 15px;
-  color: #e74c3c;
 }
 
-.hidden {
-  display: none;
+button {
+  margin: 5px;
+  padding: 10px 18px;
+  border: none;
+  background: #8f7a66;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-/* FOOTER */
 footer {
-  margin-top: 20px;
+  margin-top: 15px;
   font-size: 12px;
-  opacity: 0.7;
+  opacity: 0.6;
 }
+
+.hidden { display: none; }
 
 /* MOBILE */
 @media (max-width: 500px) {
@@ -123,8 +114,6 @@ footer {
   }
 
   .cell {
-    width: 65px;
-    height: 65px;
     font-size: 22px;
   }
 }
