@@ -1,20 +1,17 @@
 const grid = document.getElementById("grid");
-const scoreDisplay = document.getElementById("score");
-const message = document.getElementById("message");
-const moveSound = document.getElementById("moveSound");
+const scoreEl = document.getElementById("score");
+const msg = document.getElementById("message");
+const lbEl = document.getElementById("leaderboard");
+const sound = document.getElementById("moveSound");
 
-let board = [];
-let score = localStorage.getItem("score2048") || 0;
-scoreDisplay.textContent = score;
+let board = JSON.parse(localStorage.getItem("board2048")) || Array(16).fill(0);
+let score = Number(localStorage.getItem("score2048")) || 0;
 
-function startGame(reset = false) {
-  if (reset) score = 0;
-  board = Array(16).fill(0);
-  message.classList.add("hidden");
-  scoreDisplay.textContent = score;
-  addNumber();
-  addNumber();
-  draw();
+scoreEl.textContent = score;
+
+function saveState() {
+  localStorage.setItem("board2048", JSON.stringify(board));
+  localStorage.setItem("score2048", score);
 }
 
 function draw() {
@@ -31,90 +28,110 @@ function draw() {
 }
 
 function addNumber() {
-  let empty = board.map((v, i) => v === 0 ? i : null).filter(v => v !== null);
-  if (empty.length) board[empty[Math.floor(Math.random() * empty.length)]] = Math.random() > 0.9 ? 4 : 2;
+  let empty = board.map((v,i)=>v===0?i:null).filter(v=>v!==null);
+  if (empty.length) board[empty[Math.floor(Math.random()*empty.length)]] = Math.random()>0.9?4:2;
 }
 
-function slide(row) {
-  row = row.filter(v => v);
-  for (let i = 0; i < row.length - 1; i++) {
-    if (row[i] === row[i + 1]) {
-      row[i] *= 2;
-      score += row[i];
-      row[i + 1] = 0;
+function slide(arr) {
+  arr = arr.filter(v=>v);
+  for (let i=0;i<arr.length-1;i++) {
+    if (arr[i]===arr[i+1]) {
+      arr[i]*=2;
+      score+=arr[i];
+      arr[i+1]=0;
     }
   }
-  row = row.filter(v => v);
-  while (row.length < 4) row.push(0);
-  return row;
+  arr = arr.filter(v=>v);
+  while (arr.length<4) arr.push(0);
+  return arr;
 }
 
 function move(dir) {
   let old = board.toString();
 
-  for (let r = 0; r < 4; r++) {
-    let row = [];
-    for (let c = 0; c < 4; c++) {
-      let i = dir === "left" ? r * 4 + c :
-              dir === "right" ? r * 4 + (3 - c) :
-              dir === "up" ? c * 4 + r :
-              c * 4 + (3 - r);
-      row.push(board[i]);
+  for (let i=0;i<4;i++) {
+    let line=[];
+    for (let j=0;j<4;j++) {
+      let idx =
+        dir==="left"  ? i*4+j :
+        dir==="right" ? i*4+(3-j) :
+        dir==="up"    ? j*4+i :
+                        (3-j)*4+i;
+      line.push(board[idx]);
     }
-
-    row = slide(row);
-
-    for (let c = 0; c < 4; c++) {
-      let i = dir === "left" ? r * 4 + c :
-              dir === "right" ? r * 4 + (3 - c) :
-              dir === "up" ? c * 4 + r :
-              c * 4 + (3 - r);
-      board[i] = row[c];
+    line = slide(line);
+    for (let j=0;j<4;j++) {
+      let idx =
+        dir==="left"  ? i*4+j :
+        dir==="right" ? i*4+(3-j) :
+        dir==="up"    ? j*4+i :
+                        (3-j)*4+i;
+      board[idx]=line[j];
     }
   }
 
-  if (old !== board.toString()) {
+  if (old!==board.toString()) {
     addNumber();
-    localStorage.setItem("score2048", score);
-    scoreDisplay.textContent = score;
-    moveSound.play();
+    sound.play();
+    saveState();
+    scoreEl.textContent=score;
     draw();
   }
-
-  if (!board.includes(0)) message.classList.remove("hidden");
 }
 
-/* PC */
-document.addEventListener("keydown", e => {
-  if (e.key === "ArrowLeft") move("left");
-  if (e.key === "ArrowRight") move("right");
-  if (e.key === "ArrowUp") move("up");
-  if (e.key === "ArrowDown") move("down");
+document.addEventListener("keydown", e=>{
+  if(e.key==="ArrowLeft")move("left");
+  if(e.key==="ArrowRight")move("right");
+  if(e.key==="ArrowUp")move("up");
+  if(e.key==="ArrowDown")move("down");
 });
 
-/* MOBILE */
-let x1, y1;
-grid.addEventListener("touchstart", e => {
-  x1 = e.touches[0].clientX;
-  y1 = e.touches[0].clientY;
+/* Swipe */
+let x1,y1;
+grid.addEventListener("touchstart",e=>{
+  x1=e.touches[0].clientX;
+  y1=e.touches[0].clientY;
 });
-
-grid.addEventListener("touchend", e => {
-  let x2 = e.changedTouches[0].clientX;
-  let y2 = e.changedTouches[0].clientY;
-  let dx = x2 - x1;
-  let dy = y2 - y1;
-
-  if (Math.abs(dx) > Math.abs(dy)) {
-    dx > 30 ? move("right") : dx < -30 && move("left");
-  } else {
-    dy > 30 ? move("down") : dy < -30 && move("up");
+grid.addEventListener("touchend",e=>{
+  let dx=e.changedTouches[0].clientX-x1;
+  let dy=e.changedTouches[0].clientY-y1;
+  if(Math.abs(dx)>Math.abs(dy)){
+    dx>30?move("right"):dx<-30&&move("left");
+  }else{
+    dy>30?move("down"):dy<-30&&move("up");
   }
 });
 
-/* DARK MODE */
-function toggleDarkMode() {
+/* Leaderboard */
+function updateLeaderboard() {
+  let lb = JSON.parse(localStorage.getItem("lb2048")) || [];
+  lb.push(score);
+  lb = lb.sort((a,b)=>b-a).slice(0,5);
+  localStorage.setItem("lb2048", JSON.stringify(lb));
+  lbEl.innerHTML = lb.map(s=>`<li>${s}</li>`).join("");
+}
+
+function restartGame() {
+  updateLeaderboard();
+  board = Array(16).fill(0);
+  score = 0;
+  saveState();
+  scoreEl.textContent = 0;
+  msg.classList.add("hidden");
+  addNumber(); addNumber();
+  draw();
+}
+
+/* Dark */
+function toggleDarkMode(){
   document.body.classList.toggle("dark");
 }
 
-startGame();
+/* Fullscreen */
+function enterFullscreen(){
+  if(document.documentElement.requestFullscreen){
+    document.documentElement.requestFullscreen();
+  }
+}
+
+draw();
