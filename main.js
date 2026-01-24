@@ -4,116 +4,111 @@ const message = document.getElementById("message");
 const moveSound = document.getElementById("moveSound");
 
 let board = [];
-let score = 0;
-let startX, startY;
+let score = localStorage.getItem("score2048") || 0;
+scoreDisplay.textContent = score;
 
-function startGame() {
+function startGame(reset = false) {
+  if (reset) score = 0;
   board = Array(16).fill(0);
-  score = 0;
-  scoreDisplay.textContent = score;
   message.classList.add("hidden");
+  scoreDisplay.textContent = score;
   addNumber();
   addNumber();
-  drawBoard();
+  draw();
 }
 
-function drawBoard() {
+function draw() {
   grid.innerHTML = "";
   board.forEach(v => {
-    const cell = document.createElement("div");
-    cell.className = "cell";
+    const d = document.createElement("div");
+    d.className = "cell";
     if (v) {
-      cell.textContent = v;
-      cell.classList.add(`cell-${v}`);
+      d.textContent = v;
+      d.classList.add("cell-" + v);
     }
-    grid.appendChild(cell);
+    grid.appendChild(d);
   });
 }
 
 function addNumber() {
   let empty = board.map((v, i) => v === 0 ? i : null).filter(v => v !== null);
-  if (!empty.length) return;
-  board[empty[Math.floor(Math.random() * empty.length)]] = Math.random() > 0.9 ? 4 : 2;
+  if (empty.length) board[empty[Math.floor(Math.random() * empty.length)]] = Math.random() > 0.9 ? 4 : 2;
 }
 
-function moveLeft() {
-  let moved = false;
-  for (let r = 0; r < 4; r++) {
-    let row = board.slice(r * 4, r * 4 + 4).filter(v => v);
-    for (let i = 0; i < row.length - 1; i++) {
-      if (row[i] === row[i + 1]) {
-        row[i] *= 2;
-        score += row[i];
-        row[i + 1] = 0;
-      }
+function slide(row) {
+  row = row.filter(v => v);
+  for (let i = 0; i < row.length - 1; i++) {
+    if (row[i] === row[i + 1]) {
+      row[i] *= 2;
+      score += row[i];
+      row[i + 1] = 0;
     }
-    row = row.filter(v => v);
-    while (row.length < 4) row.push(0);
-    board.splice(r * 4, 4, ...row);
-    moved = true;
   }
-  return moved;
+  row = row.filter(v => v);
+  while (row.length < 4) row.push(0);
+  return row;
 }
 
-function rotate() {
-  const newBoard = [];
-  for (let i = 0; i < 4; i++)
-    for (let j = 3; j >= 0; j--)
-      newBoard.push(board[j * 4 + i]);
-  board = newBoard;
-}
-
-function canMove() {
-  if (board.includes(0)) return true;
-  for (let i = 0; i < 16; i++) {
-    if ((i % 4 !== 3 && board[i] === board[i + 1]) ||
-        (i < 12 && board[i] === board[i + 4])) return true;
-  }
-  return false;
-}
-
-function handleMove(action) {
+function move(dir) {
   let old = board.toString();
 
-  action();
+  for (let r = 0; r < 4; r++) {
+    let row = [];
+    for (let c = 0; c < 4; c++) {
+      let i = dir === "left" ? r * 4 + c :
+              dir === "right" ? r * 4 + (3 - c) :
+              dir === "up" ? c * 4 + r :
+              c * 4 + (3 - r);
+      row.push(board[i]);
+    }
+
+    row = slide(row);
+
+    for (let c = 0; c < 4; c++) {
+      let i = dir === "left" ? r * 4 + c :
+              dir === "right" ? r * 4 + (3 - c) :
+              dir === "up" ? c * 4 + r :
+              c * 4 + (3 - r);
+      board[i] = row[c];
+    }
+  }
 
   if (old !== board.toString()) {
     addNumber();
-    drawBoard();
+    localStorage.setItem("score2048", score);
     scoreDisplay.textContent = score;
-    moveSound.currentTime = 0;
     moveSound.play();
+    draw();
   }
 
-  if (!canMove()) {
-    message.classList.remove("hidden");
-  }
+  if (!board.includes(0)) message.classList.remove("hidden");
 }
 
-/* KEYBOARD */
+/* PC */
 document.addEventListener("keydown", e => {
-  if (e.key === "ArrowLeft") handleMove(moveLeft);
-  if (e.key === "ArrowUp") handleMove(() => { rotate(); moveLeft(); rotate(); rotate(); rotate(); });
-  if (e.key === "ArrowRight") handleMove(() => { rotate(); rotate(); moveLeft(); rotate(); rotate(); });
-  if (e.key === "ArrowDown") handleMove(() => { rotate(); rotate(); rotate(); moveLeft(); rotate(); });
+  if (e.key === "ArrowLeft") move("left");
+  if (e.key === "ArrowRight") move("right");
+  if (e.key === "ArrowUp") move("up");
+  if (e.key === "ArrowDown") move("down");
 });
 
-/* SWIPE */
+/* MOBILE */
+let x1, y1;
 grid.addEventListener("touchstart", e => {
-  startX = e.touches[0].clientX;
-  startY = e.touches[0].clientY;
+  x1 = e.touches[0].clientX;
+  y1 = e.touches[0].clientY;
 });
 
 grid.addEventListener("touchend", e => {
-  let dx = e.changedTouches[0].clientX - startX;
-  let dy = e.changedTouches[0].clientY - startY;
+  let x2 = e.changedTouches[0].clientX;
+  let y2 = e.changedTouches[0].clientY;
+  let dx = x2 - x1;
+  let dy = y2 - y1;
 
   if (Math.abs(dx) > Math.abs(dy)) {
-    if (dx > 30) handleMove(() => { rotate(); rotate(); moveLeft(); rotate(); rotate(); });
-    else if (dx < -30) handleMove(moveLeft);
+    dx > 30 ? move("right") : dx < -30 && move("left");
   } else {
-    if (dy > 30) handleMove(() => { rotate(); rotate(); rotate(); moveLeft(); rotate(); });
-    else if (dy < -30) handleMove(() => { rotate(); moveLeft(); rotate(); rotate(); rotate(); });
+    dy > 30 ? move("down") : dy < -30 && move("up");
   }
 });
 
