@@ -1,5 +1,7 @@
 const grid = document.getElementById("grid");
 const scoreDisplay = document.getElementById("score");
+const message = document.getElementById("message");
+
 let board = [];
 let score = 0;
 
@@ -8,6 +10,7 @@ function startGame() {
   board = Array(16).fill(0);
   score = 0;
   scoreDisplay.textContent = score;
+  message.classList.add("hidden");
 
   addNumber();
   addNumber();
@@ -42,6 +45,7 @@ function moveLeft() {
   for (let r = 0; r < 4; r++) {
     let row = board.slice(r * 4, r * 4 + 4);
     row = row.filter(v => v);
+
     for (let i = 0; i < row.length - 1; i++) {
       if (row[i] === row[i + 1]) {
         row[i] *= 2;
@@ -49,6 +53,7 @@ function moveLeft() {
         row[i + 1] = 0;
       }
     }
+
     row = row.filter(v => v);
     while (row.length < 4) row.push(0);
     board.splice(r * 4, 4, ...row);
