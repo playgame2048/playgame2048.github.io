@@ -149,12 +149,17 @@ function updateLeaderboard() {
 /* Restart */
 function restartGame() {
   updateLeaderboard();
+
   board = Array(16).fill(0);
   score = 0;
+
+  addNumber();
+  addNumber();
+
   saveState();
-  scoreEl.textContent = 0;
-  message.classList.add("hidden");
-  addNumber(); addNumber();
+  scoreEl.textContent = score;
+
+  msg.classList.add("hidden");
   draw();
 }
 
