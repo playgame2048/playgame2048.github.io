@@ -138,6 +138,10 @@ function toggleDarkMode() {
 
 /* ---------- KEYBOARD ---------- */
 document.addEventListener("keydown", e => {
+  if (["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(e.key)) {
+    e.preventDefault();
+  }
+
   if (e.key === "ArrowLeft") move("left");
   if (e.key === "ArrowRight") move("right");
   if (e.key === "ArrowUp") move("up");
