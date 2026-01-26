@@ -177,8 +177,9 @@ body.dark .cell {
 .game-wrapper {
   display: flex;
   justify-content: center;
-  gap: 20px;
   align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap; /* مهم باش يهبط تحت فالهاتف */
   max-width: 1000px;
   margin: 0 auto 20px;
 }
@@ -198,10 +199,21 @@ body.dark .cell {
   }
 
   .grid {
-    width: 320px;
-    height: 320px;
-  }
+    display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  background: var(--card);
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid var(--border);
+  touch-action: none;
 
+  width: 100%;
+  max-width: 420px;
+  height: 100%;
+  max-height: 420px;
+}
+  
   .ads-area {
     width: 100%;
     margin-top: 15px;
