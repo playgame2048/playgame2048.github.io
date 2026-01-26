@@ -205,3 +205,14 @@ body.dark .cell {
     margin-top: 15px;
   }
 }
+
+/* === FIX CENTER GAME (SAFE) === */
+.game-wrapper {
+  justify-content: center !important;
+}
+
+#grid {
+  margin-left: auto;
+  margin-right: auto;
+}
+
