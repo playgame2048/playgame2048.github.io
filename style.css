@@ -230,8 +230,13 @@ body.dark .cell {
 
 /* ====== Responsive ====== */
 @media (max-width: 768px) {
+ .game-wrapper {
+    flex-direction: column; /* باش يهبطو لتحت */
+    align-items: center;
+  }
+
   .ads-area {
-    width: 100%;
+    width: 100%; /* باش ماتبقاش كتضغط */
     margin-top: 15px;
   }
 
