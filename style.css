@@ -205,3 +205,25 @@ body.dark .cell {
     margin-top: 15px;
   }
 }
+
+/* === FIX CENTER GAME === */
+.game-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+/* اللعبة وسط الصفحة فعلاً */
+.game-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* الإعلان فاليمين */
+.ads-area {
+  width: 300px;
+  flex-shrink: 0;
+}
+
