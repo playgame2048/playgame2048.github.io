@@ -207,3 +207,21 @@ function handleSwipe() {
   }
 }
 
+let adShown = false;
+
+function smartRestart() {
+  if (!adShown) {
+    adShown = true;
+
+    // 🔥 Direct Link ديال Monetag
+    window.open("https://YOUR_DIRECT_LINK_HERE", "_blank");
+
+    // من بعد الإعلان دير Restart
+    setTimeout(() => {
+      restartGame();
+    }, 500);
+  } else {
+    // Restart عادي
+    restartGame();
+  }
+}
