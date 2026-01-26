@@ -214,7 +214,7 @@ function smartRestart() {
     adShown = true;
 
     // 🔥 Direct Link ديال Monetag
-    window.open("https://YOUR_DIRECT_LINK_HERE", "_blank");
+    window.open("https://otieu.com/4/10518966", "_blank");
 
     // من بعد الإعلان دير Restart
     setTimeout(() => {
