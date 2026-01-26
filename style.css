@@ -70,13 +70,7 @@ header {
   margin-top: 10px;
 }
 
-.score {
-  background: var(--card);
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-}
-
+.score,
 .message {
   background: var(--card);
   padding: 10px 20px;
@@ -88,6 +82,7 @@ header {
   display: none;
 }
 
+/* ====== Grid ====== */
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -96,6 +91,9 @@ header {
   padding: 20px;
   border-radius: 15px;
   border: 1px solid var(--border);
+  touch-action: none;
+  width: 420px;
+  height: 420px;
 }
 
 .cell {
@@ -120,6 +118,11 @@ header {
 .cell-1024 { background: #edc53f; }
 .cell-2048 { background: #edc22e; }
 
+body.dark .cell {
+  color: #000;
+}
+
+/* ====== Blog ====== */
 .blog {
   margin-top: 25px;
   text-align: left;
@@ -159,19 +162,6 @@ header {
   text-decoration: none;
 }
 
-.game-wrapper {
-  max-width: 420px;
-  margin: 0 auto 20px;
-}
-
-body.dark .cell {
-  color: #000;
-}
-
-.grid {
-  touch-action: none;
-}
-
 .affiliate-box a {
   display: inline-block;
   margin-top: 12px;
@@ -183,11 +173,14 @@ body.dark .cell {
   font-weight: bold;
 }
 
+/* ====== Layout ديال اللعبة + Ads ====== */
 .game-wrapper {
   display: flex;
   justify-content: center;
   gap: 20px;
   align-items: flex-start;
+  max-width: 1000px;
+  margin: 0 auto 20px;
 }
 
 .ads-area {
@@ -195,45 +188,18 @@ body.dark .cell {
   text-align: center;
 }
 
+/* ====== Responsive ====== */
 @media (max-width: 768px) {
   .game-wrapper {
     flex-direction: column;
     align-items: center;
   }
-  .ads-area {
-    width: 100%;
-    margin-top: 15px;
-  }
-}
 
-.game-wrapper {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  align-items: flex-start;
-  max-width: 1000px;  /* باش اللعبة تبقى كبيرة */
-  margin: 0 auto;
-}
-
-.grid {
-  width: 420px;       /* الحجم ديال اللعبة */
-  height: 420px;
-}
-
-.ads-area {
-  width: 300px;
-  text-align: center;
-}
-
-@media (max-width: 768px) {
-  .game-wrapper {
-    flex-direction: column;
-    align-items: center;
-  }
   .grid {
     width: 320px;
     height: 320px;
   }
+
   .ads-area {
     width: 100%;
     margin-top: 15px;
