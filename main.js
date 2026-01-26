@@ -177,3 +177,33 @@ if (!board.some(v => v !== 0)) {
 }
 draw();
 checkStatus();
+
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
+document.addEventListener("touchstart", function(e) {
+  touchStartX = e.changedTouches[0].screenX;
+  touchStartY = e.changedTouches[0].screenY;
+}, false);
+
+document.addEventListener("touchend", function(e) {
+  touchEndX = e.changedTouches[0].screenX;
+  touchEndY = e.changedTouches[0].screenY;
+  handleSwipe();
+}, false);
+
+function handleSwipe() {
+  let dx = touchEndX - touchStartX;
+  let dy = touchEndY - touchStartY;
+
+  if (Math.abs(dx) > Math.abs(dy)) {
+    if (dx > 50) moveRight();  // swipe right
+    if (dx < -50) moveLeft();  // swipe left
+  } else {
+    if (dy > 50) moveDown();   // swipe down
+    if (dy < -50) moveUp();    // swipe up
+  }
+}
+
