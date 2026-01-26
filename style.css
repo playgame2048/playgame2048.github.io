@@ -31,9 +31,10 @@ body {
 
 .container {
   width: 100%;
-  max-width: 900px;
+  max-width: 1100px;
 }
 
+/* HEADER */
 header {
   text-align: center;
   margin-bottom: 20px;
@@ -59,10 +60,6 @@ header {
   cursor: pointer;
 }
 
-.top-buttons button:hover {
-  opacity: 0.9;
-}
-
 .scoreboard {
   display: flex;
   justify-content: center;
@@ -70,20 +67,26 @@ header {
   margin-top: 10px;
 }
 
-.score,
-.message {
-  background: var(--card);
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
+/* GAME + ADS */
+.game-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+  margin: 30px auto;
 }
 
-.hidden {
-  display: none;
+/* GAME CENTER */
+.game-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
-/* ====== Grid ====== */
+/* GAME GRID */
 .grid {
+  width: 420px;
+  height: 420px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
@@ -91,9 +94,6 @@ header {
   padding: 20px;
   border-radius: 15px;
   border: 1px solid var(--border);
-  touch-action: none;
-  width: 420px;
-  height: 420px;
 }
 
 .cell {
@@ -106,89 +106,38 @@ header {
   background: #e0e0e0;
 }
 
-.cell-2 { background: #eee4da; }
-.cell-4 { background: #ede0c8; }
-.cell-8 { background: #f2b179; }
-.cell-16 { background: #f59563; }
-.cell-32 { background: #f67c5f; }
-.cell-64 { background: #f65e3b; }
-.cell-128 { background: #edcf72; }
-.cell-256 { background: #edcc61; }
-.cell-512 { background: #edc850; }
-.cell-1024 { background: #edc53f; }
-.cell-2048 { background: #edc22e; }
-
-body.dark .cell {
-  color: #000;
+/* ADS */
+.ads-area {
+  width: 300px;
+  min-height: 250px;
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 15px;
 }
 
-/* ====== Blog ====== */
+/* BLOG */
 .blog {
-  margin-top: 25px;
-  text-align: left;
+  margin-top: 30px;
   background: var(--card);
   padding: 20px;
   border-radius: 15px;
   border: 1px solid var(--border);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-.blog h2 {
-  margin-bottom: 10px;
-}
-
-.blog h3 {
-  margin-top: 15px;
-  margin-bottom: 8px;
-}
-
-.blog ul {
-  margin-left: 20px;
-  color: var(--subtext);
-}
-
-.affiliate,
-.donate {
-  margin-top: 15px;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-}
-
-.affiliate a,
+.affiliate-box a,
 .donate a {
-  color: #1a73e8;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.affiliate-box a {
   display: inline-block;
-  margin-top: 12px;
-  color: #fff;
+  margin-top: 10px;
   background: #000;
-  padding: 12px 18px;
+  color: #fff;
+  padding: 10px 15px;
   border-radius: 8px;
   text-decoration: none;
-  font-weight: bold;
 }
 
-/* ====== Layout ديال اللعبة + Ads ====== */
-.game-wrapper {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  align-items: flex-start;
-  max-width: 1000px;
-  margin: 0 auto 20px;
-}
-
-.ads-area {
-  width: 300px;
-  text-align: center;
-}
-
-/* ====== Responsive ====== */
+/* MOBILE */
 @media (max-width: 768px) {
   .game-wrapper {
     flex-direction: column;
@@ -202,14 +151,5 @@ body.dark .cell {
 
   .ads-area {
     width: 100%;
-    margin-top: 15px;
   }
-}
-
-.game-wrapper {
-  justify-content: center;
-}
-
-.grid {
-  margin: 0 auto;
 }
