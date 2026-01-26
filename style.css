@@ -207,3 +207,8 @@ body.dark .cell {
     margin-top: 15px;
   }
 }
+
+.blog {
+  clear: both;
+  width: 100%;
+}
