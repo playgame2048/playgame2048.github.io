@@ -183,9 +183,11 @@ body.dark .cell {
   margin: 0 auto 20px;
 }
 
-.ads-area {
-  width: 300px;
-  text-align: center;
+/* ====== مهم: هادشي باش يوسط grid داخل game-center */
+.game-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ====== Responsive ====== */
@@ -205,14 +207,3 @@ body.dark .cell {
     margin-top: 15px;
   }
 }
-
-/* === FIX CENTER GAME (SAFE) === */
-.game-wrapper {
-  justify-content: center !important;
-}
-
-#grid {
-  margin-left: auto;
-  margin-right: auto;
-}
-
