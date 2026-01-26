@@ -6,14 +6,6 @@
   --border: #e0e0e0;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  display: block; /* مهم بزاف */
-  padding: 20px;
-}
-
 body.dark {
   --bg: #121212;
   --card: #1e1e1e;
@@ -99,9 +91,11 @@ header {
   padding: 20px;
   border-radius: 15px;
   border: 1px solid var(--border);
-  touch-action: manipulation;
+  touch-action: none;
+
   width: 420px;
   height: 420px;
+  margin: 0 auto;  /* مهم باش يبقى ف الوسط */
 }
 
 .cell {
@@ -187,7 +181,7 @@ body.dark .cell {
   justify-content: center;
   align-items: flex-start;
   gap: 20px;
-  flex-wrap: wrap; /* مهم باش يهبطو لتحت فالهاتف */
+  flex-wrap: wrap;
   max-width: 1000px;
   margin: 0 auto 20px;
 }
@@ -197,13 +191,6 @@ body.dark .cell {
   text-align: center;
 }
 
-/* ====== مهم: هادشي باش يوسط grid داخل game-center */
-.game-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 /* ====== Responsive ====== */
 @media (max-width: 768px) {
   .game-wrapper {
@@ -211,48 +198,13 @@ body.dark .cell {
     align-items: center;
   }
 
-/* ====== Grid ====== */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  background: var(--card);
-  padding: 20px;
-  border-radius: 15px;
-  border: 1px solid var(--border);
-  touch-action: none;
-
-  width: 100%;
-  max-width: 420px;
-  height: 100%;
-  max-height: 420px;
-}
-
-/* ====== Responsive ====== */
-@media (max-width: 768px) {
- .game-wrapper {
-    flex-direction: column; /* باش يهبطو لتحت */
-    align-items: center;
+  .grid {
+    width: 320px;
+    height: 320px;
   }
 
   .ads-area {
-    width: 100%; /* باش ماتبقاش كتضغط */
+    width: 100%;
     margin-top: 15px;
   }
-
-  .grid {
-    max-width: 320px;
-    max-height: 320px;
-  }
-}
-
-.monetag-push {
-  width: 100%;
-  margin: 20px auto;
-  text-align: center;
-}
-
-.blog {
-  clear: both;
-  width: 100%;
 }
