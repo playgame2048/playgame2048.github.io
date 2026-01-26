@@ -187,7 +187,7 @@ body.dark .cell {
   justify-content: center;
   align-items: flex-start;
   gap: 20px;
-  flex-wrap: wrap; /* مهم باش يهبط تحت فالهاتف */
+  flex-wrap: wrap; /* مهم باش يهبطو لتحت فالهاتف */
   max-width: 1000px;
   margin: 0 auto 20px;
 }
