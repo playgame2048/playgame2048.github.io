@@ -205,3 +205,37 @@ body.dark .cell {
     margin-top: 15px;
   }
 }
+
+.game-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  align-items: flex-start;
+  max-width: 1000px;  /* باش اللعبة تبقى كبيرة */
+  margin: 0 auto;
+}
+
+.grid {
+  width: 420px;       /* الحجم ديال اللعبة */
+  height: 420px;
+}
+
+.ads-area {
+  width: 300px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .game-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  .grid {
+    width: 320px;
+    height: 320px;
+  }
+  .ads-area {
+    width: 100%;
+    margin-top: 15px;
+  }
+}
