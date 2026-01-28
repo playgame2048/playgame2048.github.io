@@ -43,7 +43,8 @@ button{
 .mobile{
   display:flex;
   justify-content:center;
-  gap:20px;
+  gap:15px;
+  flex-wrap:wrap;
 }
 .blog{
   max-width:600px;
@@ -80,14 +81,15 @@ footer{font-size:12px;margin:10px}
   <h1>🧩 Block Puzzle</h1>
   <div class="controls">
     <span id="score">Score: 0</span>
-    <button onclick="start()">Restart</button>
-    <button onclick="toggleDark()">Dark Mode</button>
+    <button onclick="start()">♻️</button>
+    <button onclick="toggleDark()">🌙</button>
   </div>
 </header>
 
 <canvas id="game" width="300" height="400"></canvas>
 
 <div class="mobile">
+  <button onclick="rotate()">⬆️</button>
   <button onclick="move(-1)">⬅️</button>
   <button onclick="drop()">⬇️</button>
   <button onclick="move(1)">➡️</button>
@@ -97,10 +99,10 @@ footer{font-size:12px;margin:10px}
   <h2>How to Play</h2>
   <ul>
     <li>Move blocks left or right</li>
-    <li>Complete a full row to clear it</li>
-    <li>Blocks above fall down after clearing</li>
-    <li>Game ends when no space is left</li>
-    <li>Works on PC and mobile</li>
+    <li>Rotate blocks using the up button</li>
+    <li>Complete full rows to clear them</li>
+    <li>Blocks above fall down automatically</li>
+    <li>Game ends when the grid is full</li>
   </ul>
 </section>
 
@@ -108,7 +110,7 @@ footer{font-size:12px;margin:10px}
 
 <div id="gameOver">
   <div>Game Over</div>
-  <button onclick="start()">Restart</button>
+  <button onclick="start()">♻️ Restart</button>
   <div id="restartLink">
     <a href="PUT_YOUR_MONETAG_LINK_HERE" target="_blank" style="color:#4caf50">
       Continue
@@ -144,8 +146,20 @@ function newBlock(){
   return{
     x:6,
     y:0,
-    shape:SHAPES[Math.floor(Math.random()*SHAPES.length)]
+    shape:JSON.parse(JSON.stringify(
+      SHAPES[Math.floor(Math.random()*SHAPES.length)]
+    ))
   };
+}
+
+function rotate(){
+  if(gameOver) return;
+  const rotated=current.shape[0].map((_,i)=>
+    current.shape.map(row=>row[i]).reverse()
+  );
+  const old=current.shape;
+  current.shape=rotated;
+  if(collide()) current.shape=old;
 }
 
 function draw(){
@@ -228,6 +242,7 @@ document.addEventListener("keydown",e=>{
   if(e.key==="ArrowLeft")move(-1);
   if(e.key==="ArrowRight")move(1);
   if(e.key==="ArrowDown")drop();
+  if(e.key==="ArrowUp")rotate();
 });
 
 function start(){
