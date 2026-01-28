@@ -1,58 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Block Puzzle Game</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Block Puzzle 10x10</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-
   <header>
-    <img src="logo.png" class="logo-game" alt="Puzzle Game Logo">
-    <h1 class="title">Block Puzzle Game</h1>
-    <p class="subtitle">Click blocks to clear them and score points!</p>
-    <div class="top-buttons">
-      <button onclick="toggleDarkMode()">Dark Mode</button>
-      <button onclick="restartGame()">Restart</button>
-    </div>
-    <div class="scoreboard">
-      <div class="score">Score: <span id="score">0</span></div>
-      <div class="message" id="message"></div>
+    <h1>🧩 Block Puzzle</h1>
+    <div class="controls">
+      <button id="restart">Restart</button>
+      <button id="darkMode">🌙 Dark Mode</button>
     </div>
   </header>
 
   <main>
-    <div class="game-wrapper">
-
-      <div class="game-center">
-        <div id="grid" class="grid"></div>
-      </div>
-
-      <div class="ads-area">
-        <div id="monetag-ad"></div>
-        <script>
-          (function(s){
-            s.dataset.zone='ZONE_ID';
-            s.src='https://gizokraijaw.net/vignette.min.js';
-          })([document.documentElement, document.body]
-            .filter(Boolean)
-            .pop()
-            .appendChild(document.createElement('script')));
-        </script>
-      </div>
-
-    </div>
-
-    <section class="blog">
-      <h2>📝 Tips & Strategy</h2>
-      <p>Improve your puzzle skills and enjoy the game!</p>
-    </section>
-
+    <canvas id="game" width="300" height="300"></canvas>
   </main>
-</div>
 
-<script src="main.js"></script>
+  <!-- Ads placeholder -->
+  <section class="ads">
+    <p>📢 Ad Space (Google AdSense friendly)</p>
+  </section>
+
+  <section class="how-to-play">
+    <h2>How to Play</h2>
+    <p>
+      Use ⬅️ ➡️ to move blocks<br>
+      ⬇️ to drop faster<br>
+      Fill full rows or columns to clear them.<br>
+      Game ends when no space is left.
+    </p>
+  </section>
+
+  <footer>
+    <p>© 2026 Block Puzzle</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
