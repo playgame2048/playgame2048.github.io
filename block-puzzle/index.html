@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="style.css">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Block Puzzle</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>🧩 Block Puzzle</h1>
-  <p>If you see this, the page works.</p>
-  <script src="main.js"></script>
+
+<h1>🧩 Block Puzzle</h1>
+<p>Drag blocks to fill the grid</p>
+
+<div id="game">
+  <div id="grid" class="grid"></div>
+</div>
+
+<button onclick="restartGame()">Restart</button>
+
+<script src="main.js"></script>
 </body>
 </html>
