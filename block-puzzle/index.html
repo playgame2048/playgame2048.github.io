@@ -1,50 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Puzzle Game - Block Puzzle</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Block Puzzle Game</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1 class="title">Block Puzzle Game</h1>
-      <p class="subtitle">Click blocks to clear them and score points!</p>
-      <div class="scoreboard">
-        <div class="score">Score: <span id="score">0</span></div>
-        <div class="message" id="message"></div>
-      </div>
-    </header>
+<div class="container">
 
-    <main>
-      <div class="game-wrapper">
-        <div class="game-center">
-          <img src="logo.png" class="logo-game" alt="Puzzle Game Logo">
-          <div id="grid" class="grid"></div>
-        </div>
+  <header>
+    <img src="logo.png" class="logo-game" alt="Puzzle Game Logo">
+    <h1 class="title">Block Puzzle Game</h1>
+    <p class="subtitle">Click blocks to clear them and score points!</p>
+    <div class="top-buttons">
+      <button onclick="toggleDarkMode()">Dark Mode</button>
+      <button onclick="restartGame()">Restart</button>
+    </div>
+    <div class="scoreboard">
+      <div class="score">Score: <span id="score">0</span></div>
+      <div class="message" id="message"></div>
+    </div>
+  </header>
 
-        <div class="ads-area">
-          <div id="monetag-ad"></div>
-          <script>
-            (function(s){
-              s.dataset.zone='ZONE_ID';
-              s.src='https://gizokraijaw.net/vignette.min.js';
-            })([document.documentElement, document.body]
-              .filter(Boolean)
-              .pop()
-              .appendChild(document.createElement('script')));
-          </script>
-        </div>
+  <main>
+    <div class="game-wrapper">
+
+      <div class="game-center">
+        <div id="grid" class="grid"></div>
       </div>
 
-      <section class="blog">
-        <h2>📝 Tips & Strategy</h2>
-        <p>Improve your puzzle skills and enjoy the game!</p>
-      </section>
-    </main>
-  </div>
+      <div class="ads-area">
+        <div id="monetag-ad"></div>
+        <script>
+          (function(s){
+            s.dataset.zone='ZONE_ID';
+            s.src='https://gizokraijaw.net/vignette.min.js';
+          })([document.documentElement, document.body]
+            .filter(Boolean)
+            .pop()
+            .appendChild(document.createElement('script')));
+        </script>
+      </div>
 
-  <script src="main.js"></script>
+    </div>
+
+    <section class="blog">
+      <h2>📝 Tips & Strategy</h2>
+      <p>Improve your puzzle skills and enjoy the game!</p>
+    </section>
+
+  </main>
+</div>
+
+<script src="main.js"></script>
 </body>
 </html>
