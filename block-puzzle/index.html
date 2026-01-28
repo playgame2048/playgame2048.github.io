@@ -22,32 +22,53 @@ body{
   background:var(--bg);
   color:var(--text);
   text-align:center;
-  overscroll-behavior: none;
+  overscroll-behavior:none;
 }
+
 header{padding:10px}
-.controls{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
+
+#score{
+  font-size:20px;
+  font-weight:bold;
 }
+
 canvas{
   background:#ddd;
   border-radius:10px;
-  margin:15px auto;
+  margin:15px auto 5px;
   display:block;
 }
-button{
-  padding:6px 12px;
-  cursor:pointer;
-  touch-action: manipulation;
-}
-.mobile{
+
+.controls-under{
   display:flex;
   justify-content:center;
-  gap:15px;
-  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:10px;
 }
+
+button{
+  padding:8px 14px;
+  cursor:pointer;
+  font-size:16px;
+  touch-action:manipulation;
+}
+
+.mobile{
+  display:none;
+  justify-content:center;
+  gap:18px;
+  margin:10px 0;
+}
+
+.mobile button{
+  font-size:26px;
+  padding:14px 18px;
+}
+
+@media (max-width: 768px){
+  .mobile{display:flex;}
+}
+
 .blog{
   max-width:600px;
   margin:25px auto;
@@ -58,6 +79,7 @@ button{
   font-size:16px;
 }
 .blog h2{text-align:center}
+
 #gameOver{
   position:fixed;
   inset:0;
@@ -69,6 +91,7 @@ button{
   flex-direction:column;
   font-size:24px;
 }
+
 footer{font-size:12px;margin:10px}
 </style>
 </head>
@@ -77,20 +100,23 @@ footer{font-size:12px;margin:10px}
 
 <header>
   <h1>🧩 Block Puzzle</h1>
-  <div class="controls">
-    <span id="score">Score: 0</span>
-    <button type="button" onclick="restartGame()">🔂 Restart</button>
-    <button type="button" onclick="toggleDark()">🌙 Drk Mode</button>
-  </div>
+  <div id="score">Score: 0</div>
 </header>
 
 <canvas id="game" width="300" height="400"></canvas>
 
+<!-- buttons under grid -->
+<div class="controls-under">
+  <button type="button" onclick="restartGame()">🔂 Restart</button>
+  <button type="button" onclick="toggleDark()">🌙 Dark Mode</button>
+</div>
+
+<!-- mobile controls -->
 <div class="mobile">
   <button type="button" onclick="rotate(event)">⬆️</button>
-  <button type="button" onclick="move(-1, event)">⬅️</button>
+  <button type="button" onclick="move(-1,event)">⬅️</button>
   <button type="button" onclick="drop(event)">⬇️</button>
-  <button type="button" onclick="move(1, event)">➡️</button>
+  <button type="button" onclick="move(1,event)">➡️</button>
 </div>
 
 <section class="blog">
@@ -119,11 +145,13 @@ const COLS=15, ROWS=20;
 const SIZE=canvas.width/COLS;
 
 let grid,current,score=0,gameOver=false;
+let restartClickedOnce=false;
+
 const scoreEl=document.getElementById("score");
 const overBox=document.getElementById("gameOver");
 
-// 🔗 حط هنا رابط Monetag ديالك
-const AFFILIATE_LINK = "PUT_YOUR_MONETAG_LINK_HERE";
+// 🔗 بدّل غير هاد الرابط
+const AFFILIATE_LINK="PUT_YOUR_MONETAG_LINK_HERE";
 
 const SHAPES=[
  {shape:[[1,1],[1,1]], color:"#f44336"},
@@ -157,14 +185,12 @@ function rotate(e){
 
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-
   for(let y=0;y<ROWS;y++){
     for(let x=0;x<COLS;x++){
       ctx.fillStyle=grid[y][x]||"#bbb";
       ctx.fillRect(x*SIZE,y*SIZE,SIZE-1,SIZE-1);
     }
   }
-
   ctx.fillStyle=current.color;
   current.shape.forEach((row,y)=>{
     row.forEach((v,x)=>{
@@ -238,7 +264,11 @@ document.addEventListener("keydown",e=>{
 });
 
 function restartGame(){
-  window.open(AFFILIATE_LINK,"_blank");
+  if(!restartClickedOnce){
+    restartClickedOnce=true;
+    window.open(AFFILIATE_LINK,"_blank");
+    return;
+  }
   start();
 }
 
