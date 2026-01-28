@@ -41,28 +41,35 @@ header { text-align: center; margin-bottom: 20px; }
 }
 
 .game-center {
-  display: flex; justify-content: center;
-  align-items: center; flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(10, 40px);
-  grid-template-rows: repeat(10, 40px);
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
   gap: 2px;
-  background: #ddd;
-  width: 420px;
+  width: 420px;      /* desktop */
   height: 420px;
+  background: #ddd;
+  margin: 0 auto;
   border-radius: 8px;
-  margin: 0 auto 20px;
-  position: relative;
-  z-index: 10;
 }
 
 .grid div {
   border: 1px solid #bbb;
   display: flex; justify-content: center; align-items: center;
   background: #eee;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    width: 320px;
+    height: 320px;
+  }
 }
 
 .grid .filled { background: #f67c5f; }
@@ -82,4 +89,15 @@ header { text-align: center; margin-bottom: 20px; }
   .game-wrapper { flex-direction: column; align-items: center; }
   .grid { width: 320px; height: 320px; }
   .ads-area { width: 100%; margin-top: 15px; }
+}
+
+.game-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .game-wrapper { flex-direction: column; align-items: center; }
 }
