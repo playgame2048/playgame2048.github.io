@@ -4,94 +4,62 @@ const messageEl = document.getElementById("message");
 
 let score = 0;
 let draggedBlock = null;
-let previewCells = [];
 
-// create grid cells
-for (let i = 0; i < 100; i++) {
+// create 10x10 grid cells
+for (let i=0;i<100;i++){
   const cell = document.createElement("div");
-  cell.dataset.index = i;
   cell.classList.add("cell");
-  cell.addEventListener("dragover", e => e.preventDefault());
-  cell.addEventListener("drop", e => {
-    if (!draggedBlock) return;
-    draggedBlock.style.top = e.target.offsetTop + "px";
-    draggedBlock.style.left = e.target.offsetLeft + "px";
-    draggedBlock = null;
-  });
+  cell.dataset.index=i;
   grid.appendChild(cell);
 }
 
+// create initial blocks
 function createBlock() {
   const block = document.createElement("div");
   block.className = "block";
   block.draggable = true;
   block.textContent = "B";
-  block.style.top = "0px";
-  block.style.left = Math.random() * 200 + "px";
+  block.style.top="0px";
+  block.style.left=Math.random()*200+"px";
 
-  block.addEventListener("dragstart", e => { draggedBlock = block; });
+  block.addEventListener("dragstart", ()=>{ draggedBlock = block; });
   document.body.appendChild(block);
 }
 
-// create few blocks to test
-for (let i = 0; i < 5; i++) createBlock();
-// example blocks
-createBlock("single");
-createBlock("double");
-createBlock("triple");
+for(let i=0;i<5;i++) createBlock();
 
-function getCells(shape, index) {
-  let cells = [];
-  if (shape === "single") cells = [index];
-  if (shape === "double" && index % 10 < 9) cells = [index,index+1];
-  if (shape === "triple" && index % 10 < 8) cells = [index,index+1,index+2];
-  return cells;
-}
+// drag/drop logic
+grid.addEventListener("dragover", e=>e.preventDefault());
+grid.addEventListener("drop", e=>{
+  if(!draggedBlock) return;
+  const rect = grid.getBoundingClientRect();
+  let x = e.clientX - rect.left;
+  let y = e.clientY - rect.top;
 
-function showPreview(cell) {
-  clearPreview();
-  if (!draggedBlock) return;
-  const index = Number(cell.dataset.index);
-  const shape = draggedBlock.dataset.shape;
-  const cells = getCells(shape, index);
-  cells.forEach(i => grid.children[i]?.classList.add("preview"));
-  previewCells = cells;
-}
+  // snap to grid 40px blocks
+  x = Math.floor(x/40)*40;
+  y = Math.floor(y/40)*40;
 
-function clearPreview() {
-  previewCells.forEach(i => grid.children[i]?.classList.remove("preview"));
-  previewCells = [];
-}
+  draggedBlock.style.left = rect.left + x + "px";
+  draggedBlock.style.top = rect.top + y + "px";
 
-function placeBlock(e) {
-  if (!draggedBlock) return;
-  const index = Number(e.target.dataset.index);
-  const shape = draggedBlock.dataset.shape;
-  const cells = getCells(shape, index);
-
-  cells.forEach(i => grid.children[i]?.classList.add("filled"));
   score += 10;
   scoreEl.textContent = score;
-  messageEl.textContent = "✅ Nice move!";
-
+  messageEl.textContent="✅ Nice move!";
   draggedBlock.remove();
   draggedBlock = null;
-  clearPreview();
-  checkLines();
+
+  checkRows();
+});
+
+function checkRows(){
+  // optional: add row clear logic
 }
 
-function checkLines() {
-  for (let r = 0; r < 10; r++) {
-    let row = [];
-    for (let c = 0; c < 10; c++) row.push(grid.children[r*10+c]);
-    if (row.every(cell => cell.classList.contains("filled"))) {
-      score += 100;
-      scoreEl.textContent = score;
-      row.forEach(cell => cell.classList.remove("filled"));
-      messageEl.textContent = "🔥 Row cleared!";
-    }
-  }
+function restartGame(){
+  location.reload();
 }
 
-function restartGame() { location.reload(); }
-function toggleDarkMode() { document.body.classList.toggle("dark"); }
+function toggleDarkMode(){
+  document.body.classList.toggle("dark");
+}
