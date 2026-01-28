@@ -16,28 +16,30 @@ for (let i = 0; i < 100; i++) {
   grid.appendChild(cell);
 }
 
-// create blocks (example)
+// create blocks example
 function createBlock(shape) {
   const block = document.createElement("div");
   block.className = "block";
   block.draggable = true;
   block.dataset.shape = shape;
   block.textContent = shape[0].toUpperCase();
+  block.style.position = "absolute";  // important for mobile visibility
+  block.style.top = "0px";
+  block.style.left = `${Math.random()*200}px`;
   block.addEventListener("dragstart", () => { draggedBlock = block; });
   document.body.appendChild(block);
 }
 
-// Example blocks
+// example blocks
 createBlock("single");
 createBlock("double");
 createBlock("triple");
 
-// helper
 function getCells(shape, index) {
   let cells = [];
   if (shape === "single") cells = [index];
-  if (shape === "double" && index % 10 < 9) cells = [index, index+1];
-  if (shape === "triple" && index % 10 < 8) cells = [index, index+1, index+2];
+  if (shape === "double" && index % 10 < 9) cells = [index,index+1];
+  if (shape === "triple" && index % 10 < 8) cells = [index,index+1,index+2];
   return cells;
 }
 
@@ -47,7 +49,8 @@ function showPreview(cell) {
   const index = Number(cell.dataset.index);
   const shape = draggedBlock.dataset.shape;
   const cells = getCells(shape, index);
-  cells.forEach(i => { grid.children[i]?.classList.add("preview"); previewCells.push(i); });
+  cells.forEach(i => grid.children[i]?.classList.add("preview"));
+  previewCells = cells;
 }
 
 function clearPreview() {
@@ -85,10 +88,5 @@ function checkLines() {
   }
 }
 
-function restartGame() {
-  location.reload();
-}
-
-function toggleDarkMode() {
-  document.body.classList.toggle("dark");
-}
+function restartGame() { location.reload(); }
+function toggleDarkMode() { document.body.classList.toggle("dark"); }
