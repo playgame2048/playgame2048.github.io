@@ -70,10 +70,12 @@ function placeBlock(e) {
     return;
   }
 
-  cells.forEach(i => {
-    grid.children[i].classList.add("filled");
-    score += 10;
-  });
+cells.forEach(i => {
+  grid.children[i].classList.add("filled");
+  score += 10;
+});
+
+document.getElementById("placeSound").play();
 
   scoreEl.textContent = score;
   messageEl.textContent = "✅ Nice move!";
