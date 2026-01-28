@@ -47,3 +47,10 @@ h1 {
 .block-3 {
   width: 104px;
 }
+.preview {
+  background: rgba(76, 175, 80, 0.4) !important;
+}
+
+.filled {
+  background: #4caf50 !important;
+}
