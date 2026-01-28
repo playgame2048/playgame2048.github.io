@@ -22,6 +22,7 @@ body{
   background:var(--bg);
   color:var(--text);
   text-align:center;
+  overscroll-behavior: none;
 }
 header{padding:10px}
 .controls{
@@ -39,6 +40,7 @@ canvas{
 button{
   padding:6px 12px;
   cursor:pointer;
+  touch-action: manipulation;
 }
 .mobile{
   display:flex;
@@ -67,10 +69,6 @@ button{
   flex-direction:column;
   font-size:24px;
 }
-#restartLink{
-  margin-top:8px;
-  font-size:14px;
-}
 footer{font-size:12px;margin:10px}
 </style>
 </head>
@@ -81,18 +79,18 @@ footer{font-size:12px;margin:10px}
   <h1>🧩 Block Puzzle</h1>
   <div class="controls">
     <span id="score">Score: 0</span>
-    <button onclick="start()">🔂 Restart</button>
-    <button onclick="toggleDark()">🌙 Dark Mode</button>
+    <button type="button" onclick="restartGame()">🔂 Restart</button>
+    <button type="button" onclick="toggleDark()">🌙 Drk Mode</button>
   </div>
 </header>
 
 <canvas id="game" width="300" height="400"></canvas>
 
 <div class="mobile">
-  <button onclick="rotate()">⬆️</button>
-  <button onclick="move(-1)">⬅️</button>
-  <button onclick="drop()">⬇️</button>
-  <button onclick="move(1)">➡️</button>
+  <button type="button" onclick="rotate(event)">⬆️</button>
+  <button type="button" onclick="move(-1, event)">⬅️</button>
+  <button type="button" onclick="drop(event)">⬇️</button>
+  <button type="button" onclick="move(1, event)">➡️</button>
 </div>
 
 <section class="blog">
@@ -110,55 +108,50 @@ footer{font-size:12px;margin:10px}
 
 <div id="gameOver">
   <div>Game Over</div>
-  <button onclick="start()">♻️ Restart</button>
-  <div id="restartLink">
-    <a href="PUT_YOUR_MONETAG_LINK_HERE" target="_blank" style="color:#4caf50">
-      Continue
-    </a>
-  </div>
+  <button type="button" onclick="restartGame()">♻️ Restart</button>
 </div>
 
 <script>
 const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
 
-const COLS=15;
-const ROWS=20;
+const COLS=15, ROWS=20;
 const SIZE=canvas.width/COLS;
 
 let grid,current,score=0,gameOver=false;
 const scoreEl=document.getElementById("score");
 const overBox=document.getElementById("gameOver");
 
+// 🔗 حط هنا رابط Monetag ديالك
+const AFFILIATE_LINK = "PUT_YOUR_MONETAG_LINK_HERE";
+
 const SHAPES=[
- [[1,1],[1,1]],
- [[1,1,1,1]],
- [[1,0],[1,0],[1,1]],
- [[0,1],[0,1],[1,1]],
- [[1,1,0],[0,1,1]]
+ {shape:[[1,1],[1,1]], color:"#f44336"},
+ {shape:[[1,1,1,1]], color:"#2196f3"},
+ {shape:[[1,0],[1,0],[1,1]], color:"#4caf50"},
+ {shape:[[0,1],[0,1],[1,1]], color:"#ff9800"},
+ {shape:[[1,1,0],[0,1,1]], color:"#9c27b0"}
 ];
 
 function emptyGrid(){
-  return Array.from({length:ROWS},()=>Array(COLS).fill(0));
+  return Array.from({length:ROWS},()=>Array(COLS).fill(null));
 }
 
 function newBlock(){
+  const b=SHAPES[Math.floor(Math.random()*SHAPES.length)];
   return{
-    x:6,
-    y:0,
-    shape:JSON.parse(JSON.stringify(
-      SHAPES[Math.floor(Math.random()*SHAPES.length)]
-    ))
+    x:6,y:0,
+    shape:JSON.parse(JSON.stringify(b.shape)),
+    color:b.color
   };
 }
 
-function rotate(){
+function rotate(e){
+  if(e) e.preventDefault();
   if(gameOver) return;
-  const rotated=current.shape[0].map((_,i)=>
-    current.shape.map(row=>row[i]).reverse()
-  );
+  const r=current.shape[0].map((_,i)=>current.shape.map(row=>row[i]).reverse());
   const old=current.shape;
-  current.shape=rotated;
+  current.shape=r;
   if(collide()) current.shape=old;
 }
 
@@ -167,20 +160,16 @@ function draw(){
 
   for(let y=0;y<ROWS;y++){
     for(let x=0;x<COLS;x++){
-      ctx.fillStyle=grid[y][x]?"#4caf50":"#bbb";
+      ctx.fillStyle=grid[y][x]||"#bbb";
       ctx.fillRect(x*SIZE,y*SIZE,SIZE-1,SIZE-1);
     }
   }
 
-  ctx.fillStyle="#2196f3";
+  ctx.fillStyle=current.color;
   current.shape.forEach((row,y)=>{
     row.forEach((v,x)=>{
       if(v){
-        ctx.fillRect(
-          (current.x+x)*SIZE,
-          (current.y+y)*SIZE,
-          SIZE-1,SIZE-1
-        );
+        ctx.fillRect((current.x+x)*SIZE,(current.y+y)*SIZE,SIZE-1,SIZE-1);
       }
     });
   });
@@ -190,8 +179,7 @@ function collide(){
   return current.shape.some((row,y)=>
     row.some((v,x)=>{
       if(!v)return false;
-      let ny=current.y+y;
-      let nx=current.x+x;
+      let ny=current.y+y, nx=current.x+x;
       return ny>=ROWS||nx<0||nx>=COLS||grid[ny][nx];
     })
   );
@@ -200,7 +188,7 @@ function collide(){
 function merge(){
   current.shape.forEach((row,y)=>{
     row.forEach((v,x)=>{
-      if(v) grid[current.y+y][current.x+x]=1;
+      if(v) grid[current.y+y][current.x+x]=current.color;
     });
   });
 }
@@ -209,7 +197,7 @@ function clearLines(){
   for(let y=ROWS-1;y>=0;y--){
     if(grid[y].every(c=>c)){
       grid.splice(y,1);
-      grid.unshift(Array(COLS).fill(0));
+      grid.unshift(Array(COLS).fill(null));
       score+=10;
       y++;
     }
@@ -217,7 +205,8 @@ function clearLines(){
   scoreEl.textContent="Score: "+score;
 }
 
-function drop(){
+function drop(e){
+  if(e) e.preventDefault();
   if(gameOver) return;
   current.y++;
   if(collide()){
@@ -232,18 +221,26 @@ function drop(){
   }
 }
 
-function move(dir){
+function move(dir,e){
+  if(e) e.preventDefault();
   if(gameOver) return;
   current.x+=dir;
   if(collide()) current.x-=dir;
 }
 
 document.addEventListener("keydown",e=>{
+  if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key))
+    e.preventDefault();
   if(e.key==="ArrowLeft")move(-1);
   if(e.key==="ArrowRight")move(1);
   if(e.key==="ArrowDown")drop();
   if(e.key==="ArrowUp")rotate();
 });
+
+function restartGame(){
+  window.open(AFFILIATE_LINK,"_blank");
+  start();
+}
 
 function start(){
   grid=emptyGrid();
