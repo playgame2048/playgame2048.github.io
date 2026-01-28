@@ -65,10 +65,10 @@ function placeBlock(e) {
   const shape = draggedBlock.dataset.shape;
   const cells = getCells(shape, index);
 
-  if (cells.some(i => grid.children[i]?.classList.contains("filled"))) {
-    messageEl.textContent = "❌ Can't place here!";
-    return;
-  }
+ if (isGameOver()) {
+  messageEl.textContent = "💀 Game Over! Refresh to play again";
+ }
+}
 
 cells.forEach(i => {
   grid.children[i].classList.add("filled");
@@ -94,7 +94,7 @@ function checkLines() {
       row.push(grid.children[r * 10 + c]);
     }
     if (row.every(cell => cell.classList.contains("filled"))) {
-      row.forEach(cell => cell.classList.remove("filled"));
+      document.getElementById("clearSound").play();
       score += 100;
       scoreEl.textContent = score;
       messageEl.textContent = "🔥 Row cleared!";
@@ -105,3 +105,8 @@ function checkLines() {
 function restartGame() {
   location.reload();
 }
+
+function isGameOver() {
+  return document.querySelectorAll(".block").length === 0;
+}
+
