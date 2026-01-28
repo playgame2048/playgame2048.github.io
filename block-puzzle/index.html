@@ -1,34 +1,57 @@
-<div class="container">
-  <header>
-    <h1 class="title">Block Puzzle</h1>
-    <p class="subtitle">Drag and drop blocks to complete rows!</p>
-    <div class="scoreboard">
-      Score: <span id="score">0</span>
-      <div id="message"></div>
-    </div>
-  </header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Block Puzzle Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
 
-  <main>
-    <div class="game-wrapper">
-      <!-- grid في الوسط -->
-      <div class="game-center">
-        <div id="grid" class="grid"></div>
+    <header>
+      <h1>Block Puzzle</h1>
+      <p>Drag blocks into the grid. Complete rows to score points!</p>
+      <div class="top-buttons">
+        <button onclick="restartGame()">Restart</button>
+        <button onclick="toggleDarkMode()">Dark Mode</button>
+      </div>
+      <div class="scoreboard">
+        Score: <span id="score">0</span>
+        <div id="message" class="message"></div>
+      </div>
+    </header>
+
+    <main>
+      <div class="game-wrapper">
+
+        <!-- ===== Game Center ===== -->
+        <div class="game-center">
+          <div id="grid" class="grid"></div>
+        </div>
+
+        <!-- ===== Ads Area ===== -->
+        <div class="ads-area">
+          <div id="monetag-ad"></div>
+          <script src="https://cdn.monetag.com/10519048.js"></script>
+        </div>
+
       </div>
 
-      <!-- ads بجانب اللعبة -->
-      <div class="ads-area">
-        <div id="monetag-ad"></div>
-        <script src="https://cdn.monetag.com/10519048.js"></script>
-      </div>
-    </div>
+      <section class="blog">
+        <h2>How to Play Block Puzzle</h2>
+        <p>Drag blocks into the grid. Complete a row to clear it and score points.</p>
+        <div class="affiliate-box">
+          <a href="AFFILIATE_LINK" target="_blank">Start Brain Training →</a>
+        </div>
+        <div class="donate">
+          <a href="https://ko-fi.com/help_tommy" target="_blank">💖 Donate via Ko-fi</a>
+        </div>
+      </section>
+    </main>
 
-    <!-- blog أسفل اللعبة -->
-    <section class="blog">
-      <h2>How to Play Block Puzzle</h2>
-      <p>Drag blocks into the grid. Complete a row to clear it and score points.</p>
-      <div class="affiliate-box">
-        <a href="AFFILIATE_LINK" target="_blank">Start Brain Training →</a>
-      </div>
-    </section>
-  </main>
-</div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
