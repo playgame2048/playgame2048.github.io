@@ -16,16 +16,23 @@ for (let i = 0; i < 100; i++) {
   grid.appendChild(cell);
 }
 
-// create blocks example
 function createBlock(shape) {
   const block = document.createElement("div");
   block.className = "block";
   block.draggable = true;
   block.dataset.shape = shape;
-  block.textContent = shape[0].toUpperCase();
-  block.style.position = "absolute";  // important for mobile visibility
+
+  block.style.width = "40px";
+  block.style.height = "40px";
+  block.style.background = "#f67c5f";
+  block.style.color = "#fff";
+  block.style.display = "flex";
+  block.style.alignItems = "center";
+  block.style.justifyContent = "center";
+  block.style.position = "absolute";  // مهم باش يبان فوق grid
   block.style.top = "0px";
   block.style.left = `${Math.random()*200}px`;
+
   block.addEventListener("dragstart", () => { draggedBlock = block; });
   document.body.appendChild(block);
 }
