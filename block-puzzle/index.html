@@ -28,29 +28,30 @@
 
     <!-- Game + Ads -->
     <main>
-      <div class="game-wrapper">
+     <div class="game-wrapper">
 
-        <!-- Game center -->
-        <div class="game-center">
-          <div id="grid" class="grid"></div>
-        </div>
+  <!-- Game center (centered) -->
+  <div class="game-center">
+    <img src="logo.png" class="logo-game" alt="Puzzle Game Logo">
+    <div id="grid" class="grid"></div>
+  </div>
 
-        <!-- Ads area -->
-        <div class="ads-area">
-          <div id="monetag-ad"></div>
-          <!-- Example Monetag -->
-          <script>
-            (function(s){
-              s.dataset.zone='ZONE_ID';
-              s.src='https://gizokraijaw.net/vignette.min.js';
-            })([document.documentElement, document.body]
-              .filter(Boolean)
-              .pop()
-              .appendChild(document.createElement('script')));
-          </script>
-        </div>
+  <!-- Ads area -->
+  <div class="ads-area">
+    <div id="monetag-ad"></div>
+    <!-- Monetag script -->
+    <script>
+      (function(s){
+        s.dataset.zone='ZONE_ID';
+        s.src='https://gizokraijaw.net/vignette.min.js';
+      })([document.documentElement, document.body]
+        .filter(Boolean)
+        .pop()
+        .appendChild(document.createElement('script')));
+    </script>
+  </div>
 
-      </div>
+</div>
 
       <!-- Blog / Affiliate / Donation -->
       <section class="blog">
