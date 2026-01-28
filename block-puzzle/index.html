@@ -7,37 +7,41 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>🧩 Block Puzzle</h1>
-    <div class="controls">
-      <button id="restart">Restart</button>
-      <button id="darkMode">🌙 Dark Mode</button>
-    </div>
-  </header>
 
-  <main>
-    <canvas id="game" width="300" height="300"></canvas>
-  </main>
+<header>
+  <h1>🧩 Block Puzzle</h1>
+  <div class="top-controls">
+    <span id="score">Score: 0</span>
+    <button id="restart">Restart</button>
+    <button id="darkMode">🌙</button>
+  </div>
+</header>
 
-  <!-- Ads placeholder -->
-  <section class="ads">
-    <p>📢 Ad Space (Google AdSense friendly)</p>
-  </section>
+<main>
+  <canvas id="game" width="300" height="300"></canvas>
 
-  <section class="how-to-play">
-    <h2>How to Play</h2>
-    <p>
-      Use ⬅️ ➡️ to move blocks<br>
-      ⬇️ to drop faster<br>
-      Fill full rows or columns to clear them.<br>
-      Game ends when no space is left.
-    </p>
-  </section>
+  <!-- Mobile controls -->
+  <div class="mobile-controls">
+    <button id="left">⬅️</button>
+    <button id="down">⬇️</button>
+    <button id="right">➡️</button>
+  </div>
+</main>
 
-  <footer>
-    <p>© 2026 Block Puzzle</p>
-  </footer>
+<section class="blog">
+  <h2>How to Play</h2>
+  <ul>
+    <li>Move blocks left or right</li>
+    <li>Fill full rows to earn points</li>
+    <li>Game ends when grid is full</li>
+    <li>Works on phone & PC</li>
+  </ul>
+</section>
 
-  <script src="script.js"></script>
+<footer>
+  © 2026 Block Puzzle
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
