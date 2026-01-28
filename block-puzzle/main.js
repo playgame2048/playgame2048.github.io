@@ -2,48 +2,78 @@ const grid = document.getElementById("grid");
 const blocks = document.querySelectorAll(".block");
 
 let draggedBlock = null;
+let previewCells = [];
 
 // create grid
 for (let i = 0; i < 100; i++) {
   const cell = document.createElement("div");
   cell.dataset.index = i;
 
-  cell.addEventListener("dragover", e => e.preventDefault());
-  cell.addEventListener("drop", dropBlock);
+  cell.addEventListener("dragover", e => {
+    e.preventDefault();
+    showPreview(cell);
+  });
+
+  cell.addEventListener("dragleave", clearPreview);
+  cell.addEventListener("drop", placeBlock);
 
   grid.appendChild(cell);
 }
 
-// drag events
+// drag
 blocks.forEach(block => {
   block.addEventListener("dragstart", () => {
     draggedBlock = block;
   });
 });
 
-function dropBlock(e) {
+function getCells(shape, index) {
+  let cells = [];
+  if (shape === "single") cells = [index];
+  if (shape === "double" && index % 10 < 9) cells = [index, index + 1];
+  if (shape === "triple" && index % 10 < 8) cells = [index, index + 1, index + 2];
+  return cells;
+}
+
+function showPreview(cell) {
+  clearPreview();
+  if (!draggedBlock) return;
+
+  const shape = draggedBlock.dataset.shape;
+  const index = Number(cell.dataset.index);
+  const cells = getCells(shape, index);
+
+  if (cells.length === 0) return;
+
+  cells.forEach(i => {
+    grid.children[i]?.classList.add("preview");
+    previewCells.push(i);
+  });
+}
+
+function clearPreview() {
+  previewCells.forEach(i => {
+    grid.children[i]?.classList.remove("preview");
+  });
+  previewCells = [];
+}
+
+function placeBlock(e) {
   if (!draggedBlock) return;
 
   const shape = draggedBlock.dataset.shape;
   const index = Number(e.target.dataset.index);
+  const cells = getCells(shape, index);
 
-  if (shape === "single") {
-    e.target.style.background = "#4caf50";
-  }
+  if (cells.length === 0) return;
 
-  if (shape === "double" && index % 10 < 9) {
-    e.target.style.background = "#4caf50";
-    grid.children[index + 1].style.background = "#4caf50";
-  }
-
-  if (shape === "triple" && index % 10 < 8) {
-    e.target.style.background = "#4caf50";
-    grid.children[index + 1].style.background = "#4caf50";
-    grid.children[index + 2].style.background = "#4caf50";
-  }
+  cells.forEach(i => {
+    grid.children[i].classList.add("filled");
+  });
 
   draggedBlock.remove();
   draggedBlock = null;
+  clearPreview();
 }
 
 function restartGame() {
