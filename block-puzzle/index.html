@@ -1,32 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Block Puzzle</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+<div class="container">
+  <header>
+    <h1 class="title">Block Puzzle</h1>
+    <p class="subtitle">Drag and drop blocks to complete rows!</p>
+    <div class="scoreboard">
+      Score: <span id="score">0</span>
+      <div id="message"></div>
+    </div>
+  </header>
 
-<h1>🧩 Block Puzzle</h1>
-<p>Drag blocks to fill the grid</p>
-<h2>Score: <span id="score">0</span></h2>
-<p id="message"></p>
+  <main>
+    <div class="game-wrapper">
+      <!-- grid في الوسط -->
+      <div class="game-center">
+        <div id="grid" class="grid"></div>
+      </div>
 
-<div id="game">
-  <div id="grid" class="grid"></div>
+      <!-- ads بجانب اللعبة -->
+      <div class="ads-area">
+        <div id="monetag-ad"></div>
+        <script src="https://cdn.monetag.com/10519048.js"></script>
+      </div>
+    </div>
 
-  <div id="blocks" class="blocks">
-    <div class="block" draggable="true" data-shape="single"></div>
-    <div class="block block-2" draggable="true" data-shape="double"></div>
-    <div class="block block-3" draggable="true" data-shape="triple"></div>
-  </div>
+    <!-- blog أسفل اللعبة -->
+    <section class="blog">
+      <h2>How to Play Block Puzzle</h2>
+      <p>Drag blocks into the grid. Complete a row to clear it and score points.</p>
+      <div class="affiliate-box">
+        <a href="AFFILIATE_LINK" target="_blank">Start Brain Training →</a>
+      </div>
+    </section>
+  </main>
 </div>
-
-<button onclick="restartGame()">Restart</button>
-
-<script src="main.js"></script>
-  <audio id="placeSound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-click-1114.mp3"></audio>
-<audio id="clearSound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-complete-or-approved-mission-205.mp3"></audio>
-</body>
-</html>
