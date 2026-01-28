@@ -1,88 +1,130 @@
 :root {
-  --bg: #f5f5f5;
-  --card: #fff;
-  --text: #333;
-  --subtext: #555;
+  --bg:#f5f5f5;
+  --card:#fff;
+  --text:#333;
+  --subtext:#555;
+  --border:#ccc;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  margin: 0;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
+body{
+  font-family: Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  margin:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
 }
 
-.container {
-  max-width: 1000px;
-  width: 100%;
+.container{
+  width:100%;
+  max-width:1000px;
+  padding:20px;
 }
 
-header {
-  text-align: center;
-  margin-bottom: 20px;
+header{
+  text-align:center;
+  margin-bottom:20px;
 }
 
-.scoreboard {
-  margin-top: 10px;
+.logo-game{
+  width:80px;
+  margin-bottom:10px;
 }
 
-.game-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 20px;
-  flex-wrap: wrap;
+.top-buttons button{
+  padding:8px 12px;
+  margin:5px;
+  border:none;
+  background:#333;
+  color:#fff;
+  border-radius:6px;
+  cursor:pointer;
 }
 
-.game-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.top-buttons button:hover{
+  opacity:0.9;
 }
 
-.logo-game {
-  width: 80px;
-  margin-bottom: 10px;
+.scoreboard{
+  margin-top:10px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(10, 1fr);
-  gap: 2px;
-  width: 320px;
-  height: 320px;
+.message{
+  margin-top:5px;
+  font-weight:bold;
+  color:#1a73e8;
+}
+
+/* ====== Game Layout ====== */
+.game-wrapper{
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.game-center{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  grid-template-rows:repeat(10,1fr);
+  gap:2px;
+  width:320px;
+  height:320px;
   background:#ddd;
   border-radius:8px;
 }
 
-.cell {
-  background: #eee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
+.cell{
+  background:#eee;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.2s;
 }
 
-.ads-area {
-  width: 300px;
-  text-align: center;
+.cell.filled{
+  background:#f39c12;
+  color:#fff;
 }
 
+/* Ads area */
+.ads-area{
+  width:300px;
+  text-align:center;
+}
+
+/* Blog */
+.blog{
+  margin-top:25px;
+  background:var(--card);
+  padding:20px;
+  border-radius:12px;
+  border:1px solid var(--border);
+}
+
+/* Responsive */
 @media(max-width:768px){
-  .game-wrapper {
-    flex-direction: column;
-    align-items: center;
+  .game-wrapper{
+    flex-direction:column;
+    align-items:center;
   }
-  .grid {
-    width: 280px;
-    height: 280px;
+  .grid{
+    width:280px;
+    height:280px;
   }
-  .ads-area {
-    width: 100%;
-    margin-top: 15px;
+  .ads-area{
+    width:100%;
+    margin-top:15px;
   }
 }
