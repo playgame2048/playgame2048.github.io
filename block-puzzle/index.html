@@ -3,52 +3,89 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Block Puzzle Game</title>
+  <title>Puzzle Game – Brain Block Challenge</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
 
+    <!-- Header -->
     <header>
-      <h1>Block Puzzle</h1>
-      <p>Drag blocks into the grid. Complete rows to score points!</p>
+      <div class="logo-title">
+        <img src="logo.png" alt="Puzzle Game Logo" class="logo" />
+        <h1 class="title">Brain Block Challenge</h1>
+      </div>
+      <p class="subtitle">Drag and fit blocks to complete rows. Reach the highest score!</p>
       <div class="top-buttons">
         <button onclick="restartGame()">Restart</button>
         <button onclick="toggleDarkMode()">Dark Mode</button>
       </div>
       <div class="scoreboard">
-        Score: <span id="score">0</span>
-        <div id="message" class="message"></div>
+        <div class="score">Score: <span id="score">0</span></div>
+        <div class="message hidden" id="message"></div>
       </div>
     </header>
 
+    <!-- Game + Ads -->
     <main>
-    
       <div class="game-wrapper">
-  <!-- Game center -->
-  <div class="game-center">
-    <div id="grid" class="grid"></div>
-  </div>
 
-  <!-- Ads area -->
-  <div class="ads-area">
-    <div id="monetag-ad"></div>
-    <script src="https://cdn.monetag.com/10519048.js"></script>
-  </div>
-</div>
+        <!-- Game center -->
+        <div class="game-center">
+          <div id="grid" class="grid"></div>
+        </div>
 
+        <!-- Ads area -->
+        <div class="ads-area">
+          <div id="monetag-ad"></div>
+          <!-- Example Monetag -->
+          <script>
+            (function(s){
+              s.dataset.zone='ZONE_ID';
+              s.src='https://gizokraijaw.net/vignette.min.js';
+            })([document.documentElement, document.body]
+              .filter(Boolean)
+              .pop()
+              .appendChild(document.createElement('script')));
+          </script>
+        </div>
+
+      </div>
+
+      <!-- Blog / Affiliate / Donation -->
       <section class="blog">
-        <h2>How to Play Block Puzzle</h2>
-        <p>Drag blocks into the grid. Complete a row to clear it and score points.</p>
+        <h2>🧠 Improve Your Brain Skills</h2>
+        <p>Want to get better at puzzles like Brain Block Challenge?  
+          Check this course 👉 <a href="AFFILIATE_LINK" target="_blank">Start here</a></p>
+
+        <h3>🎲 How to Play</h3>
+        <ul>
+          <li>Drag blocks into the grid to fill rows.</li>
+          <li>Every completed row gives points.</li>
+          <li>Game ends when no space left for new blocks.</li>
+        </ul>
+
+        <h3>💎 Tips</h3>
+        <ul>
+          <li>Plan ahead and keep biggest blocks ready.</li>
+          <li>Don't leave gaps in rows.</li>
+        </ul>
+
         <div class="affiliate-box">
+          <h3>Train Your Brain</h3>
+          <p>Improve strategy & logic with this puzzle course.</p>
           <a href="AFFILIATE_LINK" target="_blank">Start Brain Training →</a>
         </div>
+
         <div class="donate">
-          <a href="https://ko-fi.com/help_tommy" target="_blank">💖 Donate via Ko-fi</a>
+          <h3>Support the Game</h3>
+          <a href="https://ko-fi.com/help_tommy" target="_blank">
+            <p>💖 Your donation keeps the game free & updated!</p>
+            Donate via Ko-fi
+          </a>
         </div>
       </section>
     </main>
-
   </div>
 
   <script src="main.js"></script>
