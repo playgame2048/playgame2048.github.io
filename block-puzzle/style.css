@@ -1,6 +1,26 @@
 body {
-  background: #111;
-  color: white;
-  text-align: center;
   font-family: Arial, sans-serif;
+  text-align: center;
+  background: #f4f4f4;
+  margin: 0;
+  padding: 10px;
+}
+
+h1 {
+  margin-top: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(10, 32px);
+  gap: 4px;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.grid div {
+  width: 32px;
+  height: 32px;
+  background: #ddd;
+  border-radius: 4px;
 }
