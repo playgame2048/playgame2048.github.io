@@ -15,26 +15,28 @@ for (let i=0;i<100;i++){
 
 // create initial blocks
 function createBlock() {
-  const block = document.createElement("div");
-  block.className = "block";
-  block.draggable = true;
-  block.textContent = "B";
-  block.style.top="0px";
-  block.style.left=Math.random()*200+"px";
+  const emptyCells = [...grid.children].filter(c=>!c.classList.contains('filled'));
+  if(emptyCells.length === 0) return;
 
-  block.addEventListener("dragstart", ()=>{ draggedBlock = block; });
-  document.body.appendChild(block);
+  const cell = emptyCells[Math.floor(Math.random()*emptyCells.length)];
+  cell.classList.add('filled');
+  cell.textContent = "B";
 }
 
 for(let i=0;i<5;i++) createBlock();
 
 // drag/drop logic
-grid.addEventListener("dragover", e=>e.preventDefault());
-grid.addEventListener("drop", e=>{
-  if(!draggedBlock) return;
-  const rect = grid.getBoundingClientRect();
-  let x = e.clientX - rect.left;
-  let y = e.clientY - rect.top;
+grid.addEventListener('click', e=>{
+  const cell = e.target;
+  if(!cell.classList.contains('filled')) return;
+
+  cell.classList.remove('filled');
+  cell.textContent = '';
+  score += 10;
+  scoreEl.textContent = score;
+  messageEl.textContent = "✅ Block cleared!";
+  createBlock();
+});
 
   // snap to grid 40px blocks
   x = Math.floor(x/40)*40;
