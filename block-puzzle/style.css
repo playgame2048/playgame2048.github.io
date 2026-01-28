@@ -54,3 +54,14 @@ h1 {
 .filled {
   background: #4caf50 !important;
 }
+.cell {
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.cell.filled {
+  transform: scale(1.05);
+}
+
+.cell.preview {
+  background: rgba(0, 0, 0, 0.15);
+}
