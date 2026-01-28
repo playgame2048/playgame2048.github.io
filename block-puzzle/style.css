@@ -1,13 +1,13 @@
 :root {
-  --bg: #f4f4f4;
+  --bg: #f2f2f2;
   --text: #111;
-  --grid: #ddd;
+  --card: #fff;
 }
 
 body.dark {
-  --bg: #111;
-  --text: #f4f4f4;
-  --grid: #333;
+  --bg: #121212;
+  --text: #f2f2f2;
+  --card: #1e1e1e;
 }
 
 body {
@@ -22,36 +22,49 @@ header {
   padding: 10px;
 }
 
-.controls button {
-  margin: 5px;
-  padding: 8px 12px;
+.top-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 6px 12px;
   cursor: pointer;
 }
 
 main {
   display: flex;
-  justify-content: center;
-  margin: 20px 0;
+  flex-direction: column;
+  align-items: center;
 }
 
 canvas {
-  background: var(--grid);
+  background: #ccc;
   border-radius: 10px;
+  margin: 15px 0;
 }
 
-.ads {
-  margin: 20px;
+.mobile-controls {
+  display: flex;
+  gap: 15px;
+}
+
+.blog {
+  max-width: 420px;
+  margin: 25px auto;
   padding: 15px;
-  border: 1px dashed #999;
+  background: var(--card);
+  border-radius: 10px;
+  text-align: left;
 }
 
-.how-to-play {
-  max-width: 400px;
-  margin: auto;
-  font-size: 14px;
+.blog h2 {
+  text-align: center;
 }
 
 footer {
-  margin: 15px 0;
   font-size: 12px;
+  margin-bottom: 10px;
 }
