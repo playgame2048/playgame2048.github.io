@@ -10,33 +10,31 @@ let previewCells = [];
 for (let i = 0; i < 100; i++) {
   const cell = document.createElement("div");
   cell.dataset.index = i;
-  cell.addEventListener("dragover", e => { e.preventDefault(); showPreview(cell); });
-  cell.addEventListener("dragleave", clearPreview);
-  cell.addEventListener("drop", placeBlock);
+  cell.classList.add("cell");
+  cell.addEventListener("dragover", e => e.preventDefault());
+  cell.addEventListener("drop", e => {
+    if (!draggedBlock) return;
+    draggedBlock.style.top = e.target.offsetTop + "px";
+    draggedBlock.style.left = e.target.offsetLeft + "px";
+    draggedBlock = null;
+  });
   grid.appendChild(cell);
 }
 
-function createBlock(shape) {
+function createBlock() {
   const block = document.createElement("div");
   block.className = "block";
   block.draggable = true;
-  block.dataset.shape = shape;
-
-  block.style.width = "40px";
-  block.style.height = "40px";
-  block.style.background = "#f67c5f";
-  block.style.color = "#fff";
-  block.style.display = "flex";
-  block.style.alignItems = "center";
-  block.style.justifyContent = "center";
-  block.style.position = "absolute";  // مهم باش يبان فوق grid
+  block.textContent = "B";
   block.style.top = "0px";
-  block.style.left = `${Math.random()*200}px`;
+  block.style.left = Math.random() * 200 + "px";
 
-  block.addEventListener("dragstart", () => { draggedBlock = block; });
+  block.addEventListener("dragstart", e => { draggedBlock = block; });
   document.body.appendChild(block);
 }
 
+// create few blocks to test
+for (let i = 0; i < 5; i++) createBlock();
 // example blocks
 createBlock("single");
 createBlock("double");
