@@ -71,7 +71,7 @@ button{
   .mobile{display:flex;}
 }
 
-/* BLOG + EXTRA SECTIONS */
+/* BLOG */
 .blog{
   max-width:700px;
   margin:30px auto;
@@ -82,8 +82,9 @@ button{
   font-size:16px;
   border:1px solid var(--border);
 }
-.blog h2, .blog h3{
-  text-align:center;
+.blog h2{
+  text-align:left;
+  margin-top:25px;
 }
 .blog p{
   line-height:1.6;
@@ -92,38 +93,15 @@ button{
   margin-left:20px;
 }
 
-.blog .box{
-  margin-top:20px;
-  padding:15px;
-  border-radius:10px;
-  border:1px dashed var(--border);
-  background:rgba(0,0,0,0.03);
-}
-
-body.dark .blog .box{
-  background:rgba(255,255,255,0.05);
-}
-
-/* AD BANNER */
-.ad-banner{
-  max-width:700px;
-  margin:20px auto;
-  padding:15px;
-  background:var(--card);
-  border-radius:10px;
-  border:1px solid var(--border);
-}
-.ad-banner p{
-  font-size:14px;
-  margin-bottom:10px;
-}
-.ad-placeholder{
-  height:90px;
-  border:2px dashed var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:14px;
+.support-btn{
+  display:inline-block;
+  margin-top:10px;
+  padding:10px 18px;
+  background:#4caf50;
+  color:#fff;
+  border-radius:6px;
+  text-decoration:none;
+  font-weight:bold;
 }
 
 /* GAME OVER */
@@ -147,6 +125,9 @@ footer{font-size:12px;margin:15px}
 
 <header>
   <h1>🧩 Block Puzzle</h1>
+  <p style="margin:4px 0;font-size:14px;opacity:.8">
+    A classic block game – simple to play, hard to master
+  </p>
   <div id="score">Score: 0</div>
 </header>
 
@@ -164,56 +145,42 @@ footer{font-size:12px;margin:15px}
   <button type="button" onclick="move(1,event)">➡️</button>
 </div>
 
-<!-- BLOG -->
 <section class="blog">
   <h2>How to Play</h2>
   <p>
-    Block Puzzle is a classic block-dropping game inspired by Tetris.
-    Your goal is simple: place the falling blocks in the grid and
-    complete full horizontal rows to clear them.
+    Block Puzzle is a classic block-dropping game inspired by traditional
+    puzzle games. Your goal is to place blocks smartly and clear full rows
+    to earn points.
   </p>
-
   <ul>
-    <li>Use <strong>Left</strong> and <strong>Right</strong> to move blocks</li>
-    <li>Use <strong>Up</strong> to rotate blocks</li>
-    <li>Use <strong>Down</strong> to drop faster</li>
-    <li>Each cleared row gives you points</li>
+    <li>Move blocks left and right to position them</li>
+    <li>Rotate blocks to fit empty spaces</li>
+    <li>Complete full rows to clear them</li>
+    <li>The game ends when the grid is full</li>
   </ul>
 
-  <h3>How to Win & Get Higher Scores</h3>
+  <h2>How to Win & Improve</h2>
   <p>
-    There is no final “win” the challenge is to survive as long as
-    possible and get the highest score.
+    There is no final level to win. The challenge is to survive longer
+    and reach a higher score.
   </p>
   <ul>
-    <li>Plan where blocks will land before dropping</li>
-    <li>Try to keep the grid as low as possible</li>
-    <li>Save space for long blocks to clear multiple rows</li>
-    <li>Don’t rush control is better than speed</li>
+    <li>Keep the grid as low as possible</li>
+    <li>Plan moves before dropping blocks</li>
+    <li>Use rotations wisely</li>
+    <li>Stay calm and avoid rushing</li>
   </ul>
 
-  <div class="box">
-    <h3>Support the Game ❤️</h3>
-    <p>
-      If you enjoy playing this game and want to support future updates,
-      you can make a small donation. Every support helps keep the game
-      free and improved.
-    </p>
-    <p>
-      👉 <a href="PUT_YOUR_DONATION_LINK_HERE" target="_blank">
-        Click here to donate
-      </a>
-    </p>
-  </div>
-</section>
+  <h2>Support the Game</h2>
+  <p>
+    If you enjoy this game and would like to support future updates,
+    you can help by making a small donation.
+  </p>
 
-<!-- AD BANNER -->
-<section class="ad-banner">
-  <p>Sponsored</p>
-  <a href="<script>(function(s){s.dataset.zone='10534618',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>" target="_blank">
-    <div class="ad-placeholder">
-      Monetag Vignette / Banner Ad Space
-    </div>
+  <a class="support-btn"
+     href="PUT_YOUR_DONATION_LINK_HERE"
+     target="_blank">
+    ❤️ Support Development
   </a>
 </section>
 
@@ -237,7 +204,7 @@ let restartClickedOnce=false;
 const scoreEl=document.getElementById("score");
 const overBox=document.getElementById("gameOver");
 
-// 🔗 Affiliate link (Restart first click)
+// 🔗 Monetag link (Restart first click)
 const AFFILIATE_LINK="https://otieu.com/4/10534586";
 
 const SHAPES=[
@@ -374,6 +341,16 @@ function toggleDark(){
 
 start();
 setInterval(()=>{drop();draw();},700);
+</script>
+
+<!-- Monetag Vignette Ad -->
+<script>
+(function(s){
+  s.dataset.zone='10534618';
+  s.src='https://gizokraijaw.net/vignette.min.js';
+})([document.documentElement, document.body].filter(Boolean)
+  .pop()
+  .appendChild(document.createElement('script')));
 </script>
 
 </body>
