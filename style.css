@@ -96,3 +96,40 @@ body::before {
   opacity: 0.08; /* subtle overlay */
   z-index: -1;
 }
+/* Hero section full width, centered content */
+.hero {
+  width: 100%;             /* full width */
+  padding: 100px 20px 40px 20px; /* top padding كبير باش يطلع فوق */
+  text-align: center;      /* center title + subtitle */
+  position: relative;      /* باش يبقى فوق background */
+  z-index: 1;
+  background: linear-gradient(145deg, #1a1a1a, #121212);
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.5);
+}
+
+/* Title */
+.hero h1 {
+  font-size: 48px;
+  margin: 0 0 10px 0;       /* margin bottom فقط */
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+}
+
+/* Subtitle */
+.hero .subtitle {
+  font-size: 18px;
+  margin: 0;
+  opacity: 0.8;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+/* Background (keeping old layout) */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://images.unsplash.com/photo-1603791440384-56cd371ee9b9?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
+  opacity: 0.08;
+  z-index: 0;
+}
