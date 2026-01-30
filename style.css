@@ -1,39 +1,51 @@
-/* Body & basic settings */
-body {
+/* Basic Reset */
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
   font-family: Arial, sans-serif;
   color: #fff;
   background: #0d0d0d;
   min-height: 100vh;
+  position: relative;
 }
 
 /* Hero Section */
 .hero {
   width: 100%;
-  padding: 100px 20px 40px 20px; /* top spacing bigger */
-  text-align: center;
+  height: 250px;
+  display: flex;
+  justify-content: center;  /* horizontal center */
+  align-items: flex-start;  /* vertical top */
+  padding-top: 30px;        /* spacing from top */
   background: linear-gradient(145deg, #1a1a1a, #121212);
+  position: relative;
+  z-index: 1;
   box-shadow: inset 0 0 60px rgba(0,0,0,0.5);
 }
 
-/* Hero Title + Subtitle */
-.hero h1 {
-  font-size: 48px;
+.hero-content h1 {
+  font-size: 3rem;
   margin-bottom: 10px;
+  text-align: center;
   text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
 }
 
-.hero .subtitle {
-  font-size: 18px;
+.hero-content .subtitle {
+  font-size: 1rem;
   opacity: 0.8;
+  text-align: center;
   text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
 }
 
 /* Games container */
 .container {
-  max-width: 800px;
-  width: 100%;
-  margin: 0 auto;
+  max-width: 900px;
+  width: 90%;
+  margin: 20px auto;
   padding: 20px;
 }
 
@@ -75,6 +87,7 @@ body {
   text-decoration: none;
   border-radius: 6px;
   font-weight: bold;
+  text-align: center;
 }
 
 /* Footer */
@@ -83,46 +96,10 @@ footer {
   font-size: 12px;
   opacity: 0.6;
   text-align: center;
+  padding-bottom: 20px;
 }
 
-/* Background image */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('https://images.unsplash.com/photo-1603791440384-56cd371ee9b9?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
-  opacity: 0.08; /* subtle overlay */
-  z-index: -1;
-}
-/* Hero section full width, centered content */
-.hero {
-  width: 100%;             /* full width */
-  padding: 100px 20px 40px 20px; /* top padding كبير باش يطلع فوق */
-  text-align: center;      /* center title + subtitle */
-  position: relative;      /* باش يبقى فوق background */
-  z-index: 1;
-  background: linear-gradient(145deg, #1a1a1a, #121212);
-  box-shadow: inset 0 0 60px rgba(0,0,0,0.5);
-}
-
-/* Title */
-.hero h1 {
-  font-size: 48px;
-  margin: 0 0 10px 0;       /* margin bottom فقط */
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
-}
-
-/* Subtitle */
-.hero .subtitle {
-  font-size: 18px;
-  margin: 0;
-  opacity: 0.8;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
-}
-
-/* Background (keeping old layout) */
+/* Background */
 body::before {
   content: '';
   position: fixed;
@@ -134,41 +111,19 @@ body::before {
   z-index: 0;
 }
 
-.hero {
-  width: 100%;
-  height: 300px; /* height enough for top placement */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* content يبدأ من فوق */
-  align-items: center; /* center horizontally */
-  padding-top: 40px; /* top spacing */
-  background: linear-gradient(145deg, #1a1a1a, #121212);
-  position: relative;
-  z-index: 1;
-  box-shadow: inset 0 0 60px rgba(0,0,0,0.5);
-}
-
-.hero-content h1 {
-  font-size: 48px;
-  margin: 0 0 10px 0;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
-}
-
-.hero-content .subtitle {
-  font-size: 18px;
-  margin: 0;
-  opacity: 0.8;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
-}
-
-/* background ثابت */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('https://images.unsplash.com/photo-1603791440384-56cd371ee9b9?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
-  opacity: 0.08;
-  z-index: 0;
+/* Responsive for phone */
+@media screen and (max-width: 480px) {
+  .hero {
+    height: 200px;
+    padding-top: 20px;
+  }
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  .hero-content .subtitle {
+    font-size: 0.9rem;
+  }
+  .games {
+    grid-template-columns: 1fr;
+  }
 }
