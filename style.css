@@ -137,3 +137,10 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+.card img {
+  width: 100%;       /* تملي العرض ديال card */
+  border-radius: 10px;
+  margin-bottom: 15px;
+  object-fit: cover; /* يخلي الصورة تملى card بلا distortion */
+}
