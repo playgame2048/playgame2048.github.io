@@ -1,28 +1,25 @@
+/* Body & basic settings */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   color: #fff;
   background: #0d0d0d;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-/* Hero section */
+/* Hero Section */
 .hero {
-  text-align: center;
-  padding: 80px 20px 40px 20px;
   width: 100%;
-  background: linear-gradient(135deg, #1f1f1f, #121212);
-  /* Gaming 3D/gradient effect */
-  background-image: linear-gradient(145deg, #1a1a1a, #121212 70%);
+  padding: 100px 20px 40px 20px; /* top spacing bigger */
+  text-align: center;
+  background: linear-gradient(145deg, #1a1a1a, #121212);
   box-shadow: inset 0 0 60px rgba(0,0,0,0.5);
 }
 
+/* Hero Title + Subtitle */
 .hero h1 {
   font-size: 48px;
-  margin: 0 0 10px 0;
+  margin-bottom: 10px;
   text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
 }
 
@@ -32,21 +29,22 @@ body {
   text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
 }
 
-/* Container for cards */
+/* Games container */
 .container {
   max-width: 800px;
   width: 100%;
+  margin: 0 auto;
   padding: 20px;
 }
 
-/* Cards grid */
+/* Cards Grid */
 .games {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
 }
 
-/* Individual cards */
+/* Cards */
 .card {
   background: #1e1e1e;
   border-radius: 12px;
@@ -87,7 +85,7 @@ footer {
   text-align: center;
 }
 
-/* Optional: animated background effect */
+/* Background image */
 body::before {
   content: '';
   position: fixed;
@@ -95,38 +93,6 @@ body::before {
   width: 100%;
   height: 100%;
   background: url('https://images.unsplash.com/photo-1603791440384-56cd371ee9b9?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
-  opacity: 0.08; /* subtle */
-  z-index: -1;
-}
-
-/* Hero section full width */
-.hero {
-  width: 100%;
-  padding: 80px 20px 40px 20px; /* top spacing bigger */
-  text-align: center;
-  background: linear-gradient(145deg, #1a1a1a, #121212);
-  box-shadow: inset 0 0 60px rgba(0,0,0,0.5);
-}
-
-.hero h1 {
-  font-size: 48px;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
-}
-
-.hero .subtitle {
-  font-size: 18px;
-  opacity: 0.8;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('https://images.unsplash.com/photo-1603791440384-56cd371ee9b9?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
-  opacity: 0.08; /* subtle background */
+  opacity: 0.08; /* subtle overlay */
   z-index: -1;
 }
