@@ -133,3 +133,42 @@ body::before {
   opacity: 0.08;
   z-index: 0;
 }
+
+.hero {
+  width: 100%;
+  height: 300px; /* height enough for top placement */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* content يبدأ من فوق */
+  align-items: center; /* center horizontally */
+  padding-top: 40px; /* top spacing */
+  background: linear-gradient(145deg, #1a1a1a, #121212);
+  position: relative;
+  z-index: 1;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.5);
+}
+
+.hero-content h1 {
+  font-size: 48px;
+  margin: 0 0 10px 0;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+}
+
+.hero-content .subtitle {
+  font-size: 18px;
+  margin: 0;
+  opacity: 0.8;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+/* background ثابت */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://images.unsplash.com/photo-1603791440384-56cd371ee9b9?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
+  opacity: 0.08;
+  z-index: 0;
+}
