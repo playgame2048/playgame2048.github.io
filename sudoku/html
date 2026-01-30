@@ -1,0 +1,37 @@
+<!-- ===================== SUDOKU 3x3 – FULL WORKING VERSION ===================== -->
+<!-- ================ index.html (HTML FILE) ================ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sudoku 3×3 – Brain Puzzle</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>🧩 Sudoku 3×3</h1>
+    <p class="subtitle">Quick mini sudoku to boost your brain power</p>
+  </header>
+
+  <div class="controls">
+    <button id="restartBtn">🔄 Restart</button>
+    <button id="themeBtn">🌙 Dark</button>
+  </div>
+
+  <div id="game"></div>
+
+  <div id="message"></div>
+
+  <section class="blog">
+    <h2>📘 How to Play</h2>
+    <p>Fill the grid with numbers from <strong>1 to 9</strong> without repeating any number in the same row, column or block.</p>
+    <p>A 3×3 mini-sudoku is perfect for fast training and improving memory & logic skills.</p>
+  </section>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
