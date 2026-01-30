@@ -1,4 +1,4 @@
-/* Basic Reset */
+/* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -6,11 +6,12 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
   color: #fff;
-  background: #0d0d0d;
   min-height: 100vh;
   position: relative;
+  background: #0d0d0d;
+  perspective: 1000px; /* 3D effect for cards */
 }
 
 /* Hero Section */
@@ -18,9 +19,9 @@ body {
   width: 100%;
   height: 250px;
   display: flex;
-  justify-content: center;  /* horizontal center */
-  align-items: flex-start;  /* vertical top */
-  padding-top: 30px;        /* spacing from top */
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 30px;
   background: linear-gradient(145deg, #1a1a1a, #121212);
   position: relative;
   z-index: 1;
@@ -31,14 +32,27 @@ body {
   font-size: 3rem;
   margin-bottom: 10px;
   text-align: center;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
 }
 
 .hero-content .subtitle {
   font-size: 1rem;
-  opacity: 0.8;
   text-align: center;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+  opacity: 0.9;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+}
+
+/* Background 3D style */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://images.unsplash.com/photo-1612831455546-c24bdb0a0c9f?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
+  opacity: 0.15;
+  z-index: 0;
+  transform: translateZ(-50px) scale(1.1); /* subtle 3D depth */
 }
 
 /* Games container */
@@ -58,17 +72,25 @@ body {
 
 /* Cards */
 .card {
-  background: #1e1e1e;
+  background: linear-gradient(145deg, #1e1e1e, #2a2a2a);
   border-radius: 12px;
   padding: 20px;
   transition: transform 0.3s, box-shadow 0.3s;
+  transform-style: preserve-3d;
 }
 
 .card:hover {
-  transform: translateY(-5px) scale(1.03);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+  transform: translateY(-10px) rotateX(3deg) rotateY(3deg) scale(1.05);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.7);
 }
 
+.card img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+/* Card text */
 .card h2 {
   margin: 10px 0;
 }
@@ -97,18 +119,6 @@ footer {
   opacity: 0.6;
   text-align: center;
   padding-bottom: 20px;
-}
-
-/* Background */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('https://images.unsplash.com/photo-1603791440384-56cd371ee9b9?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
-  opacity: 0.08;
-  z-index: 0;
 }
 
 /* Responsive for phone */
