@@ -1,78 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PlayGmae – Free Online Games</title>
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #121212;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-.container {
-  text-align: center;
-  max-width: 800px;
-  width: 100%;
-  padding: 20px;
-}
-h1 {
-  font-size: 36px;
-  margin-bottom: 5px;
-}
-.subtitle {
-  opacity: 0.8;
-  margin-bottom: 30px;
-}
-.games {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-}
-.card {
-  background: #1e1e1e;
-  border-radius: 12px;
-  padding: 20px;
-}
-.card h2 {
-  margin: 10px 0;
-}
-.card p {
-  font-size: 14px;
-  opacity: 0.85;
-}
-.card a {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 10px 16px;
-  background: #4caf50;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 6px;
-  font-weight: bold;
-}
-footer {
-  margin-top: 30px;
-  font-size: 12px;
-  opacity: 0.6;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlayGmae – Free Online Games</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
- <header class="hero">
-  <div class="hero-content">
-    <h1>🎮 Play Game </h1>
-    <p class="subtitle">Play classic puzzle games instantly, no download, no signup</p>
-  </div>
-</header>
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-content">
+      <h1>🎮 Play Game</h1>
+      <p class="subtitle">Play classic puzzle games instantly, no download, no signup</p>
+    </div>
+  </header>
 
-  <div class="container">
+  <!-- Games Section -->
+  <main class="container">
     <div class="games">
       <div class="card">
         <h2>🧩 Block Puzzle</h2>
@@ -86,11 +31,9 @@ footer {
         <a href="2048/index.html">Play Now</a>
       </div>
     </div>
+  </main>
 
-    <footer>© 2026 PlayGmae – Free Online Games</footer>
-  </div>
-  
-<link rel="stylesheet" href="style.css">
+  <footer>© 2026 PlayGmae – Free Online Games</footer>
 
 </body>
 </html>
