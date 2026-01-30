@@ -6,12 +6,13 @@
 }
 
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
   color: #fff;
   min-height: 100vh;
-  position: relative;
-  background: #0d0d0d;
-  perspective: 1000px; /* 3D effect for cards */
+  background:
+    radial-gradient(circle at top left, rgba(0,180,255,0.12), transparent 40%),
+    radial-gradient(circle at bottom right, rgba(255,0,150,0.10), transparent 40%),
+    linear-gradient(180deg, #0b0d12, #050607);
 }
 
 /* Hero Section */
