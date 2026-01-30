@@ -144,3 +144,34 @@ footer {
   margin-bottom: 15px;
   object-fit: cover; /* يخلي الصورة تملى card بلا distortion */
 }
+
+/* ===== 3D Dark Gaming Background (SAFE ADDITION) ===== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(0, 200, 255, 0.08), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255, 200, 0, 0.06), transparent 40%),
+    linear-gradient(180deg, #0b0b0f, #050507);
+  z-index: -1;
+}
+
+/* subtle 3D noise / depth */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.015),
+      rgba(255,255,255,0.015) 1px,
+      transparent 1px,
+      transparent 6px
+    );
+  opacity: 0.35;
+  z-index: -1;
+  pointer-events: none;
+}
+
