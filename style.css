@@ -5,14 +5,42 @@
   box-sizing: border-box;
 }
 
+/* ====== GLOBAL BACKGROUND PROFESSIONAL EDITION ====== */
 body {
+  margin: 0;
+  padding: 0;
   font-family: Arial, sans-serif;
   color: #fff;
+  background: #08090d; /* Base dark layer */
+  overflow-x: hidden;
   min-height: 100vh;
+  position: relative;
+}
+
+/* Soft color clouds + gradients */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
   background:
-    radial-gradient(circle at top left, rgba(0,180,255,0.12), transparent 40%),
-    radial-gradient(circle at bottom right, rgba(255,0,150,0.10), transparent 40%),
-    linear-gradient(180deg, #0b0d12, #050607);
+    radial-gradient(circle at 20% 30%, rgba(0, 200, 255, 0.18), transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(255, 100, 0, 0.18), transparent 60%),
+    radial-gradient(circle at 50% 100%, rgba(70, 0, 255, 0.15), transparent 70%),
+    linear-gradient(180deg, #0a0b0e, #050607 70%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Noise texture for premium gaming look */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: 
+    url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+  opacity: 0.25;
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* Hero Section */
@@ -38,19 +66,6 @@ body {
 .hero p {
   font-size: 0.95rem;
   opacity: 0.8;
-}
-
-/* Background 3D style */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('https://images.unsplash.com/photo-1612831455546-c24bdb0a0c9f?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
-  opacity: 0.15;
-  z-index: 0;
-  transform: translateZ(-50px) scale(1.1); /* subtle 3D depth */
 }
 
 /* Games container */
@@ -141,36 +156,6 @@ footer {
   border-radius: 10px;
   margin-bottom: 15px;
   object-fit: cover; /* يخلي الصورة تملى card بلا distortion */
-}
-
-/* ===== 3D Dark Gaming Background (SAFE ADDITION) ===== */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(circle at 30% 20%, rgba(0, 200, 255, 0.10), transparent 50%),
-    radial-gradient(circle at 70% 80%, rgba(255, 150, 0, 0.10), transparent 50%),
-    linear-gradient(180deg, #0a0b0f, #050506);
-  z-index: -1;
-}
-
-/* subtle 3D noise / depth */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      rgba(255,255,255,0.015),
-      rgba(255,255,255,0.015) 1px,
-      transparent 1px,
-      transparent 6px
-    );
-  opacity: 0.35;
-  z-index: -1;
-  pointer-events: none;
 }
 
 @media (max-width: 600px) {
