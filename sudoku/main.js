@@ -95,6 +95,32 @@ function isConflict(cell, value) {
   return conflict;
 }
 
+function highlightErrorCells(cell, value) {
+  clearAllErrorHighlights();
+
+  let r = Number(cell.dataset.row);
+  let c = Number(cell.dataset.col);
+  value = Number(value);
+
+  document.querySelectorAll(".cell").forEach(el => {
+    let rr = Number(el.dataset.row);
+    let cc = Number(el.dataset.col);
+
+    if (el === cell) return;
+
+    if (rr === r || cc === c || sameBlock(r, c, rr, cc)) {
+      if (Number(el.textContent) === value) {
+        el.classList.add("error");
+        cell.classList.add("error");
+      }
+    }
+  });
+}
+
+function clearAllErrorHighlights() {
+  document.querySelectorAll(".cell").forEach(el => el.classList.remove("error"));
+}
+
 function sameBlock(r, c, rr, cc) {
   return Math.floor(r/3) === Math.floor(rr/3) &&
          Math.floor(c/3) === Math.floor(cc/3);
@@ -109,12 +135,10 @@ document.querySelectorAll(".num").forEach(btn => {
     const value = btn.textContent;
     selectedCell.textContent = value;
 
-    // Remove old error styling
-    selectedCell.classList.remove("error");
+    clearAllErrorHighlights(); // remove old errors
 
-    // Check if value already exists in same row/col/block
     if (isConflict(selectedCell, value)) {
-      selectedCell.classList.add("error");
+      highlightErrorCells(selectedCell, value);
     }
   });
 });
