@@ -70,6 +70,31 @@ function highlightRelated(cell) {
   });
 }
 
+function isConflict(cell, value) {
+  let r = Number(cell.dataset.row);
+  let c = Number(cell.dataset.col);
+
+  value = Number(value);
+
+  let conflict = false;
+
+  document.querySelectorAll(".cell").forEach(el => {
+    let rr = Number(el.dataset.row);
+    let cc = Number(el.dataset.col);
+
+    if (el === cell) return; // ignore itself
+
+    // Same row or same column or block
+    if (rr === r || cc === c || sameBlock(r, c, rr, cc)) {
+      if (Number(el.textContent) === value) {
+        conflict = true;
+      }
+    }
+  });
+
+  return conflict;
+}
+
 function sameBlock(r, c, rr, cc) {
   return Math.floor(r/3) === Math.floor(rr/3) &&
          Math.floor(c/3) === Math.floor(cc/3);
