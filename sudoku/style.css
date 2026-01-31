@@ -199,3 +199,29 @@ header button {
   background-color: #ff4b4b !important;
   color: #fff !important;
 }
+
+.blog {
+  margin-top: 50px;
+  padding: 20px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+}
+
+.blog h2 {
+  margin: 12px 0;
+}
+
+.blog ul {
+  padding-left: 20px;
+}
+
+.donate-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 16px;
+  background: #ffcc00;
+  color: #000;
+  font-weight: bold;
+  border-radius: 6px;
+  text-decoration: none;
+}
