@@ -1,61 +1,45 @@
-<!-- ===================== script.js (JS FILE) ===================== -->
-<script>
-const game = document.getElementById("game");
+const board = document.getElementById("sudoku-board");
 const message = document.getElementById("message");
-const restartBtn = document.getElementById("restartBtn");
-const themeBtn = document.getElementById("themeBtn");
+let firstRestart = true;
 
-let board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-let solution = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-solution.sort(() => Math.random() - 0.5);
-
-function drawBoard() {
-  game.innerHTML = "";
-
-  board.forEach((num, i) => {
+// Generate 3x3 Sudoku Board
+function generateBoard() {
+  board.innerHTML = "";
+  for (let i = 0; i < 9; i++) {
     const cell = document.createElement("div");
-    cell.className = "cell";
-    cell.dataset.index = i;
+    cell.classList.add("cell");
 
-    if (num !== 0) {
-      cell.textContent = num;
-      cell.classList.add("prefilled");
-    } else {
-      cell.addEventListener("click", () => selectNumber(i, cell));
-    }
+    const input = document.createElement("input");
+    input.maxLength = 1;
 
-    game.appendChild(cell);
-  });
-}
+    input.addEventListener("input", checkWin);
 
-def selectNumber(i, cell) {
-  let value = prompt("Enter a number 1-9:");
-  if (!value || isNaN(value) || value < 1 || value > 9) return;
-
-  if (value == solution[i]) {
-    cell.textContent = value;
-    cell.style.background = "#4caf50";
-    board[i] = value;
-  } else {
-    cell.style.background = "#c0392b";
+    cell.appendChild(input);
+    board.appendChild(cell);
   }
-
-  checkWin();
 }
 
 function checkWin() {
-  if (board.every((n, i) => n === solution[i])) {
-    message.textContent = "🎉 Perfect! You solved the puzzle!";
+  const values = [...document.querySelectorAll(".cell input")].map(i => i.value);
+
+  if (values.every(v => v >= 1 && v <= 9)) {
+    message.textContent = "🎉 You solved it!";
   }
 }
 
-restartBtn.onclick = () => {
-  window.location.href = "https://direct-link.com"; // ← اختر رابطك هنا
-};
+document.getElementById("restartBtn").addEventListener("click", () => {
+  if (firstRestart) {
+    document.getElementById("directLink").click();
+    firstRestart = false;
+  }
+  message.textContent = "";
+  generateBoard();
+});
 
-themeBtn.onclick = () => {
+// DARK MODE
+document.getElementById("darkModeBtn").addEventListener("click", () => {
   document.body.classList.toggle("dark");
-};
+});
 
-drawBoard();
-</script>
+// Init
+generateBoard();
