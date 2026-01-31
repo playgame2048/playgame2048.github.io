@@ -158,3 +158,27 @@ body.dark .num:hover {
 body.dark .blog {
   color: white;
 }
+
+/* Numbers inside grid */
+.cell {
+  color: #0066cc; /* Blue for user numbers */
+}
+
+.fixed {
+  color: #000 !important; /* Original puzzle numbers */
+}
+
+body.dark .fixed {
+  color: #fff !important;
+}
+
+/* Error (red number) */
+.cell.error {
+  color: #ff3b3b !important;
+  font-weight: bold;
+}
+
+/* Move number pad slightly down */
+.number-pad {
+  margin-top: 40px;
+}
