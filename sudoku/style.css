@@ -1,67 +1,109 @@
-<!-- ===================== style.css (CSS FILE) ===================== -->
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
-  background: #0b0d12;
+  background: #0c0e13;
   color: #fff;
-  display: flex;
-  justify-content: center;
   padding: 20px;
+  text-align: center;
 }
 
-.container { max-width: 500px; width: 100%; }
-header { text-align: center; margin-bottom: 20px; }
-header h1 { font-size: 2rem; margin-bottom: 5px; }
-.subtitle { opacity: 0.8; font-size: 0.9rem; }
+/* HEADER */
+header h1 {
+  font-size: 2.3rem;
+  margin-bottom: 5px;
+}
 
-.controls {
-  display: flex;
-  justify-content: space-between;
+.subtitle {
+  opacity: 0.8;
   margin-bottom: 15px;
 }
-button {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-}
-#restartBtn { background: #4caf50; color: #fff; }
-#themeBtn { background: #222; color: #fff; }
 
-/* Sudoku Grid */
-#game {
+.top-buttons button {
+  padding: 8px 14px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  background: #4caf50;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.top-buttons button:hover {
+  background: #43a047;
+}
+
+/* BOARD */
+.board {
+  width: 300px;
+  height: 300px;
+  margin: 20px auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 5px;
-  margin-bottom: 15px;
+  gap: 3px;
 }
+
 .cell {
-  width: 80px;
-  height: 80px;
-  background: #1e1e1e;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2rem;
+  background: #1b1d25;
+  border-radius: 6px;
+  font-size: 1.8rem;
+  line-height: 100px;
   cursor: pointer;
-  transition: 0.2s;
+  user-select: none;
 }
-.cell:focus { outline: 2px solid #4caf50; }
-.cell.prefilled { background: #333; cursor: default; }
 
-#message { text-align: center; font-size: 1.2rem; margin-top: 10px; }
+.cell input {
+  width: 100%;
+  height: 100%;
+  font-size: 2rem;
+  text-align: center;
+  background: none;
+  border: none;
+  color: #ffffff;
+}
 
-.blog { margin-top: 25px; padding: 15px; background: #111; border-radius: 10px; }
-.blog h2 { margin-bottom: 10px; }
-.blog p { opacity: 0.9; line-height: 1.4; }
+.cell input:focus {
+  outline: none;
+}
+
+/* BLOG */
+.blog {
+  max-width: 350px;
+  margin: 30px auto;
+  padding: 15px;
+  background: #14161b;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.blog a {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+/* MESSAGE */
+.message {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
 
 /* DARK MODE */
-.dark body { background: #fff; color: #000; }
-.dark .cell { background: #eee; color: #000; }
-.dark .prefilled { background: #ccc; }
-.dark .blog { background: #f3f3f3; color: #000; }
-</style>
+.dark body {
+  background: #e6e6e6;
+  color: #000;
+}
+
+.dark .cell {
+  background: #e0e0e0;
+  color: #000;
+}
+
+.dark .blog {
+  background: #dcdcdc;
+}
