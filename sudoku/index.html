@@ -1,54 +1,58 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sudoku Pro</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sudoku Game – 3x3</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1 class="title">Sudoku Pro</h1>
-        <p class="subtitle">Simple • Clean • Professional</p>
-    </header>
 
-    <div class="container">
-        <div class="top-buttons">
-            <button id="restartBtn">Restart</button>
-            <button id="darkModeBtn">Dark Mode</button>
-        </div>
+  <header class="header">
+    <h1>🧩 Sudoku 3×3</h1>
+    <p class="subtitle">Fill the grid with numbers 1–9 without repeating</p>
 
-        <div id="sudoku-grid"></div>
+    <div class="top-buttons">
+      <button id="restartBtn">🔄 Restart</button>
+      <button id="darkModeBtn">🌙 Dark Mode</button>
+    </div>
+  </header>
 
-        <div class="number-pad">
-            <button class="num">1</button>
-            <button class="num">2</button>
-            <button class="num">3</button>
-            <button class="num">4</button>
-            <button class="num">5</button>
-            <button class="num">6</button>
-            <button class="num">7</button>
-            <button class="num">8</button>
-            <button class="num">9</button>
-            <button class="num erase">Erase</button>
-        </div>
+  <main class="game-wrapper">
 
-        <div id="message"></div>
+    <!-- Sudoku Grid -->
+    <div id="sudokuGrid"></div>
+
+    <!-- Number Pad -->
+    <div class="number-pad">
+      <h3>Select Number</h3>
+      <div class="pad">
+        <button class="num">1</button>
+        <button class="num">2</button>
+        <button class="num">3</button>
+        <button class="num">4</button>
+        <button class="num">5</button>
+        <button class="num">6</button>
+        <button class="num">7</button>
+        <button class="num">8</button>
+        <button class="num">9</button>
+      </div>
     </div>
 
-    <section class="blog">
-        <h2>How to Play</h2>
-        <p>Fill the grid with numbers 1 to 9 without repeating any number in each row, column, or 3×3 block.</p>
-        <p>Tap a cell, then choose a number from the pad. Use "Erase" to clear a cell.</p>
-        <h2>Tips & Strategy</h2>
-        <ul>
-            <li>Start with cells that have fewer possible numbers.</li>
-            <li>Use logic, not guessing.</li>
-            <li>Check rows, columns, and blocks often.</li>
-        </ul>
-    </section>
+  </main>
 
-    <script src="main.js"></script>
+  <section class="blog">
+    <h2>📘 How to Play</h2>
+    <p>Fill each 3×3 box, row, and column with numbers from 1 to 9 without repeating.</p>
+
+    <h3>Tips</h3>
+    <ul>
+      <li>Start with cells that have fewer possible numbers.</li>
+      <li>Use logic, not guessing.</li>
+      <li>Check rows, columns, and blocks carefully.</li>
+    </ul>
+  </section>
+
+  <script src="main.js"></script>
 </body>
 </html>
