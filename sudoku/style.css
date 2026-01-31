@@ -225,6 +225,14 @@ header button {
   border-radius: 6px;
   text-decoration: none;
 }
+
+.blog {
+  background: rgba(255,255,255,0.9) !important;
+  color: #000 !important;
+}
+.blog h2 { color: #333 !important; }
+.blog p, .blog ul { color: #222 !important; }
+
 /* BLOG CARD (Professional Style) */
 .blog {
   margin-top: 60px;
@@ -290,4 +298,18 @@ header button {
   .blog ul {
     font-size: 0.9rem;
   }
+}
+
+/* Error highlight (soft red background) */
+.cell.error {
+  background-color: rgba(255, 80, 80, 0.45) !important;
+  border: 2px solid rgba(255,0,0,0.6);
+}
+
+.cell.error input {
+  color: #000 !important;  /* الرقم يبقى noir */
+}
+
+.number-select {
+  margin-top: 25px; /* بدل 10px */
 }
