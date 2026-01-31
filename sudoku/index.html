@@ -1,35 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sudoku 3×3 – Brain Puzzle</title>
-<link rel="stylesheet" href="/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sudoku 3x3 – Play Now</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<div class="container">
   <header>
-    <h1>🧩 Sudoku 3×3</h1>
-    <p class="subtitle">Quick mini sudoku to boost your brain power</p>
+    <h1>🧩 Sudoku 3x3</h1>
+    <p class="subtitle">Train your brain with this simple & fun mini Sudoku</p>
+
+    <div class="top-buttons">
+      <button id="restartBtn">🔄 Restart</button>
+      <button id="darkModeBtn">🌙 Dark Mode</button>
+    </div>
   </header>
 
-  <div class="controls">
-    <button id="restartBtn">🔄 Restart</button>
-    <button id="themeBtn">🌙 Dark</button>
-  </div>
+  <main>
+    <div id="sudoku-board" class="board"></div>
+    <div id="message" class="message"></div>
 
-  <div id="game"></div>
+    <!-- Direct Link on First Restart -->
+    <a id="directLink" href="https://your-link.com" style="display:none;"></a>
 
-  <div id="message"></div>
+    <section class="blog">
+      <h2>📘 How to Play</h2>
+      <p>Fill each row, column and 3×3 box with numbers from 1 to 9 without repeating.</p>
 
-  <section class="blog">
-    <h2>📘 How to Play</h2>
-    <p>Fill the grid with numbers from <strong>1 to 9</strong> without repeating any number in the same row, column or block.</p>
-    <p>A 3×3 mini-sudoku is perfect for fast training and improving memory & logic skills.</p>
-  </section>
-</div>
+      <h3>✨ Tips</h3>
+      <ul>
+        <li>Start with the easiest rows.</li>
+        <li>Look for single possibilities.</li>
+        <li>Don’t guess randomly.</li>
+      </ul>
 
-<script src="/main.js"></script>
+      <h3>🧠 Want to Improve Your Logic?</h3>
+      <p>Try this brain-training challenge to boost your skills:</p>
+      <a class="affiliate" href="YOUR_AFFILIATE_LINK" target="_blank">Start Training →</a>
+    </section>
+  </main>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
