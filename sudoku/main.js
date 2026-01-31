@@ -1,77 +1,96 @@
-let selectedCell = null;
-
-const grid = document.getElementById("sudoku-grid");
-
-// SIMPLE PUZZLE (you can replace later with generator)
+// Simple 3x3 Sudoku board (static example)
 const puzzle = [
-    "530070000",
-    "600195000",
-    "098000060",
-    "800060003",
-    "400803001",
-    "700020006",
-    "060000280",
-    "000419005",
-    "000080079",
+  [5, 3, "", "", 7, "", "", "", ""],
+  [6, "", "", 1, 9, 5, "", "", ""],
+  ["", 9, 8, "", "", "", "", 6, ""],
+
+  [8, "", "", "", 6, "", "", "", 3],
+  [4, "", "", 8, "", 3, "", "", 1],
+  [7, "", "", "", 2, "", "", "", 6],
+
+  ["", 6, "", "", "", "", 2, 8, ""],
+  ["", "", "", 4, 1, 9, "", "", 5],
+  ["", "", "", "", 8, "", "", 7, 9]
 ];
 
-function loadGrid() {
-    grid.innerHTML = "";
-    for (let r = 0; r < 9; r++) {
-        for (let c = 0; c < 9; c++) {
-            const cell = document.createElement("div");
-            cell.classList.add("cell");
-            cell.dataset.row = r;
-            cell.dataset.col = c;
+let selectedCell = null;
 
-            const val = puzzle[r][c];
-            if (val !== "0") {
-                cell.textContent = val;
-                cell.classList.add("fixed");
-            }
+// BUILD GRID
+function generateGrid() {
+  const grid = document.getElementById("sudokuGrid");
+  grid.innerHTML = "";
 
-            cell.onclick = () => selectCell(cell);
-            grid.appendChild(cell);
-        }
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      const cell = document.createElement("div");
+      cell.classList.add("cell");
+      cell.dataset.row = r;
+      cell.dataset.col = c;
+
+      if (puzzle[r][c] !== "") {
+        cell.textContent = puzzle[r][c];
+        cell.classList.add("fixed");
+      }
+
+      cell.addEventListener("click", () => selectCell(cell));
+      grid.appendChild(cell);
     }
+  }
 }
 
+generateGrid();
+
+// CELL SELECTION + HIGHLIGHTING
 function selectCell(cell) {
-    if (selectedCell) selectedCell.classList.remove("selected");
-    selectedCell = cell;
-    selectedCell.classList.add("selected");
+  clearHighlights();
+
+  selectedCell = cell;
+  cell.classList.add("active");
+
+  highlightRelated(cell);
 }
 
-// NUMBER PAD
-const nums = document.querySelectorAll(".num");
-nums.forEach(n => {
-    n.onclick = () => {
-        if (!selectedCell || selectedCell.classList.contains("fixed")) return;
-        if (n.classList.contains("erase")) selectedCell.textContent = "";
-        else selectedCell.textContent = n.textContent;
-        checkWin();
-    };
+function clearHighlights() {
+  document.querySelectorAll(".cell").forEach(c => {
+    c.classList.remove("active", "related");
+  });
+}
+
+function highlightRelated(cell) {
+  let r = Number(cell.dataset.row);
+  let c = Number(cell.dataset.col);
+
+  document.querySelectorAll(".cell").forEach(el => {
+    let rr = Number(el.dataset.row);
+    let cc = Number(el.dataset.col);
+
+    if (rr === r || cc === c || sameBlock(r, c, rr, cc)) {
+      el.classList.add("related");
+    }
+  });
+}
+
+function sameBlock(r, c, rr, cc) {
+  return Math.floor(r/3) === Math.floor(rr/3) &&
+         Math.floor(c/3) === Math.floor(cc/3);
+}
+
+// NUMBER PAD INPUT
+document.querySelectorAll(".num").forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (!selectedCell) return;
+    if (selectedCell.classList.contains("fixed")) return;
+
+    selectedCell.textContent = btn.textContent;
+  });
 });
 
-// CHECK WIN
-function checkWin() {
-    const cells = document.querySelectorAll(".cell");
-    for (let c of cells) {
-        if (c.textContent === "") return;
-    }
-    document.getElementById("message").textContent = "🎉 You Completed the Puzzle!";
-}
-
 // DARK MODE
-const darkBtn = document.getElementById("darkModeBtn");
-darkBtn.onclick = () => {
-    document.body.classList.toggle("dark");
+document.getElementById("darkModeBtn").onclick = () => {
+  document.body.classList.toggle("dark");
 };
 
-// RESTART
-const restartBtn = document.getElementById("restartBtn");
-restartBtn.onclick = () => {
-    window.location.href = "https://otieu.com/4/10544878"; // change USERNAME
+// RESTART BUTTON
+document.getElementById("restartBtn").onclick = () => {
+  window.location.href = "https://otieu.com/4/10544878";
 };
-
-loadGrid();
