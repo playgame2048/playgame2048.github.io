@@ -1,45 +1,77 @@
-const board = document.getElementById("sudoku-board");
-const message = document.getElementById("message");
-let firstRestart = true;
+let selectedCell = null;
 
-// Generate 3x3 Sudoku Board
-function generateBoard() {
-  board.innerHTML = "";
-  for (let i = 0; i < 9; i++) {
-    const cell = document.createElement("div");
-    cell.classList.add("cell");
+const grid = document.getElementById("sudoku-grid");
 
-    const input = document.createElement("input");
-    input.maxLength = 1;
+// SIMPLE PUZZLE (you can replace later with generator)
+const puzzle = [
+    "530070000",
+    "600195000",
+    "098000060",
+    "800060003",
+    "400803001",
+    "700020006",
+    "060000280",
+    "000419005",
+    "000080079",
+];
 
-    input.addEventListener("input", checkWin);
+function loadGrid() {
+    grid.innerHTML = "";
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            const cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.dataset.row = r;
+            cell.dataset.col = c;
 
-    cell.appendChild(input);
-    board.appendChild(cell);
-  }
+            const val = puzzle[r][c];
+            if (val !== "0") {
+                cell.textContent = val;
+                cell.classList.add("fixed");
+            }
+
+            cell.onclick = () => selectCell(cell);
+            grid.appendChild(cell);
+        }
+    }
 }
 
-function checkWin() {
-  const values = [...document.querySelectorAll(".cell input")].map(i => i.value);
-
-  if (values.every(v => v >= 1 && v <= 9)) {
-    message.textContent = "🎉 You solved it!";
-  }
+function selectCell(cell) {
+    if (selectedCell) selectedCell.classList.remove("selected");
+    selectedCell = cell;
+    selectedCell.classList.add("selected");
 }
 
-document.getElementById("restartBtn").addEventListener("click", () => {
-  if (firstRestart) {
-    document.getElementById("directLink").click();
-    firstRestart = false;
-  }
-  message.textContent = "";
-  generateBoard();
+// NUMBER PAD
+const nums = document.querySelectorAll(".num");
+nums.forEach(n => {
+    n.onclick = () => {
+        if (!selectedCell || selectedCell.classList.contains("fixed")) return;
+        if (n.classList.contains("erase")) selectedCell.textContent = "";
+        else selectedCell.textContent = n.textContent;
+        checkWin();
+    };
 });
+
+// CHECK WIN
+function checkWin() {
+    const cells = document.querySelectorAll(".cell");
+    for (let c of cells) {
+        if (c.textContent === "") return;
+    }
+    document.getElementById("message").textContent = "🎉 You Completed the Puzzle!";
+}
 
 // DARK MODE
-document.getElementById("darkModeBtn").addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-});
+const darkBtn = document.getElementById("darkModeBtn");
+darkBtn.onclick = () => {
+    document.body.classList.toggle("dark");
+};
 
-// Init
-generateBoard();
+// RESTART
+const restartBtn = document.getElementById("restartBtn");
+restartBtn.onclick = () => {
+    window.location.href = "https://otieu.com/4/10544878"; // change USERNAME
+};
+
+loadGrid();
