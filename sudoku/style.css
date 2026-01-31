@@ -225,3 +225,69 @@ header button {
   border-radius: 6px;
   text-decoration: none;
 }
+/* BLOG CARD (Professional Style) */
+.blog {
+  margin-top: 60px;
+  padding: 25px;
+  background: rgba(20, 20, 20, 0.8); /* Dark Glass */
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  width: 95%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.blog h2 {
+  margin-bottom: 10px;
+  color: #ffd95a;
+  font-size: 1.3rem;
+}
+
+.blog p,
+.blog ul {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.blog ul {
+  padding-left: 20px;
+  margin-top: 5px;
+}
+
+.donate-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #ffe066, #ffb700);
+  color: #000;
+  font-weight: bold;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(255,215,0,0.4);
+  transition: 0.3s;
+}
+
+.donate-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(255,215,0,0.5);
+}
+
+/* PHONE RESPONSIVE */
+@media (max-width: 480px) {
+  .blog {
+    padding: 18px;
+  }
+
+  .blog h2 {
+    font-size: 1.15rem;
+  }
+
+  .blog p,
+  .blog ul {
+    font-size: 0.9rem;
+  }
+}
