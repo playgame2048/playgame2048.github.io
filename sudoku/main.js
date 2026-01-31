@@ -75,13 +75,22 @@ function sameBlock(r, c, rr, cc) {
          Math.floor(c/3) === Math.floor(cc/3);
 }
 
-// NUMBER PAD INPUT
+// NUMBER PAD INPUT + ERROR CHECK
 document.querySelectorAll(".num").forEach(btn => {
   btn.addEventListener("click", () => {
     if (!selectedCell) return;
     if (selectedCell.classList.contains("fixed")) return;
 
-    selectedCell.textContent = btn.textContent;
+    const value = btn.textContent;
+    selectedCell.textContent = value;
+
+    // Remove old error styling
+    selectedCell.classList.remove("error");
+
+    // Check if value already exists in same row/col/block
+    if (isConflict(selectedCell, value)) {
+      selectedCell.classList.add("error");
+    }
   });
 });
 
