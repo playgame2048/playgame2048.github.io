@@ -21,6 +21,11 @@ const puzzle = [
   ["", "", "", "", 8, "", "", 7, 9]
 ];
 
+if (row % 3 === 0) cell.classList.add("block-border-top");
+if (row % 3 === 2) cell.classList.add("block-border-bottom");
+if (col % 3 === 0) cell.classList.add("block-border-left");
+if (col % 3 === 2) cell.classList.add("block-border-right");
+
 let selectedCell = null;
 
 // BUILD GRID
