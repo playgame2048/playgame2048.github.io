@@ -1,194 +1,164 @@
-let seconds = 0;
-setInterval(() => {
-  seconds++;
-  let m = String(Math.floor(seconds / 60)).padStart(2, '0');
-  let s = String(seconds % 60).padStart(2, '0');
-  document.getElementById("timer").textContent = `⏳ ${m}:${s}`;
-}, 1000);
-
-// Simple 3x3 Sudoku board (static example)
-const puzzle = [
-  [5, 3, "", "", 7, "", "", "", ""],
-  [6, "", "", 1, 9, 5, "", "", ""],
-  ["", 9, 8, "", "", "", "", 6, ""],
-
-  [8, "", "", "", 6, "", "", "", 3],
-  [4, "", "", 8, "", 3, "", "", 1],
-  [7, "", "", "", 2, "", "", "", 6],
-
-  ["", 6, "", "", "", "", 2, 8, ""],
-  ["", "", "", 4, 1, 9, "", "", 5],
-  ["", "", "", "", 8, "", "", 7, 9]
-];
-
+// ===== VARIABLES =====
+const grid = document.getElementById("grid");
+const numbersPanel = document.getElementById("numbersPanel");
+const gameOverEl = document.getElementById("gameOver");
+let selectedNumber = null;
 let selectedCell = null;
+let errors = 0;
+let paused = false;
+let time = 0;
+let timerInterval;
+let difficulty = "easy";
 
-// BUILD GRID
-function generateGrid() {
-  const grid = document.getElementById("sudokuGrid");
-  grid.innerHTML = "";
+// ===== TIMER =====
+function startTimer(){
+  clearInterval(timerInterval);
+  timerInterval = setInterval(()=>{
+    if(!paused){
+      time++;
+      let m = String(Math.floor(time/60)).padStart(2,"0");
+      let s = String(time%60).padStart(2,"0");
+      document.getElementById("timer").textContent=`${m}:${s}`;
+    }
+  },1000);
+}
+startTimer();
 
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      const cell = document.createElement("div");
-      cell.classList.add("cell");
-      cell.dataset.row = r;
-      cell.dataset.col = c;
+// ===== PAUSE =====
+document.getElementById("pauseBtn").onclick=()=>{
+  paused = !paused;
+  document.getElementById("pauseBtn").textContent = paused ? "▶️" : "⏸";
+}
 
-      if (puzzle[r][c] !== "") {
-        cell.textContent = puzzle[r][c];
+// ===== DARK MODE =====
+document.getElementById("darkModeBtn").onclick=()=>{
+  document.body.classList.toggle("dark");
+}
+
+// ===== RESTART =====
+document.getElementById("restartBtn").onclick=()=>{
+  location.reload();
+}
+
+// ===== DIFFICULTY =====
+document.getElementById("easyBtn").onclick=()=>{difficulty="easy"; generatePuzzle();}
+document.getElementById("mediumBtn").onclick=()=>{difficulty="medium"; generatePuzzle();}
+document.getElementById("hardBtn").onclick=()=>{difficulty="hard"; generatePuzzle();}
+
+// ===== NUMBERS PANEL =====
+function buildNumbersPanel(){
+  numbersPanel.innerHTML="";
+  for(let i=1;i<=9;i++){
+    const btn=document.createElement("button");
+    btn.className="num-btn";
+    btn.textContent=i;
+    btn.onclick=()=>{
+      document.querySelectorAll(".num-btn").forEach(b=>b.classList.remove("selected"));
+      btn.classList.add("selected");
+      selectedNumber=i;
+    };
+    numbersPanel.appendChild(btn);
+  }
+}
+buildNumbersPanel();
+
+// ===== SUDOKU GRID =====
+const puzzles = {
+  easy:[
+    [5,3,"","",7,"","","",""],
+    [6,"","",1,9,5,"","",""],
+    ["",9,8,"","","","","",6,""],
+    [8,"","","",6,"","","",3],
+    [4,"",8,"",3,"","","",1],
+    [7,"","","",2,"","","",6],
+    ["",6,"","","","","",2,8,""],
+    ["","","",4,1,9,"","","5"],
+    ["","","","","8","","",7,9]
+  ],
+  medium:[], // يمكن تزيد medium puzzle
+  hard:[]    // يمكن تزيد hard puzzle
+};
+
+function generatePuzzle(){
+  grid.innerHTML="";
+  errors=0;
+  const puzzle = puzzles[difficulty].map(row=>[...row]);
+  for(let r=0;r<9;r++){
+    for(let c=0;c<9;c++){
+      const cell=document.createElement("div");
+      cell.className="cell";
+      cell.dataset.row=r;
+      cell.dataset.col=c;
+
+      if(puzzle[r][c]!==""){
+        cell.textContent=puzzle[r][c];
         cell.classList.add("fixed");
       }
 
-      cell.addEventListener("click", () => selectCell(cell));
+      if(r%3===0) cell.classList.add("block-border-top");
+      if(c%3===0) cell.classList.add("block-border-left");
+      if(r===8) cell.classList.add("block-border-bottom");
+      if(c===8) cell.classList.add("block-border-right");
+
+      cell.onclick=()=>selectCell(cell);
       grid.appendChild(cell);
     }
   }
 }
+generatePuzzle();
 
-generateGrid();
-
-// CELL SELECTION + HIGHLIGHTING
-function selectCell(cell) {
-  clearHighlights();
-
-  selectedCell = cell;
-  cell.classList.add("active");
-
-if (row % 3 === 0) cell.classList.add("block-border-top");
-if (row % 3 === 2) cell.classList.add("block-border-bottom");
-if (col % 3 === 0) cell.classList.add("block-border-left");
-if (col % 3 === 2) cell.classList.add("block-border-right");
-
-  highlightRelated(cell);
+// ===== SELECT CELL =====
+function selectCell(cell){
+  if(selectedCell) selectedCell.classList.remove("active");
+  selectedCell=cell;
+  if(!cell.classList.contains("fixed")) cell.classList.add("active");
 }
 
-function clearHighlights() {
-  document.querySelectorAll(".cell").forEach(c => {
-    c.classList.remove("active", "related");
-  });
-}
+// ===== PLACE NUMBER =====
+function placeNumber(num){
+  if(!selectedCell || selectedCell.classList.contains("fixed")) return;
 
-function highlightRelated(cell) {
-  let r = Number(cell.dataset.row);
-  let c = Number(cell.dataset.col);
+  selectedCell.textContent=num;
+  selectedCell.classList.remove("error");
 
-  document.querySelectorAll(".cell").forEach(el => {
-    let rr = Number(el.dataset.row);
-    let cc = Number(el.dataset.col);
-
-    if (rr === r || cc === c || sameBlock(r, c, rr, cc)) {
-      el.classList.add("related");
+  if(isConflict(selectedCell,num)){
+    selectedCell.classList.add("error");
+    errors++;
+    if(errors>=4){
+      gameOverEl.style.display="block";
+      paused=true;
     }
-  });
-}
-
-function isConflict(cell, value) {
-  let r = Number(cell.dataset.row);
-  let c = Number(cell.dataset.col);
-
-  value = Number(value);
-
-  let conflict = false;
-
-  document.querySelectorAll(".cell").forEach(el => {
-    let rr = Number(el.dataset.row);
-    let cc = Number(el.dataset.col);
-
-    if (el === cell) return; // ignore itself
-
-    // Same row or same column or block
-    if (rr === r || cc === c || sameBlock(r, c, rr, cc)) {
-      if (Number(el.textContent) === value) {
-        conflict = true;
-      }
-    }
-  });
-
-  return conflict;
-}
-
-function highlightErrorCells(cell, value) {
-  clearAllErrorHighlights();
-
-  let r = Number(cell.dataset.row);
-  let c = Number(cell.dataset.col);
-  value = Number(value);
-
-  document.querySelectorAll(".cell").forEach(el => {
-    let rr = Number(el.dataset.row);
-    let cc = Number(el.dataset.col);
-
-    if (el === cell) return;
-
-    if (rr === r || cc === c || sameBlock(r, c, rr, cc)) {
-      if (Number(el.textContent) === value) {
-        el.classList.add("error");
-        cell.classList.add("error");
-      }
-    }
-  });
-}
-
-function clearAllErrorHighlights() {
-  document.querySelectorAll(".cell").forEach(el => el.classList.remove("error"));
-}
-
-function sameBlock(r, c, rr, cc) {
-  return Math.floor(r/3) === Math.floor(rr/3) &&
-         Math.floor(c/3) === Math.floor(cc/3);
-}
-
-// NUMBER PAD INPUT + ERROR CHECK
-document.querySelectorAll(".num").forEach(btn => {
-  btn.addEventListener("click", () => {
-    if (!selectedCell) return;
-    if (selectedCell.classList.contains("fixed")) return;
-
-    const value = btn.textContent;
-    selectedCell.textContent = value;
-
-    clearAllErrorHighlights(); // remove old errors
-
-    if (isConflict(selectedCell, value)) {
-      highlightErrorCells(selectedCell, value);
-    }
-  });
-});
-
-let errors = 0;
-
-function markError(cell) {
-  errors++;
-  cell.classList.add("error");
-
-  if (errors >= 4) {
-    setTimeout(() => {
-      alert("❌ GAME OVER — You made 4 mistakes!");
-      location.reload();
-    }, 300);
   }
 }
 
-const holes = {
-  easy: 30,
-  medium: 40,
-  hard: 55
-};
+// ===== HIGHLIGHT RELATED CELLS =====
+grid.addEventListener("click",e=>{
+  if(e.target.classList.contains("cell")){
+    selectCell(e.target);
+  }
+});
 
-function generatePuzzle() {
-  let diff = document.getElementById("difficulty").value;
-  let emptyCells = holes[diff];
+document.querySelectorAll(".num-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    if(selectedCell) placeNumber(btn.textContent);
+  });
+});
 
-  // هنا تحط اللوجيك ديال التفريغ بناء على مستوى الصعوبة
+// ===== CHECK CONFLICT =====
+function isConflict(cell,value){
+  const r=Number(cell.dataset.row);
+  const c=Number(cell.dataset.col);
+  let conflict=false;
+  document.querySelectorAll(".cell").forEach(el=>{
+    const rr=Number(el.dataset.row);
+    const cc=Number(el.dataset.col);
+    if(el===cell) return;
+    if(rr===r||cc===c||sameBlock(r,c,rr,cc)){
+      if(Number(el.textContent)===Number(value)) conflict=true;
+    }
+  });
+  return conflict;
 }
-
-// DARK MODE
-document.getElementById("darkModeBtn").onclick = () => {
-  document.body.classList.toggle("dark");
-};
-
-// RESTART BUTTON
-document.getElementById("restartBtn").onclick = () => {
-  window.location.href = "https://otieu.com/4/10544878";
-};
+function sameBlock(r,c,rr,cc){
+  return Math.floor(r/3)===Math.floor(rr/3)&&Math.floor(c/3)===Math.floor(cc/3);
+}
