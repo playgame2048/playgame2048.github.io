@@ -1,18 +1,15 @@
-// ===== VARIABLES =====
 const grid = document.getElementById("grid");
 const numbersPanel = document.getElementById("numbersPanel");
 const gameOverEl = document.getElementById("gameOver");
-let selectedNumber = null;
+
 let selectedCell = null;
 let errors = 0;
 let paused = false;
 let time = 0;
 let timerInterval;
-
-// 🔹 monetag مرة وحدة
 let monetagOnce = false;
 
-// ===== TIMER =====
+// TIMER
 function startTimer(){
   clearInterval(timerInterval);
   timerInterval = setInterval(()=>{
@@ -20,70 +17,90 @@ function startTimer(){
       time++;
       let m = String(Math.floor(time/60)).padStart(2,"0");
       let s = String(time%60).padStart(2,"0");
-      document.getElementById("timer").textContent=`${m}:${s}`;
+      timer.textContent = `${m}:${s}`;
     }
   },1000);
 }
 startTimer();
 
-// ===== PAUSE =====
-document.getElementById("pauseBtn").onclick=()=>{
+// BUTTONS
+pauseBtn.onclick = ()=>{
   paused = !paused;
-  document.getElementById("pauseBtn").textContent = paused ? "▶️" : "⏸";
+  pauseBtn.textContent = paused ? "▶️" : "⏸";
 };
 
-// ===== DARK MODE =====
-document.getElementById("darkModeBtn").onclick=()=>{
+darkModeBtn.onclick = ()=>{
   document.body.classList.toggle("dark");
 };
 
-// ===== RESTART (Monetag مرة وحدة) =====
-document.getElementById("restartBtn").onclick=()=>{
+restartBtn.onclick = ()=>{
   if(!monetagOnce){
     monetagOnce = true;
-    window.open("https://MONETAG-LINK-DYALK","_blank");
+    window.open("https://MONETAG-LINK","_blank");
   }else{
     location.reload();
   }
 };
 
-// ===== NUMBERS PANEL =====
-function buildNumbersPanel(){
-  numbersPanel.innerHTML="";
-  for(let i=1;i<=9;i++){
-    const btn=document.createElement("button");
-    btn.className="num-btn";
-    btn.textContent=i;
-    btn.onclick=()=>{
-      document.querySelectorAll(".num-btn").forEach(b=>b.classList.remove("selected"));
-      btn.classList.add("selected");
-      selectedNumber=i;
-      if(selectedCell) placeNumber(i);
-    };
-    numbersPanel.appendChild(btn);
-  }
+// NUMBERS
+for(let i=1;i<=9;i++){
+  let btn=document.createElement("button");
+  btn.className="num-btn";
+  btn.textContent=i;
+  btn.onclick=()=>placeNumber(i);
+  numbersPanel.appendChild(btn);
 }
-buildNumbersPanel();
 
-// ===== SUDOKU PUZZLES =====
-const puzzles = [
-  [5,3,"","",7,"","","",""],
-  [6,"","",1,9,5,"","",""],
-  ["",9,8,"","","","","",6,""],
-  [8,"","","",6,"","","",3],
-  [4,"",8,"",3,"","","",1],
-  [7,"","","",2,"","","",6],
-  ["",6,"","","","","",2,8,""],
-  ["","","",4,1,9,"","","5"],
-  ["","","","","8","","",7,9]
-];
+// PUZZLES (نفس structure)
+const puzzles = {
+  easy:[[
+    [5,3,"","",7,"","","",""],
+    [6,"","",1,9,5,"","",""],
+    ["",9,8,"","","","","",6,""],
+    [8,"","","",6,"","","",3],
+    [4,"",8,"",3,"","","",1],
+    [7,"","","",2,"","","",6],
+    ["",6,"","","","","",2,8,""],
+    ["","","",4,1,9,"","","5"],
+    ["","","","","8","","",7,9]
+  ]],
+  medium:[[
+    ["",2,"",6,"","","",9,""],
+    ["","","",1,9,"","","",""],
+    ["",9,8,"","","","","",6,""],
+    [8,"","","",6,"","","",3],
+    ["","","",8,"",3,"","",""],
+    [7,"","","",2,"","","",6],
+    ["",6,"","","","","",2,8,""],
+    ["","","",4,1,9,"","","5"],
+    ["","","","","8","","",7,9]
+  ]],
+  hard:[[
+    ["","","","","","","","",""],
+    ["","","",1,"","","","",""],
+    ["",9,"","","","","",6,""],
+    ["","","","","","","","",3],
+    ["","","",8,"",3,"","",""],
+    [7,"","","","","","","",6],
+    ["",6,"","","","","",2,""],
+    ["","","",4,"","","","",""],
+    ["","","","","8","","","",""]
+  ]]
+};
 
-// ===== GENERATE =====
+// RANDOM PUZZLE
 function generatePuzzle(){
   grid.innerHTML="";
   errors=0;
 
-  const puzzle = puzzles.map(row=>[...row]);
+  let all = [
+    ...puzzles.easy,
+    ...puzzles.medium,
+    ...puzzles.hard
+  ];
+
+  const puzzle = all[Math.floor(Math.random()*all.length)]
+    .map(r=>[...r]);
 
   for(let r=0;r<9;r++){
     for(let c=0;c<9;c++){
@@ -97,11 +114,6 @@ function generatePuzzle(){
         cell.classList.add("fixed");
       }
 
-      if(r%3===0) cell.classList.add("block-border-top");
-      if(c%3===0) cell.classList.add("block-border-left");
-      if(r===8) cell.classList.add("block-border-bottom");
-      if(c===8) cell.classList.add("block-border-right");
-
       cell.onclick=()=>selectCell(cell);
       grid.appendChild(cell);
     }
@@ -109,18 +121,16 @@ function generatePuzzle(){
 }
 generatePuzzle();
 
-// ===== SELECT CELL =====
 function selectCell(cell){
   if(selectedCell) selectedCell.classList.remove("active");
-  selectedCell=cell;
-  if(!cell.classList.contains("fixed")) cell.classList.add("active");
+  if(cell.classList.contains("fixed")) return;
+  selectedCell = cell;
+  cell.classList.add("active");
 }
 
-// ===== PLACE NUMBER =====
 function placeNumber(num){
   if(!selectedCell || selectedCell.classList.contains("fixed")) return;
-
-  selectedCell.textContent=num;
+  selectedCell.textContent = num;
   selectedCell.classList.remove("error");
 
   if(isConflict(selectedCell,num)){
@@ -133,21 +143,13 @@ function placeNumber(num){
   }
 }
 
-// ===== CHECK CONFLICT =====
 function isConflict(cell,value){
-  const r=Number(cell.dataset.row);
-  const c=Number(cell.dataset.col);
-  let conflict=false;
-  document.querySelectorAll(".cell").forEach(el=>{
-    const rr=Number(el.dataset.row);
-    const cc=Number(el.dataset.col);
-    if(el===cell) return;
-    if(rr===r||cc===c||sameBlock(r,c,rr,cc)){
-      if(Number(el.textContent)===Number(value)) conflict=true;
-    }
+  const r=cell.dataset.row;
+  const c=cell.dataset.col;
+  return [...document.querySelectorAll(".cell")].some(el=>{
+    if(el===cell) return false;
+    return (el.dataset.row===r || el.dataset.col===c) && el.textContent==value;
   });
-  return conflict;
 }
-function sameBlock(r,c,rr,cc){
-  return Math.floor(r/3)===Math.floor(rr/3)&&Math.floor(c/3)===Math.floor(cc/3);
-}
+
+goRestart.onclick=()=>location.reload();
