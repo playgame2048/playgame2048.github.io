@@ -11,7 +11,6 @@
 <header class="header">
   <h1>Sudoku</h1>
 
-  <!-- نفس top-controls ديالك، غير بقى بوحدو -->
   <div class="top-controls">
     <button id="restartBtn">Restart</button>
     <button id="darkModeBtn">Dark Mode</button>
@@ -22,22 +21,20 @@
   </div>
 </header>
 
-<!-- game + numbers فاليمين -->
 <div class="game-container">
   <div id="grid" class="sudoku-grid"></div>
   <div class="number-select" id="numbersPanel"></div>
 </div>
 
-<!-- بلاصة الإعلانات -->
 <div class="ads-zone">
-  <!-- PUT MONETAG ADS HERE -->
+  <!-- MONETAG ADS CODE HERE -->
 </div>
 
 <div class="game-over" id="gameOver">
-  GAME OVER - Play Again
+  GAME OVER<br><br>
+  <button id="goRestart">Restart</button>
 </div>
 
-<!-- BLOG ما تقاسش -->
 <section class="blog">
   <h2>🎲 How to Play</h2>
   <p>Fill the grid with numbers 1-9. Each row, column, and 3x3 box must contain all numbers without repetition. Be careful: 4 mistakes and the game ends!</p>
