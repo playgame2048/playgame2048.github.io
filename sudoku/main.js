@@ -1,13 +1,14 @@
 const grid=document.getElementById("grid");
 const numbers=document.getElementById("numbers");
-const noteBtn=document.getElementById("noteBtn");
+const notesBtn=document.getElementById("notesBtn");
 const hintBtn=document.getElementById("hintBtn");
-const hintsLeftEl=document.getElementById("hintsLeft");
-const gameOver=document.getElementById("gameOver");
+const hintsEl=document.getElementById("hints");
+const overlay=document.getElementById("overlay");
+const timerEl=document.getElementById("timer");
 
 let selectedCell=null;
 let notesMode=false;
-let hintsLeft=3;
+let hints=3;
 let time=0;
 let paused=false;
 
@@ -63,53 +64,55 @@ function buildGrid(){
 }
 buildGrid();
 
-numbers.querySelectorAll("button").forEach(btn=>{
-  btn.onclick=()=>{
-    if(!selectedCell) return;
-    const r=selectedCell.dataset.r;
-    const c=selectedCell.dataset.c;
-    const num=Number(btn.dataset.num);
+for(let i=1;i<=9;i++){
+  const b=document.createElement("button");
+  b.textContent=i;
+  b.onclick=()=>placeNumber(i);
+  numbers.appendChild(b);
+}
 
-    if(notesMode){
-      let notes=selectedCell.querySelector(".notes");
-      if(!notes){
-        notes=document.createElement("div");
-        notes.className="notes";
-        selectedCell.textContent="";
-        selectedCell.appendChild(notes);
-      }
-      if(!notes.textContent.includes(num)){
-        notes.textContent+=num;
-      }
-    }else{
-      selectedCell.innerHTML=num;
-      if(num!==solution[r][c]){
-        gameOver.style.display="flex";
-        paused=true;
-      }
+function placeNumber(n){
+  if(!selectedCell) return;
+  const r=selectedCell.dataset.r;
+  const c=selectedCell.dataset.c;
+
+  if(notesMode){
+    let notes=selectedCell.querySelector(".notes");
+    if(!notes){
+      notes=document.createElement("div");
+      notes.className="notes";
+      selectedCell.textContent="";
+      selectedCell.appendChild(notes);
     }
-  };
-});
+    if(!notes.textContent.includes(n)) notes.textContent+=n;
+  }else{
+    selectedCell.innerHTML=n;
+    if(n!==solution[r][c]){
+      paused=true;
+      overlay.style.display="flex";
+    }
+  }
+}
 
-noteBtn.onclick=()=>{
+notesBtn.onclick=()=>{
   notesMode=!notesMode;
-  noteBtn.style.opacity=notesMode?0.6:1;
+  notesBtn.style.opacity=notesMode?0.6:1;
 };
 
 hintBtn.onclick=()=>{
-  if(hintsLeft<=0 || !selectedCell) return;
+  if(hints<=0 || !selectedCell) return;
   const r=selectedCell.dataset.r;
   const c=selectedCell.dataset.c;
   selectedCell.textContent=solution[r][c];
-  hintsLeft--;
-  hintsLeftEl.textContent=hintsLeft;
+  hints--;
+  hintsEl.textContent=hints;
 };
 
 setInterval(()=>{
   if(!paused){
     time++;
-    const m=String(Math.floor(time/60)).padStart(2,"0");
-    const s=String(time%60).padStart(2,"0");
-    document.getElementById("time").textContent=`${m}:${s}`;
+    let m=String(Math.floor(time/60)).padStart(2,"0");
+    let s=String(time%60).padStart(2,"0");
+    timerEl.textContent=`${m}:${s}`;
   }
 },1000);
