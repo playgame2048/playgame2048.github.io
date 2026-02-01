@@ -1,3 +1,11 @@
+let seconds = 0;
+setInterval(() => {
+  seconds++;
+  let m = String(Math.floor(seconds / 60)).padStart(2, '0');
+  let s = String(seconds % 60).padStart(2, '0');
+  document.getElementById("timer").textContent = `⏳ ${m}:${s}`;
+}, 1000);
+
 // Simple 3x3 Sudoku board (static example)
 const puzzle = [
   [5, 3, "", "", 7, "", "", "", ""],
