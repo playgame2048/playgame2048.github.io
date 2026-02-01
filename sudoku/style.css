@@ -1,62 +1,126 @@
-/* RESET */
-* { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
-body { background:#f0f0f0; color:#222; transition:0.3s; display:flex; flex-direction:column; align-items:center;}
-body.dark { background:#121212; color:#fff; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
-header.header { text-align:center; margin-top:20px; }
-header h1 { font-size:2.5rem; margin-bottom:10px; }
+body{
+  background:#f0f0f0;
+  color:#222;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  transition:.3s;
+}
+body.dark{background:#121212;color:#fff}
 
-.top-controls { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; align-items:center; margin-bottom:10px; }
-.top-controls button { padding:10px 18px; font-size:16px; border:none; border-radius:8px; cursor:pointer; background:#4caf50; color:white; transition:0.2s;}
-.top-controls button:hover { opacity:0.8; }
+.header{text-align:center;margin-top:20px}
+h1{font-size:2.5rem;margin-bottom:15px}
 
-.timer-box { width:120px; height:40px; display:flex; justify-content:center; align-items:center; background:#222; color:#fff; border-radius:8px; font-size:18px; font-weight:bold; }
-body.dark .timer-box { background:#fff; color:#000; }
+.controls-row{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
 
-.difficulty-box { display:flex; gap:10px; justify-content:center; margin-bottom:20px; }
-.difficulty-box button { padding:8px 12px; border-radius:6px; border:none; cursor:pointer; background:#eee; font-weight:bold; transition:0.2s;}
-.difficulty-box button:hover { background:#ddd; }
-body.dark .difficulty-box button { background:#333; color:#fff; }
-body.dark .difficulty-box button:hover { background:#444; }
+button{
+  padding:10px 18px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  background:#4caf50;
+  color:#fff;
+}
 
-.game-container { display:flex; justify-content:center; margin-bottom:15px; }
+.timer-box{
+  padding:10px 18px;
+  background:#222;
+  color:#fff;
+  border-radius:8px;
+  font-weight:bold;
+}
+body.dark .timer-box{background:#fff;color:#000}
 
-.sudoku-grid { display:grid; grid-template-columns:repeat(9,50px); grid-template-rows:repeat(9,50px); gap:2px; }
-.cell { background:white; border:1px solid #aaa; display:flex; justify-content:center; align-items:center; font-size:22px; cursor:pointer; transition:0.15s; color:#0066cc; }
-.cell.fixed { color:#000; font-weight:bold; cursor:default; }
-.cell.active { background:#c5e5ff !important; }
-.cell.related { background:#f2f2f2; }
-.cell.error { background:rgba(255,80,80,0.45); color:#000; font-weight:bold; border:2px solid rgba(255,0,0,0.6); }
+.game-container{
+  display:flex;
+  gap:25px;
+  margin-bottom:20px;
+}
 
-body.dark .cell { background:#1d1d1d; color:white; border-color:#444; }
-body.dark .cell.active { background:#004a77 !important; }
-body.dark .cell.related { background:#222; }
-body.dark .cell.error { background:rgba(255,80,80,0.45); color:#fff; border-color:rgba(255,0,0,0.7); }
+.sudoku-grid{
+  display:grid;
+  grid-template-columns:repeat(9,50px);
+  grid-template-rows:repeat(9,50px);
+  gap:2px;
+}
 
-.number-select { display:grid; grid-template-columns:repeat(9,50px); gap:5px; justify-content:center; margin-bottom:30px; }
-.num-btn { padding:15px; border:2px solid #000; border-radius:6px; background:white; font-size:18px; cursor:pointer; }
-.num-btn.selected { background:#e0e0e0; }
-body.dark .num-btn { background:#444; color:#fff; border-color:#888; }
-body.dark .num-btn.selected { background:#666; color:#fff; }
+.cell{
+  background:#fff;
+  border:1px solid #aaa;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:22px;
+  cursor:pointer;
+}
+.cell.fixed{font-weight:bold;color:#000}
+.cell.active{background:#c5e5ff}
+.cell.error{background:rgba(255,0,0,.4)}
 
-.game-over { display:none; color:red; font-size:24px; font-weight:bold; margin:20px 0; }
+body.dark .cell{background:#1d1d1d;color:#fff;border-color:#444}
 
-.blog { max-width:700px; background:rgba(20,20,20,0.85); color:#fff; padding:20px; border-radius:12px; box-shadow:0 8px 25px rgba(0,0,0,0.45); backdrop-filter:blur(5px); margin-bottom:50px;}
-.blog h2 { color:#ffd95a; margin-bottom:10px; font-size:1.3rem; }
-.blog p { margin-bottom:10px; line-height:1.6; }
-.donate-btn { display:inline-block; margin-top:15px; padding:12px 20px; border-radius:10px; font-weight:bold; text-decoration:none; background:linear-gradient(135deg,#ffe066,#ffb700); color:#000; box-shadow:0 4px 10px rgba(255,215,0,0.4); transition:0.3s;}
-.donate-btn:hover { transform:translateY(-3px); box-shadow:0 6px 15px rgba(255,215,0,0.5); }
+.number-select{
+  display:grid;
+  grid-template-columns:repeat(3,50px);
+  grid-template-rows:repeat(3,50px);
+  gap:5px;
+}
 
-/* Bold borders 3x3 blocks */
-.cell.block-border-top    { border-top:3px solid #000; }
-.cell.block-border-bottom { border-bottom:3px solid #000; }
-.cell.block-border-left   { border-left:3px solid #000; }
-.cell.block-border-right  { border-right:3px solid #000; }
+.num-btn{
+  font-size:18px;
+  cursor:pointer;
+  border-radius:6px;
+  border:2px solid #000;
+}
 
-/* Responsive */
-@media(max-width:480px){
-  .sudoku-grid { grid-template-columns:repeat(9,35px); grid-template-rows:repeat(9,35px); gap:1px; }
-  .number-select { grid-template-columns:repeat(9,35px); }
-  .top-controls { flex-wrap:wrap; gap:5px; }
-  .difficulty-box { flex-wrap:wrap; gap:5px; justify-content:center; }
+.game-over{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  color:#fff;
+  z-index:999;
+}
+
+.game-over button{
+  margin-top:20px;
+  padding:15px 25px;
+  font-size:18px;
+}
+
+.ads-zone{
+  margin:30px auto;
+  max-width:728px;
+  width:100%;
+  text-align:center;
+}
+
+.blog{
+  max-width:700px;
+  background:#111;
+  color:#fff;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:40px;
+}
+
+.donate-btn{
+  display:inline-block;
+  margin-top:10px;
+  padding:10px 20px;
+  background:gold;
+  color:#000;
+  border-radius:10px;
+  text-decoration:none;
 }
