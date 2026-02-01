@@ -8,32 +8,20 @@
 </head>
 <body>
 
-<header class="top-bar">
-  <h1>Sudoku</h1>
-  <div class="controls">
-    <button id="noteBtn">✏️ Notes</button>
-    <button id="hintBtn">💡 Hint (<span id="hintsLeft">3</span>)</button>
-    <div class="timer">⏱ <span id="time">00:00</span></div>
-  </div>
-</header>
+<h1>Sudoku</h1>
 
-<main class="game-wrapper">
-  <div id="grid" class="grid"></div>
+<div class="top">
+  <button id="notesBtn">✏ Notes</button>
+  <button id="hintBtn">💡 Hint (<span id="hints">3</span>)</button>
+  <div id="timer">00:00</div>
+</div>
 
-  <div class="numbers" id="numbers">
-    <button data-num="1">1</button>
-    <button data-num="2">2</button>
-    <button data-num="3">3</button>
-    <button data-num="4">4</button>
-    <button data-num="5">5</button>
-    <button data-num="6">6</button>
-    <button data-num="7">7</button>
-    <button data-num="8">8</button>
-    <button data-num="9">9</button>
-  </div>
-</main>
+<div class="game">
+  <div id="grid"></div>
+  <div id="numbers"></div>
+</div>
 
-<div class="overlay" id="gameOver">
+<div id="overlay">
   <h2>Game Over</h2>
   <button onclick="location.reload()">Restart</button>
 </div>
