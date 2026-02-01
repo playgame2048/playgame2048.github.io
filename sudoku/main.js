@@ -21,11 +21,6 @@ const puzzle = [
   ["", "", "", "", 8, "", "", 7, 9]
 ];
 
-if (row % 3 === 0) cell.classList.add("block-border-top");
-if (row % 3 === 2) cell.classList.add("block-border-bottom");
-if (col % 3 === 0) cell.classList.add("block-border-left");
-if (col % 3 === 2) cell.classList.add("block-border-right");
-
 let selectedCell = null;
 
 // BUILD GRID
@@ -59,6 +54,11 @@ function selectCell(cell) {
 
   selectedCell = cell;
   cell.classList.add("active");
+
+if (row % 3 === 0) cell.classList.add("block-border-top");
+if (row % 3 === 2) cell.classList.add("block-border-bottom");
+if (col % 3 === 0) cell.classList.add("block-border-left");
+if (col % 3 === 2) cell.classList.add("block-border-right");
 
   highlightRelated(cell);
 }
@@ -155,6 +155,33 @@ document.querySelectorAll(".num").forEach(btn => {
     }
   });
 });
+
+let errors = 0;
+
+function markError(cell) {
+  errors++;
+  cell.classList.add("error");
+
+  if (errors >= 4) {
+    setTimeout(() => {
+      alert("❌ GAME OVER — You made 4 mistakes!");
+      location.reload();
+    }, 300);
+  }
+}
+
+const holes = {
+  easy: 30,
+  medium: 40,
+  hard: 55
+};
+
+function generatePuzzle() {
+  let diff = document.getElementById("difficulty").value;
+  let emptyCells = holes[diff];
+
+  // هنا تحط اللوجيك ديال التفريغ بناء على مستوى الصعوبة
+}
 
 // DARK MODE
 document.getElementById("darkModeBtn").onclick = () => {
