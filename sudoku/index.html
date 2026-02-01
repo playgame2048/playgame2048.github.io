@@ -1,45 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Sudoku</title>
-<link rel="stylesheet" href="style.css">
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header {
+        width: 100%;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .title {
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .time {
+        font-size: 20px;
+        font-weight: bold;
+        color: #000;
+    }
+
+    .panel {
+        margin-top: 20px;
+        display: flex;
+        gap: 15px;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        background: #333;
+        color: #fff;
+    }
+
+    #board-container {
+        margin-top: 30px;
+        display: flex;
+        gap: 30px;
+    }
+
+    #sudoku-board {
+        width: 360px;
+        height: 360px;
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        grid-template-rows: repeat(9, 1fr);
+        background: white;
+        border: 3px solid black;
+    }
+
+    .cell {
+        border: 1px solid #ccc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    #select-panel {
+        width: 150px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .num-btn {
+        width: 45px;
+        height: 45px;
+        background: #444;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 20px;
+    }
+
+    footer {
+        margin-top: 40px;
+        padding: 20px;
+        font-size: 18px;
+        text-align: center;
+    }
+</style>
 </head>
 <body>
 
-<header class="header">
-  <h1>Sudoku</h1>
-  <div class="top-controls">
-    <button id="restartBtn">Restart</button>
-    <button id="darkModeBtn">Dark Mode</button>
-    <div class="timer-box">
-      ⏱ <span id="timer">00:00</span>
-    </div>
-    <button id="pauseBtn">⏸</button>
-  </div>
-  <div class="difficulty-box">
-    <button id="easyBtn">Easy</button>
-    <button id="mediumBtn">Medium</button>
-    <button id="hardBtn">Hard</button>
-  </div>
+<header>
+    <div class="title">Sudoku</div>
+    <div class="time" id="timer">00:00</div>
 </header>
 
-<div class="game-container">
-  <div id="grid" class="sudoku-grid"></div>
+<div class="panel">
+    <button id="restartBtn">Restart</button>
+    <button id="modeBtn">Simple</button>
+    <button id="darkBtn">Dark Mode</button>
 </div>
 
-<div class="number-select" id="numbersPanel"></div>
+<div id="board-container">
+    <div id="sudoku-board"></div>
 
-<div class="game-over" id="gameOver">GAME OVER - Play Again</div>
+    <div id="select-panel">
+        <div class="num-btn">1</div>
+        <div class="num-btn">2</div>
+        <div class="num-btn">3</div>
+        <div class="num-btn">4</div>
+        <div class="num-btn">5</div>
+        <div class="num-btn">6</div>
+        <div class="num-btn">7</div>
+        <div class="num-btn">8</div>
+        <div class="num-btn">9</div>
+    </div>
+</div>
 
-<section class="blog">
-  <h2>How to Play & How to Win</h2>
-  <p>Fill the grid with numbers 1-9. Each row, column, and 3x3 box must contain all numbers without repetition. Be careful: 4 mistakes and the game ends!</p>
-  <p>Support the project if you like it!</p>
-  <a href="https://ko-fi.com/yourlink" target="_blank" class="donate-btn">Support Us</a>
-</section>
+<footer>
+    Donate to support us → <a href="#" target="_blank">Ko‑Fi</a>
+</footer>
 
-<script src="main.js"></script>
+<script>
+// Basic Grid Render
+let board = document.getElementById("sudoku-board");
+let selectedNumber = null;
+
+function generateBoard() {
+    board.innerHTML = "";
+    for (let i = 0; i < 81; i++) {
+        let cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.addEventListener("click", function() {
+            if (selectedNumber) {
+                cell.textContent = selectedNumber;
+            }
+        });
+        board.appendChild(cell);
+    }
+}
+
+generateBoard();
+
+// Select numbers
+const numButtons = document.querySelectorAll('.num-btn');
+numButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        selectedNumber = btn.textContent;
+    });
+});
+
+// Timer
+let seconds = 0;
+setInterval(() => {
+    seconds++;
+    let m = String(Math.floor(seconds / 60)).padStart(2, '0');
+    let s = String(seconds % 60).padStart(2, '0');
+    document.getElementById('timer').textContent = `${m}:${s}`;
+}, 1000);
+
+// Restart
+ document.getElementById("restartBtn").addEventListener("click", () => {
+    seconds = 0;
+    generateBoard();
+});
+
+// Dark Mode
+let dark = false;
+document.getElementById("darkBtn").addEventListener("click", () => {
+    dark = !dark;
+    if (dark) {
+        document.body.style.background = "#111";
+        document.body.style.color = "white";
+        document.getElementById('timer').style.color = "white";
+        document.querySelector('header').style.background = "#222";
+    } else {
+        document.body.style.background = "#f2f2f2";
+        document.body.style.color = "black";
+        document.getElementById('timer').style.color = "black";
+        document.querySelector('header').style.background = "white";
+    }
+});
+</script>
 </body>
 </html>
