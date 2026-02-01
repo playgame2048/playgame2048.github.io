@@ -313,3 +313,10 @@ header button {
 .number-select {
   margin-top: 25px; /* بدل 10px */
 }
+
+#timer {
+  font-size: 1.2rem;
+  margin: 15px 0;
+  color: #ffd95a;
+  font-weight: bold;
+}
