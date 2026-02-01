@@ -1,155 +1,115 @@
-const grid = document.getElementById("grid");
-const numbersPanel = document.getElementById("numbersPanel");
-const gameOverEl = document.getElementById("gameOver");
+const grid=document.getElementById("grid");
+const numbers=document.getElementById("numbers");
+const noteBtn=document.getElementById("noteBtn");
+const hintBtn=document.getElementById("hintBtn");
+const hintsLeftEl=document.getElementById("hintsLeft");
+const gameOver=document.getElementById("gameOver");
 
-let selectedCell = null;
-let errors = 0;
-let paused = false;
-let time = 0;
-let timerInterval;
-let monetagOnce = false;
+let selectedCell=null;
+let notesMode=false;
+let hintsLeft=3;
+let time=0;
+let paused=false;
 
-// TIMER
-function startTimer(){
-  clearInterval(timerInterval);
-  timerInterval = setInterval(()=>{
-    if(!paused){
-      time++;
-      let m = String(Math.floor(time/60)).padStart(2,"0");
-      let s = String(time%60).padStart(2,"0");
-      timer.textContent = `${m}:${s}`;
-    }
-  },1000);
-}
-startTimer();
+const solution=[
+[5,3,4,6,7,8,9,1,2],
+[6,7,2,1,9,5,3,4,8],
+[1,9,8,3,4,2,5,6,7],
+[8,5,9,7,6,1,4,2,3],
+[4,2,6,8,5,3,7,9,1],
+[7,1,3,9,2,4,8,5,6],
+[9,6,1,5,3,7,2,8,4],
+[2,8,7,4,1,9,6,3,5],
+[3,4,5,2,8,6,1,7,9]
+];
 
-// BUTTONS
-pauseBtn.onclick = ()=>{
-  paused = !paused;
-  pauseBtn.textContent = paused ? "▶️" : "⏸";
-};
+const puzzle=[
+[5,3,"","",7,"","","",""],
+[6,"","",1,9,5,"","",""],
+["",9,8,"","","","","",6,""],
+[8,"","","",6,"","","",3],
+[4,"",8,"",3,"","","",1],
+[7,"","","",2,"","","",6],
+["",6,"","","","","",2,8,""],
+["","","",4,1,9,"","","5"],
+["","","","","8","","",7,9]
+];
 
-darkModeBtn.onclick = ()=>{
-  document.body.classList.toggle("dark");
-};
-
-restartBtn.onclick = ()=>{
-  if(!monetagOnce){
-    monetagOnce = true;
-    window.open("https://MONETAG-LINK","_blank");
-  }else{
-    location.reload();
-  }
-};
-
-// NUMBERS
-for(let i=1;i<=9;i++){
-  let btn=document.createElement("button");
-  btn.className="num-btn";
-  btn.textContent=i;
-  btn.onclick=()=>placeNumber(i);
-  numbersPanel.appendChild(btn);
-}
-
-// PUZZLES (نفس structure)
-const puzzles = {
-  easy:[[
-    [5,3,"","",7,"","","",""],
-    [6,"","",1,9,5,"","",""],
-    ["",9,8,"","","","","",6,""],
-    [8,"","","",6,"","","",3],
-    [4,"",8,"",3,"","","",1],
-    [7,"","","",2,"","","",6],
-    ["",6,"","","","","",2,8,""],
-    ["","","",4,1,9,"","","5"],
-    ["","","","","8","","",7,9]
-  ]],
-  medium:[[
-    ["",2,"",6,"","","",9,""],
-    ["","","",1,9,"","","",""],
-    ["",9,8,"","","","","",6,""],
-    [8,"","","",6,"","","",3],
-    ["","","",8,"",3,"","",""],
-    [7,"","","",2,"","","",6],
-    ["",6,"","","","","",2,8,""],
-    ["","","",4,1,9,"","","5"],
-    ["","","","","8","","",7,9]
-  ]],
-  hard:[[
-    ["","","","","","","","",""],
-    ["","","",1,"","","","",""],
-    ["",9,"","","","","",6,""],
-    ["","","","","","","","",3],
-    ["","","",8,"",3,"","",""],
-    [7,"","","","","","","",6],
-    ["",6,"","","","","",2,""],
-    ["","","",4,"","","","",""],
-    ["","","","","8","","","",""]
-  ]]
-};
-
-// RANDOM PUZZLE
-function generatePuzzle(){
+function buildGrid(){
   grid.innerHTML="";
-  errors=0;
-
-  let all = [
-    ...puzzles.easy,
-    ...puzzles.medium,
-    ...puzzles.hard
-  ];
-
-  const puzzle = all[Math.floor(Math.random()*all.length)]
-    .map(r=>[...r]);
-
-  for(let r=0;r<9;r++){
-    for(let c=0;c<9;c++){
+  puzzle.forEach((row,r)=>{
+    row.forEach((val,c)=>{
       const cell=document.createElement("div");
       cell.className="cell";
-      cell.dataset.row=r;
-      cell.dataset.col=c;
+      cell.dataset.r=r;
+      cell.dataset.c=c;
 
-      if(puzzle[r][c]!==""){
-        cell.textContent=puzzle[r][c];
+      if(val!==""){
+        cell.textContent=val;
         cell.classList.add("fixed");
       }
 
-      cell.onclick=()=>selectCell(cell);
+      cell.onclick=()=>{
+        document.querySelectorAll(".cell").forEach(c=>c.classList.remove("active"));
+        if(!cell.classList.contains("fixed")){
+          selectedCell=cell;
+          cell.classList.add("active");
+        }
+      };
+
       grid.appendChild(cell);
-    }
-  }
-}
-generatePuzzle();
-
-function selectCell(cell){
-  if(selectedCell) selectedCell.classList.remove("active");
-  if(cell.classList.contains("fixed")) return;
-  selectedCell = cell;
-  cell.classList.add("active");
-}
-
-function placeNumber(num){
-  if(!selectedCell || selectedCell.classList.contains("fixed")) return;
-  selectedCell.textContent = num;
-  selectedCell.classList.remove("error");
-
-  if(isConflict(selectedCell,num)){
-    selectedCell.classList.add("error");
-    errors++;
-    if(errors>=4){
-      paused=true;
-      gameOverEl.style.display="flex";
-    }
-  }
-}
-
-function isConflict(cell,value){
-  const r=cell.dataset.row;
-  const c=cell.dataset.col;
-  return [...document.querySelectorAll(".cell")].some(el=>{
-    if(el===cell) return false;
-    return (el.dataset.row===r || el.dataset.col===c) && el.textContent==value;
+    });
   });
 }
+buildGrid();
 
-goRestart.onclick=()=>location.reload();
+numbers.querySelectorAll("button").forEach(btn=>{
+  btn.onclick=()=>{
+    if(!selectedCell) return;
+    const r=selectedCell.dataset.r;
+    const c=selectedCell.dataset.c;
+    const num=Number(btn.dataset.num);
+
+    if(notesMode){
+      let notes=selectedCell.querySelector(".notes");
+      if(!notes){
+        notes=document.createElement("div");
+        notes.className="notes";
+        selectedCell.textContent="";
+        selectedCell.appendChild(notes);
+      }
+      if(!notes.textContent.includes(num)){
+        notes.textContent+=num;
+      }
+    }else{
+      selectedCell.innerHTML=num;
+      if(num!==solution[r][c]){
+        gameOver.style.display="flex";
+        paused=true;
+      }
+    }
+  };
+});
+
+noteBtn.onclick=()=>{
+  notesMode=!notesMode;
+  noteBtn.style.opacity=notesMode?0.6:1;
+};
+
+hintBtn.onclick=()=>{
+  if(hintsLeft<=0 || !selectedCell) return;
+  const r=selectedCell.dataset.r;
+  const c=selectedCell.dataset.c;
+  selectedCell.textContent=solution[r][c];
+  hintsLeft--;
+  hintsLeftEl.textContent=hintsLeft;
+};
+
+setInterval(()=>{
+  if(!paused){
+    time++;
+    const m=String(Math.floor(time/60)).padStart(2,"0");
+    const s=String(time%60).padStart(2,"0");
+    document.getElementById("time").textContent=`${m}:${s}`;
+  }
+},1000);
