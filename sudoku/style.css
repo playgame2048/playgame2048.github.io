@@ -320,3 +320,13 @@ header button {
   color: #ffd95a;
   font-weight: bold;
 }
+
+/* 3x3 block borders */
+.cell {
+  border: 1px solid #aaa;
+}
+
+.block-border-top    { border-top:    3px solid #000; }
+.block-border-bottom { border-bottom: 3px solid #000; }
+.block-border-left   { border-left:   3px solid #000; }
+.block-border-right  { border-right:  3px solid #000; }
