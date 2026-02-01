@@ -1,65 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sudoku Pro</title>
-<link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sudoku</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <header class="header">
-    <h1>Sudoku Pro</h1>
-    <p class="subtitle">Play • Learn • Master</p>
-
-    <div class="top-buttons">
-        <button id="restartBtn">Restart</button>
-        <button id="darkModeBtn">Dark Mode</button>
-
-        <div class="timer-box">
-            <span id="timer">00:00</span>
-        </div>
-
-        <button id="pauseBtn">⏸</button>
+  <h1>Sudoku</h1>
+  <div class="top-controls">
+    <button id="restartBtn">Restart</button>
+    <button id="darkModeBtn">Dark Mode</button>
+    <div class="timer-box">
+      ⏱ <span id="timer">00:00</span>
     </div>
-
-    <div class="difficulty-bar">
-        <button data-diff="easy" class="diff-btn">Easy</button>
-        <button data-diff="medium" class="diff-btn">Medium</button>
-        <button data-diff="hard" class="diff-btn">Hard</button>
-    </div>
+    <button id="pauseBtn">⏸</button>
+  </div>
+  <div class="difficulty-box">
+    <button id="easyBtn">Easy</button>
+    <button id="mediumBtn">Medium</button>
+    <button id="hardBtn">Hard</button>
+  </div>
 </header>
 
-<!-- GAME WRAPPER -->
-<div class="game-wrapper">
-    <div id="sudokuGrid" class="sudoku-grid"></div>
-
-    <!-- NUMBER PAD -->
-    <div class="number-pad">
-        <h3>Select Number</h3>
-        <div id="numberPad" class="pad"></div>
-    </div>
+<div class="game-container">
+  <div id="grid" class="sudoku-grid"></div>
 </div>
 
-<!-- GAME OVER -->
-<div id="gameOver" class="game-over"></div>
+<div class="number-select" id="numbersPanel"></div>
 
-<!-- BLOG -->
+<div class="game-over" id="gameOver">GAME OVER - Play Again</div>
+
 <section class="blog">
-    <h2>How to Play Sudoku</h2>
-    <p>Sudoku is a logic-based puzzle game. Your goal is to fill the grid with numbers 1–9 without repeating in any row, column, or 3×3 block.</p>
-
-    <h2>How to Win</h2>
-    <ul>
-        <li>Start with the easiest numbers.</li>
-        <li>Use logic, not guessing.</li>
-        <li>Check rows, columns, and blocks for conflicts.</li>
-        <li>Use highlighting to track your moves.</li>
-        <li>Avoid mistakes — 4 errors = Game Over.</li>
-    </ul>
-
-    <a class="donate-btn" href="https://ko-fi.com" target="_blank">☕ Support Us on Ko-fi</a>
+  <h2>How to Play & How to Win</h2>
+  <p>Fill the grid with numbers 1-9. Each row, column, and 3x3 box must contain all numbers without repetition. Be careful: 4 mistakes and the game ends!</p>
+  <p>Support the project if you like it!</p>
+  <a href="https://ko-fi.com/yourlink" target="_blank" class="donate-btn">Support Us</a>
 </section>
 
 <script src="main.js"></script>
