@@ -11,6 +11,7 @@ let snake = [{x:180,y:180}];
 let direction = "RIGHT";
 let food = spawnFood();
 let score = 0;
+let gameRunning = false;
 
 let firstRestart = true;
 const restartLink = "https://otieu.com/4/10557461";
@@ -56,7 +57,24 @@ canvas.addEventListener("touchend", e => {
 });
 });
 
+function gameLoop() {
+  if (!gameRunning) return;
+
+  update();
+  draw();
+}
+setInterval(gameLoop, 120);
+
 // Restart
+function restartGame() {
+  snake = [{ x: 10, y: 10 }];
+  direction = "RIGHT";
+  score = 0;
+  gameOver = false;
+  gameRunning = true;
+  hideGameOverScreen();
+}
+
 document.getElementById("restartBtn").onclick=()=>{
   if(firstRestart){
     firstRestart=false;
@@ -65,8 +83,10 @@ document.getElementById("restartBtn").onclick=()=>{
   resetGame();
   
 };
-restartOverlayBtn.onclick=()=>{
-  gameOverScreen.style.display="none";
+gameOverRestartBtn.addEventListener("click", () => {
+  hideGameOverScreen();
+  // ما تبداش اللعبة هنا
+});
 
   if(firstRestart){
     firstRestart=false;
@@ -188,6 +208,12 @@ ctx.stroke();
   gameOverSound.currentTime = 0;
   gameOverSound.play();
   return;
+}
+  
+function endGame() {
+  gameOver = true;
+  gameRunning = false;
+  showGameOverScreen();
 }
 
   snake.unshift(head);
