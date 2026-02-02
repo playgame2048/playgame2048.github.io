@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe</title>
+
+<style>
+:root{
+  --bg:#f2f2f2;
+  --text:#111;
+  --card:#fff;
+  --btn:#222;
+}
+body.dark{
+  --bg:#121212;
+  --text:#fff;
+  --card:#1e1e1e;
+  --btn:#fff;
+}
+
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+h1{
+  font-size:42px;
+  margin:20px 0 10px;
+}
+
+.controls{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:15px;
+}
+
+button{
+  padding:10px 15px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  background:var(--btn);
+  color:var(--bg);
+  font-weight:bold;
+}
+
+.game{
+  background:var(--card);
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 5px 15px rgba(0,0,0,.2);
+}
+
+.board{
+  display:grid;
+  grid-template-columns:repeat(3,100px);
+  grid-template-rows:repeat(3,100px);
+  gap:10px;
+}
+
+.cell{
+  background:var(--bg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:48px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#status{
+  margin-top:15px;
+  font-size:20px;
+  text-align:center;
+}
+
+.section{
+  max-width:800px;
+  margin:40px 15px;
+  background:var(--card);
+  padding:20px;
+  border-radius:12px;
+}
+
+.section h2{
+  margin-top:0;
+}
+
+.placeholder{
+  margin-top:10px;
+  padding:15px;
+  border:2px dashed #999;
+  text-align:center;
+  opacity:.7;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Tic Tac Toe</h1>
+
+<div class="controls">
+  <button onclick="setMode('ai')">Play vs AI</button>
+  <button onclick="setMode('pvp')">2 Players</button>
+  <button onclick="restart()">Restart</button>
+  <button onclick="toggleDark()">Dark Mode</button>
+</div>
+
+<div class="game">
+  <div class="board" id="board"></div>
+  <div id="status">Choose a mode to start</div>
+</div>
+
+<!-- BLOG -->
+<div class="section">
+  <h2>How to Play</h2>
+  <p>
+    Tic Tac Toe is played on a 3x3 grid. Players take turns placing their symbol
+    (X or O). The first player to align three symbols in a row, column, or diagonal wins.
+  </p>
+
+  <h2>How to Win</h2>
+  <p>
+    Try to control the center, block your opponent early, and always look two moves ahead.
+    Against AI, forcing a draw is also a smart strategy.
+  </p>
+
+  <h2>Support Us</h2>
+  <p>If you enjoy this game, support us to keep improving it.</p>
+  <button>Support Us</button>
+
+  <div class="placeholder">🔗 Place your support link here</div>
+  <div class="placeholder">🔗 Place your direct restart link here</div>
+  <div class="placeholder">📢 Monetag Ads Here</div>
+</div>
+
+<script>
+const boardEl=document.getElementById("board");
+const statusEl=document.getElementById("status");
+
+let board=["","","","","","","","",""];
+let current="X";
+let gameOver=false;
+let mode=null;
+
+const wins=[
+  [0,1,2],[3,4,5],[6,7,8],
+  [0,3,6],[1,4,7],[2,5,8],
+  [0,4,8],[2,4,6]
+];
+
+function setMode(m){
+  mode=m;
+  restart();
+  statusEl.textContent = mode==="ai" ? "You (X) vs AI (O)" : "Person 1 (X) turn";
+}
+
+function restart(){
+  board=["","","","","","","","",""];
+  current="X";
+  gameOver=false;
+  draw();
+}
+
+function draw(){
+  boardEl.innerHTML="";
+  board.forEach((v,i)=>{
+    const c=document.createElement("div");
+    c.className="cell";
+    c.textContent=v;
+    c.onclick=()=>play(i);
+    boardEl.appendChild(c);
+  });
+}
+
+function play(i){
+  if(board[i] || gameOver) return;
+  board[i]=current;
+  if(checkWin()){
+    statusEl.textContent = mode==="pvp"
+      ? (current==="X"?"Person 1 Wins":"Person 2 Wins")
+      : (current==="X"?"You Win":"AI Wins");
+    gameOver=true;
+    draw();
+    return;
+  }
+  if(!board.includes("")){
+    statusEl.textContent="Draw!";
+    gameOver=true;
+    return;
+  }
+
+  current = current==="X"?"O":"X";
+  draw();
+
+  if(mode==="ai" && current==="O"){
+    setTimeout(aiMove,300);
+  }else if(mode==="pvp"){
+    statusEl.textContent = current==="X"?"Person 1 turn":"Person 2 turn";
+  }
+}
+
+function aiMove(){
+  let empty=
