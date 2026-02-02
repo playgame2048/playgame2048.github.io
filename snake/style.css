@@ -77,9 +77,11 @@ canvas{
 }
 
 .game-over h2{
-  font-size:3rem;
+  font-family:'Press Start 2P',cursive;
+  font-size:2.5rem;
   color:#ef4444;
-  margin-bottom:10px;
+  margin-bottom:20px;
+  animation:shake .6s infinite alternate;
 }
 
 .game-over p{
@@ -96,3 +98,19 @@ canvas{
   color:#fff;
   cursor:pointer;
 }
+
+@keyframes shake{
+  0%{transform:translateX(-2px)}
+  100%{transform:translateX(2px)}
+}
+
+.game-over{
+  animation:fadeZoom .4s ease forwards;
+}
+
+@keyframes fadeZoom{
+  from{opacity:0;transform:scale(.8)}
+  to{opacity:1;transform:scale(1)}
+}
+
+
