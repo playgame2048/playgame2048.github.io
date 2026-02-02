@@ -8,23 +8,37 @@
 </head>
 <body>
 
-<h1>Sudoku</h1>
+<header class="header">
+  <h1>Sudoku</h1>
+  <div class="top-controls">
+    <button id="restartBtn">Restart</button>
+    <button id="darkModeBtn">Dark Mode</button>
+    <div class="timer-box">
+      ⏱ <span id="timer">00:00</span>
+    </div>
+    <button id="pauseBtn">⏸</button>
+  </div>
+  <div class="difficulty-box">
+    <button id="easyBtn">Easy</button>
+    <button id="mediumBtn">Medium</button>
+    <button id="hardBtn">Hard</button>
+  </div>
+</header>
 
-<div class="top">
-  <button id="notesBtn">✏ Notes</button>
-  <button id="hintBtn">💡 Hint (<span id="hints">3</span>)</button>
-  <div id="timer">00:00</div>
+<div class="game-container">
+  <div id="grid" class="sudoku-grid"></div>
 </div>
 
-<div class="game">
-  <div id="grid"></div>
-  <div id="numbers"></div>
-</div>
+<div class="number-select" id="numbersPanel"></div>
 
-<div id="overlay">
-  <h2>Game Over</h2>
-  <button onclick="location.reload()">Restart</button>
-</div>
+<div class="game-over" id="gameOver">GAME OVER - Play Again</div>
+
+<section class="blog">
+  <h2>How to Play & How to Win</h2>
+  <p>Fill the grid with numbers 1-9. Each row, column, and 3x3 box must contain all numbers without repetition. Be careful: 4 mistakes and the game ends!</p>
+  <p>Support the project if you like it!</p>
+  <a href="https://ko-fi.com/yourlink" target="_blank" class="donate-btn">Support Us</a>
+</section>
 
 <script src="main.js"></script>
 </body>
