@@ -23,7 +23,7 @@ body{
 
 h1{
   font-size:42px;
-  margin:20px 0 10px;
+  margin:20px 0 25px; /* زدت المسافة من التحت */
 }
 
 .controls{
@@ -132,11 +132,11 @@ button{
 }
 
 .top-controls{
-  margin-top:10px; /* هابطين شوية على العنوان */
+  margin-top:0;
+  margin-bottom:30px; /* تبعاد على اللعبة */
   display:flex;
-  gap:10px;
+  gap:15px; /* تباعد بين الأزرار */
   justify-content:center;
-  margin-bottom:15px;
 }
 
 .mode-controls{
