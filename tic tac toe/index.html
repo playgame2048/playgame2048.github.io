@@ -13,13 +13,21 @@
 <div class="controls">
   <button onclick="setMode('ai')">Play vs AI</button>
   <button onclick="setMode('pvp')">2 Players</button>
-  <button onclick="restart()">Restart</button>
   <button onclick="toggleDark()">Dark Mode</button>
 </div>
 
 <div class="game">
   <div class="board" id="board"></div>
   <div id="status">Choose a mode to start</div>
+
+  <div class="scoreboard">
+    <p>Person 1 Wins: <span id="score1">0</span></p>
+    <p>Person 2 / AI Wins: <span id="score2">0</span></p>
+  </div>
+
+  <div class="restart-container">
+    <button id="restartBtn">Restart</button>
+  </div>
 </div>
 
 <!-- BLOG -->
@@ -38,12 +46,13 @@
 
   <h2>Support Us</h2>
   <p>If you enjoy this game, support us to keep improving it.</p>
-  <button>Support Us</button>
+  <button id="supportBtn">Support Us</button>
 
   <div class="placeholder">🔗 Place your support link here</div>
-  <div class="placeholder">🔗 Place your direct restart link here</div>
   <div class="placeholder">📢 Monetag Ads Here</div>
 </div>
+
+<div id="balloons"></div>
 
 <script src="main.js"></script>
 </body>
