@@ -12,6 +12,7 @@ let gameOver=false;
 let mode=null;
 let score1=localStorage.getItem("score1")?parseInt(localStorage.getItem("score1")):0;
 let score2=localStorage.getItem("score2")?parseInt(localStorage.getItem("score2")):0;
+let firstRestart=true; // لتشغيل direct link فقط المرة الأولى
 
 score1El.textContent=score1;
 score2El.textContent=score2;
@@ -50,8 +51,11 @@ function draw(){
 function play(i){
   if(board[i] || gameOver) return;
   board[i]=current;
+  draw();
+
   if(checkWin()){
     gameOver=true;
+    showWinner(current);
     celebrate();
     if(current==="X"){
       score1++;
@@ -62,23 +66,16 @@ function play(i){
       localStorage.setItem("score2",score2);
       score2El.textContent=score2;
     }
-
-    statusEl.textContent = mode==="pvp"
-      ? (current==="X"?"Person 1 Wins":"Person 2 Wins")
-      : (current==="X"?"You Win":"AI Wins");
-
-    draw();
     return;
   }
 
   if(!board.includes("")){
-    statusEl.textContent="Draw!";
     gameOver=true;
+    statusEl.textContent="Draw!";
     return;
   }
 
   current = current==="X"?"O":"X";
-  draw();
 
   if(mode==="ai" && current==="O"){
     setTimeout(aiMove,300);
@@ -87,6 +84,15 @@ function play(i){
   }
 }
 
+function showWinner(winner){
+  if(mode==="pvp"){
+    statusEl.textContent = winner==="X"?"Person 1 Wins!":"Person 2 Wins!";
+  }else{
+    statusEl.textContent = winner==="X"?"You Win!":"AI Wins!";
+  }
+}
+
+// AI move
 function aiMove(){
   let empty=board.map((v,i)=>v===""?i:null).filter(v=>v!==null);
   let move=empty[Math.floor(Math.random()*empty.length)];
@@ -101,24 +107,38 @@ function toggleDark(){
   document.body.classList.toggle("dark");
 }
 
+// Restart button: direct link only first time
 restartBtn.onclick=()=>{
-  window.location.href="YOUR_DIRECT_LINK_HERE"; // حطي اللينك ديالك هنا
+  if(firstRestart){
+    firstRestart=false;
+    window.location.href="YOUR_DIRECT_LINK_HERE"; // حطي هنا اللينك ديالك
+  }else{
+    restart();
+  }
 };
 
-// simple support button placeholder
+// Support button
 supportBtn.onclick=()=>{
   window.open("YOUR_SUPPORT_LINK_HERE","_blank");
 };
 
-// Balloons animation
+// Balloons animation improved
 function celebrate(){
   for(let i=0;i<30;i++){
     const b=document.createElement("div");
     b.className="balloon";
     b.style.left=Math.random()*window.innerWidth+"px";
-    b.style.background=['red','blue','yellow','green','orange'][Math.floor(Math.random()*4)];
+    b.style.background=['red','blue','yellow','green','orange'][Math.floor(Math.random()*5)];
+    b.style.bottom="-50px";
     balloonsEl.appendChild(b);
-    setTimeout(()=>b.remove(),4000);
+    // animate
+    let duration = 4000 + Math.random()*2000;
+    b.animate([
+      {transform: 'translateY(0px)', opacity:1},
+      {transform: `translateY(-${window.innerHeight + 100}px)`, opacity:0.7}
+    ], {duration:duration, iterations:1, easing:'linear'});
+    // remove after animation
+    setTimeout(()=>b.remove(), duration);
   }
 }
 
