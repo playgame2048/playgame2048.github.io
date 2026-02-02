@@ -1,5 +1,6 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
+const gameOverSound = document.getElementById("gameOverSound");
 const gameOverScreen = document.getElementById("gameOver");
 const finalScoreEl = document.getElementById("finalScore");
 const restartOverlayBtn = document.getElementById("restartOverlay");
@@ -150,6 +151,8 @@ ctx.stroke();
 ){
   finalScoreEl.textContent = score;
   gameOverScreen.style.display="flex";
+  gameOverSound.currentTime = 0;
+  gameOverSound.play();
   return;
 }
 
