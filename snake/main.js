@@ -21,6 +21,13 @@ document.addEventListener("keydown",e=>{
   if(e.key==="ArrowDown" && direction!=="UP") direction="DOWN";
   if(e.key==="ArrowLeft" && direction!=="RIGHT") direction="LEFT";
   if(e.key==="ArrowRight" && direction!=="LEFT") direction="RIGHT";
+  
+  window.addEventListener("keydown", e => {
+  if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key)) {
+    e.preventDefault();
+  }
+});
+
   // ===== TOUCH CONTROLS (MOBILE) =====
   let touchStartX = 0;
   let touchStartY = 0;
