@@ -4,13 +4,7 @@ const gameOverSound = document.getElementById("gameOverSound");
 const gameOverScreen = document.getElementById("gameOver");
 const finalScoreEl = document.getElementById("finalScore");
 const restartOverlayBtn = document.getElementById("restartOverlay");
-let paused = false;
-const pauseBtn = document.getElementById("pauseBtn");
 
-pauseBtn.onclick = () => {
-  paused = !paused;
-  pauseBtn.textContent = paused ? "▶️ Resume" : "⏸ Pause";
-};
 
 const box = 20;
 let snake = [{x:180,y:180}];
@@ -85,8 +79,6 @@ function resetGame(){
   direction="RIGHT";
   food=spawnFood();
   score=0;
-  paused = false;
-  pauseBtn.textContent = "⏸ Pause";
 }
 
 function spawnFood(){
@@ -97,7 +89,6 @@ function spawnFood(){
 }
 
 function draw(){
- if(paused) return;
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
   // Grid
@@ -189,8 +180,6 @@ ctx.stroke();
   gameOverScreen.style.display="flex";
   gameOverSound.currentTime = 0;
   gameOverSound.play();
-  paused = true;
-  pauseBtn.textContent = "▶️ Resume";
   return;
 }
 
