@@ -28,9 +28,9 @@ document.addEventListener("keydown",e=>{
   }
 });
 
-  // ===== TOUCH CONTROLS (MOBILE) =====
-  let touchStartX = 0;
-  let touchStartY = 0;
+// ===== TOUCH CONTROLS =====
+let touchStartX = 0;
+let touchStartY = 0;
 
 canvas.addEventListener("touchstart", e => {
   touchStartX = e.touches[0].clientX;
@@ -44,21 +44,16 @@ canvas.addEventListener("touchend", e => {
   let dx = touchEndX - touchStartX;
   let dy = touchEndY - touchStartY;
 
-  if (Math.abs(dx) > Math.abs(dy)) {
+  if(Math.abs(dx) > Math.abs(dy)){
     // Horizontal swipe
-    if (dx > 0 && direction !== "LEFT") direction = "RIGHT";
-    else if (dx < 0 && direction !== "RIGHT") direction = "LEFT";
-  } else {
+    if(dx > 0 && direction !== "LEFT") direction = "RIGHT";
+    else if(dx < 0 && direction !== "RIGHT") direction = "LEFT";
+  }else{
     // Vertical swipe
-    if (dy > 0 && direction !== "UP") direction = "DOWN";
-    else if (dy < 0 && direction !== "DOWN") direction = "UP";
-
-    canvas.addEventListener("touchmove", e => {
-  e.preventDefault();
-},{ passive:false });
-
+    if(dy > 0 && direction !== "UP") direction = "DOWN";
+    else if(dy < 0 && direction !== "DOWN") direction = "UP";
   }
- });
+});
 });
 
 // Restart
