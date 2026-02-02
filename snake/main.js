@@ -52,6 +52,11 @@ canvas.addEventListener("touchend", e => {
     // Vertical swipe
     if (dy > 0 && direction !== "UP") direction = "DOWN";
     else if (dy < 0 && direction !== "DOWN") direction = "UP";
+
+    canvas.addEventListener("touchmove", e => {
+  e.preventDefault();
+},{ passive:false });
+
   }
  });
 });
