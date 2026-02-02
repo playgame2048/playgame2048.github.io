@@ -83,9 +83,7 @@ function draw(){
   i===snake.length-1 ? "#14532d" :
   "#16a34a";
     ctx.fill();
-  });
-  
-// Eyes 👀 (HEAD ONLY)
+    // Eyes 👀 (HEAD ONLY)
 let head = snake[0];
 ctx.fillStyle = "#000";
 
@@ -121,7 +119,8 @@ if(direction==="RIGHT"){
   ctx.lineTo(head.x+box+6, head.y+box/2);
 }
 ctx.stroke();
-
+  });
+  
   let head={...snake[0]};
   if(direction==="UP") head.y-=box;
   if(direction==="DOWN") head.y+=box;
