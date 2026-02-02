@@ -139,12 +139,3 @@ canvas.glow {
 body.dark .game-wrapper::after{
   opacity:1;
 }
-
-canvas.glow {
-  box-shadow: none;
-}
-
-body.dark canvas.glow {
-  box-shadow: 0 0 20px rgba(34,197,94,0.6), 0 0 40px rgba(239,68,68,0.5);
-}
-
