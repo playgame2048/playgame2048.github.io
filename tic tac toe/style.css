@@ -145,11 +145,3 @@ button{
   gap:10px;
   justify-content:center;
 }
-
-.ad-vignette{
-  margin:30px 0 20px;
-  min-height:100px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
