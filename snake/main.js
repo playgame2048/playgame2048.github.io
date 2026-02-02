@@ -1,5 +1,8 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
+const gameOverScreen = document.getElementById("gameOver");
+const finalScoreEl = document.getElementById("finalScore");
+const restartOverlayBtn = document.getElementById("restartOverlay");
 
 const box = 20;
 let snake = [{x:180,y:180}];
@@ -24,6 +27,17 @@ document.getElementById("restartBtn").onclick=()=>{
     firstRestart=false;
     window.open(restartLink,"_blank");
   }
+  resetGame();
+  
+};
+restartOverlayBtn.onclick=()=>{
+  gameOverScreen.style.display="none";
+
+  if(firstRestart){
+    firstRestart=false;
+    window.open(restartLink,"_blank");
+  }
+
   resetGame();
 };
 
@@ -128,15 +142,16 @@ ctx.stroke();
   if(direction==="RIGHT") head.x+=box;
 
   // Collision
-  if(
-    head.x<0||head.y<0||
-    head.x>=canvas.width||
-    head.y>=canvas.height||
-    snake.some(p=>p.x===head.x&&p.y===head.y)
-  ){
-    resetGame();
-    return;
-  }
+ if(
+  head.x<0||head.y<0||
+  head.x>=canvas.width||
+  head.y>=canvas.height||
+  snake.some(p=>p.x===head.x&&p.y===head.y)
+){
+  finalScoreEl.textContent = score;
+  gameOverScreen.style.display="flex";
+  return;
+}
 
   snake.unshift(head);
 
