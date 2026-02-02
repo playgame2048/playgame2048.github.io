@@ -111,7 +111,7 @@ function toggleDark(){
 restartBtn.onclick=()=>{
   if(firstRestart){
     firstRestart=false;
-    window.location.href="YOUR_DIRECT_LINK_HERE"; // حطي هنا اللينك ديالك
+    window.location.href="https://otieu.com/4/10553939"; // حطي هنا اللينك ديالك
   }else{
     restart();
   }
@@ -119,7 +119,7 @@ restartBtn.onclick=()=>{
 
 // Support button
 supportBtn.onclick=()=>{
-  window.open("YOUR_SUPPORT_LINK_HERE","_blank");
+  window.open("https://ko-fi.com/help_tommy","_blank");
 };
 
 // Balloons animation improved
