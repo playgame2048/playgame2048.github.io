@@ -130,3 +130,18 @@ button{
 @media(max-width:600px){
   .board{grid-template-columns:repeat(3,80px); grid-template-rows:repeat(3,80px);}
 }
+
+.top-controls{
+  margin-top:10px; /* هابطين شوية على العنوان */
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin-bottom:15px;
+}
+
+.mode-controls{
+  margin-top:15px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+}
