@@ -1,41 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Snake Game</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Snake Game</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1 class="title">🐍 Snake Game</h1>
 
-  <div class="top-controls">
-    <button id="darkModeBtn">🌙 Dark Mode</button>
-    <button id="restartBtn">🔄 Restart</button>
-  </div>
+<h1 class="title">Snake Game</h1>
 
-  <div class="game-wrapper">
-    <canvas id="game" width="320" height="320"></canvas>
-    <div class="score">Score: <span id="score">0</span></div>
-  </div>
+<div class="controls">
+  <button id="restartBtn">Restart</button>
+  <button id="darkBtn">Dark Mode</button>
+</div>
 
-  <!-- ADS PLACE -->
-  <div class="ad-box">
-    <!-- Monetag / Ads code here -->
-  </div>
+<div class="game-wrapper">
+  <canvas id="game" width="360" height="360"></canvas>
+</div>
 
-  <div class="blog">
-    <h2>How to Play</h2>
-    <p>Use arrow keys on desktop or swipe on mobile to control the snake. Eat food to grow and increase your score.</p>
+<!-- ADS PLACE -->
+<div class="ads">
+  <!-- PUT YOUR MONETAG VIGNETTE HERE -->
+</div>
 
-    <h2>How to Win</h2>
-    <p>Plan your moves, avoid walls and your own tail, and try to get the highest score possible.</p>
+<section class="modes"></section>
 
-    <h2>Support Us</h2>
-    <p>If you enjoy the game, support us to keep improving!</p>
-    <button class="support-btn">Support Us</button>
-  </div>
+<section class="blog">
+  <h2>🐍 How to Play</h2>
+  <p>Use arrow keys (or swipe on mobile) to move the snake and eat apples.</p>
 
-  <script src="main.js"></script>
+  <h2>🏆 How to Win</h2>
+  <p>Eat as many apples as possible without hitting walls or yourself.</p>
+
+  <h2>❤️ To support us</h2>
+  <a href="#" class="support-btn">Support Us</a>
+</section>
+
+<script src="main.js"></script>
 </body>
 </html>
