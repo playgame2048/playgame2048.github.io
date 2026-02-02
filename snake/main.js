@@ -8,7 +8,7 @@ let food = spawnFood();
 let score = 0;
 
 let firstRestart = true;
-const restartLink = "PUT_YOUR_LINK_HERE";
+const restartLink = "https://otieu.com/4/10557461";
 
 // Controls
 document.addEventListener("keydown",e=>{
