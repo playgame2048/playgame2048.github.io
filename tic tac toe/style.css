@@ -48,6 +48,7 @@ button{
   padding:20px;
   border-radius:12px;
   box-shadow:0 5px 15px rgba(0,0,0,.2);
+  margin-bottom:20px;
 }
 
 .board{
@@ -73,6 +74,18 @@ button{
   text-align:center;
 }
 
+.scoreboard{
+  margin-top:10px;
+  font-size:18px;
+  display:flex;
+  gap:20px;
+  justify-content:center;
+}
+
+.restart-container{
+  margin-top:15px;
+}
+
 .section{
   max-width:800px;
   margin:40px 15px;
@@ -93,7 +106,27 @@ button{
   opacity:.7;
 }
 
+#balloons{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1000;
+}
+
+.balloon{
+  position:absolute;
+  width:30px;
+  height:40px;
+  background:red;
+  border-radius:50% 50% 50% 50%;
+  animation:float 4s linear forwards;
+}
+
+@keyframes float{
+  0%{transform:translateY(0);}
+  100%{transform:translateY(-800px);}
+}
+
 @media(max-width:600px){
-  .game{flex-direction:column}
   .board{grid-template-columns:repeat(3,80px); grid-template-rows:repeat(3,80px);}
 }
