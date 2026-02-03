@@ -15,17 +15,16 @@ let score = 0;
 let firstRestart = true;
 const restartLink = "https://otieu.com/4/10557461";
 
-// Controls
-document.addEventListener("keydown",e=>{
+// ===== KEYBOARD CONTROLS =====
+document.addEventListener("keydown", e => {
+  if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key)) {
+    e.preventDefault();
+  }
+
   if(e.key==="ArrowUp" && direction!=="DOWN") direction="UP";
   if(e.key==="ArrowDown" && direction!=="UP") direction="DOWN";
   if(e.key==="ArrowLeft" && direction!=="RIGHT") direction="LEFT";
   if(e.key==="ArrowRight" && direction!=="LEFT") direction="RIGHT";
-  
-  window.addEventListener("keydown", e => {
-  if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key)) {
-    e.preventDefault();
-  }
 });
 
 // ===== TOUCH CONTROLS =====
@@ -38,42 +37,27 @@ canvas.addEventListener("touchstart", e => {
 });
 
 canvas.addEventListener("touchend", e => {
-  let touchEndX = e.changedTouches[0].clientX;
-  let touchEndY = e.changedTouches[0].clientY;
-
-  let dx = touchEndX - touchStartX;
-  let dy = touchEndY - touchStartY;
+  let dx = e.changedTouches[0].clientX - touchStartX;
+  let dy = e.changedTouches[0].clientY - touchStartY;
 
   if(Math.abs(dx) > Math.abs(dy)){
-    // Horizontal swipe
     if(dx > 0 && direction !== "LEFT") direction = "RIGHT";
     else if(dx < 0 && direction !== "RIGHT") direction = "LEFT";
-  }else{
-    // Vertical swipe
+  } else {
     if(dy > 0 && direction !== "UP") direction = "DOWN";
     else if(dy < 0 && direction !== "DOWN") direction = "UP";
   }
 });
-});
-
-setInterval(gameLoop, 120);
 
 // Restart
-document.getElementById("restartBtn").onclick=()=>{
+document.getElementById("restartBtn").onclick = () => {
   if(firstRestart){
-    firstRestart=false;
-    window.open(restartLink,"_blank");
+    firstRestart = false;
+    window.open(restartLink, "_blank");
+    return;
   }
   resetGame();
-  
-};
-
-  if(firstRestart){
-    firstRestart=false;
-    window.open(restartLink,"_blank");
-  }
-
-  resetGame();
+  gameOverScreen.style.display = "none";
 };
 
 // Dark mode
