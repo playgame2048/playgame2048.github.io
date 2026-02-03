@@ -11,6 +11,7 @@ let snake = [{x:180,y:180}];
 let direction = "RIGHT";
 let food = spawnFood();
 let score = 0;
+let gameOver = false;
 
 let firstRestart = true;
 const restartLink = "https://otieu.com/4/10557461";
@@ -59,7 +60,6 @@ document.getElementById("restartBtn").onclick = () => {
 
   resetGame();
   gameOverScreen.style.display = "none";
-  console.log("game restarted");
 };
 
 // Dark mode
@@ -68,10 +68,11 @@ document.getElementById("darkBtn").onclick=()=>{
 };
 
 function resetGame(){
-  snake=[{x:180,y:180}];
-  direction="RIGHT";
-  food=spawnFood();
-  score=0;
+  snake = [{x:180,y:180}];
+  direction = "RIGHT";
+  food = spawnFood();
+  score = 0;
+  gameOver = false;
 }
 
 function spawnFood(){
@@ -82,6 +83,7 @@ function spawnFood(){
 }
 
 function draw(){
+  if(gameOver) return;
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
   // Grid
@@ -169,11 +171,17 @@ ctx.stroke();
   head.y>=canvas.height||
   snake.some(p=>p.x===head.x&&p.y===head.y)
 ){
+if(
+  head.x < 0 || head.y < 0 ||
+  head.x >= canvas.width ||
+  head.y >= canvas.height ||
+  snake.some(p => p.x === head.x && p.y === head.y)
+){
+  gameOver = true;
   finalScoreEl.textContent = score;
-  gameOverScreen.style.display="flex";
+  gameOverScreen.style.display = "flex";
   gameOverSound.currentTime = 0;
   gameOverSound.play();
-  return;
 }
 
   snake.unshift(head);
