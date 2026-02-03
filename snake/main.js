@@ -56,6 +56,7 @@ document.getElementById("restartBtn").onclick = () => {
     window.open(restartLink, "_blank");
     return;
   }
+
   resetGame();
   gameOverScreen.style.display = "none";
 };
