@@ -59,6 +59,7 @@ document.getElementById("restartBtn").onclick = () => {
 
   resetGame();
   gameOverScreen.style.display = "none";
+  console.log("game restarted");
 };
 
 // Dark mode
