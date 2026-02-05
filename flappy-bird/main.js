@@ -17,12 +17,12 @@ function init() {
     x: 60,
     y: canvas.height / 2, // bird يبدأ فوسط الشاشة
     size: 14,
-    velocity: 0
+    velocity: 8
   };
 
   pipes = [];
   score = 0;
-  gravity = 0.3;        // ممكن تخفف شوية، مثلا 0.25 فالأول
+  gravity = 0.25;        // ممكن تخفف شوية، مثلا 0.25 فالأول
   gameSpeed = 2;
   gameRunning = true;
   frames = 0;           // إعادة frames
