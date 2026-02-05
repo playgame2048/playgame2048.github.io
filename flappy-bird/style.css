@@ -1,0 +1,99 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  color: #111;
+  text-align: center;
+  overflow: hidden;
+}
+
+body.dark {
+  background: #0b0d12;
+  color: #eee;
+}
+
+/* Header */
+.top {
+  padding: 12px;
+}
+
+.top h1 {
+  margin-bottom: 10px;
+}
+
+.top-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #22c55e;
+  color: #fff;
+  font-weight: bold;
+}
+
+body.dark button {
+  background: #16a34a;
+}
+
+/* Game */
+.game-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+canvas {
+  background: linear-gradient(#60a5fa, #e0f2fe);
+  border-radius: 12px;
+}
+
+body.dark canvas {
+  background: linear-gradient(#020617, #020617);
+  box-shadow: 0 0 25px rgba(34,197,94,0.25);
+}
+
+/* Game Over */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.6);
+}
+
+.overlay-box {
+  background: #111;
+  color: #fff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  font-size: 20px;
+}
+
+/* Blog */
+.blog {
+  padding: 20px;
+  text-align: left;
+}
+
+.blog h2 {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.blog p {
+  font-size: 14px;
+  opacity: 0.85;
+}
