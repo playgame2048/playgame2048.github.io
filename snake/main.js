@@ -7,6 +7,8 @@ const restartOverlayBtn = document.getElementById("restartOverlay");
 
 
 const box = 20;
+let gameOver = false;
+let interval = null;
 let snake = [{x:180,y:180}];
 let direction = "RIGHT";
 let food = spawnFood();
@@ -165,18 +167,13 @@ ctx.stroke();
   if(direction==="RIGHT") head.x+=box;
 
   // Collision
- if(
-  head.x<0||head.y<0||
-  head.x>=canvas.width||
-  head.y>=canvas.height||
-  snake.some(p=>p.x===head.x&&p.y===head.y)
-){
 if(
   head.x < 0 || head.y < 0 ||
   head.x >= canvas.width ||
   head.y >= canvas.height ||
   snake.some(p => p.x === head.x && p.y === head.y)
 ){
+  
   gameOver = true;
   finalScoreEl.textContent = score;
   gameOverScreen.style.display = "flex";
@@ -193,3 +190,5 @@ if(
     snake.pop();
   }
 }
+
+interval = setInterval(draw, 120);
