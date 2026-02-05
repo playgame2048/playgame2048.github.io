@@ -55,16 +55,6 @@ window.addEventListener("keydown", e => {
   }
 });
 
-function loop() {
-  if(gameRunning){
-    update();
-    draw();
-    frames++;
-  }
-  requestAnimationFrame(loop); // بدل setInterval
-}
-loop();
-
 // ===== PIPES =====
 function addPipe() {
   const gap = 120;
