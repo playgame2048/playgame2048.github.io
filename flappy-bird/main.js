@@ -80,9 +80,6 @@ function loop(timeStamp){
 }
 requestAnimationFrame(loop);
 
-if(bird.velocity > 8) bird.velocity = 8; // max down
-if(bird.velocity < -8) bird.velocity = -8; // max up
-
 // ===== PIPES =====
 function addPipe() {
   const gap = 120;
