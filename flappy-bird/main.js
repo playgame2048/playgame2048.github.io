@@ -39,6 +39,7 @@ document.addEventListener("keydown", e => {
     e.preventDefault();
     flap();
   }
+  if (e.code === "ArrowUp") flap();
 });
 
 canvas.addEventListener("touchstart", e => {
