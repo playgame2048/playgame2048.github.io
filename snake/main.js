@@ -193,5 +193,3 @@ if(
     snake.pop();
   }
 }
-
-setInterval(draw,120);
