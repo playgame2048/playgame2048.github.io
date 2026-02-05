@@ -55,6 +55,38 @@ window.addEventListener("keydown", e => {
   }
 });
 
+function loop() {
+  if(gameRunning){
+    update();
+    draw();
+    frames++;
+  }
+  requestAnimationFrame(loop); // بدل setInterval
+}
+loop();
+
+let lastTime = 0;
+function loop(timeStamp){
+  const deltaTime = (timeStamp - lastTime)/16; // 16ms ~ 60fps
+  lastTime = timeStamp;
+
+  if(gameRunning){
+    update(deltaTime);
+    draw();
+    frames += deltaTime;
+  }
+
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+if(bird.velocity > 8) bird.velocity = 8; // max down
+if(bird.velocity < -8) bird.velocity = -8; // max up
+
+bird.y = canvas.height / 2;
+frames = 0; 
+if (frames < 60) return; // delay قبل ما يبان pipe
+
 // ===== PIPES =====
 function addPipe() {
   const gap = 120;
@@ -71,8 +103,9 @@ function addPipe() {
 function update() {
   if (!gameRunning) return;
 
-  bird.velocity += gravity;
-  bird.y += bird.velocity;
+bird.velocity += gravity * deltaTime;
+bird.y += bird.velocity * deltaTime;
+pipes.forEach(p => p.x -= gameSpeed * deltaTime);
 
   if (bird.y < 0 || bird.y + bird.size > canvas.height) {
     endGame();
