@@ -22,7 +22,7 @@ function init() {
 
   pipes = [];
   score = 0;
-  gravity = 0.4;
+  gravity = 0.25;
   gameSpeed = 2;
   gameRunning = true;
   gameOverScreen.style.display = "none";
@@ -93,7 +93,7 @@ function update() {
 
   pipes = pipes.filter(p => p.x > -50);
 
-  if (frames % 90 === 0) addPipe();
+  if (frames % 110 === 0) addPipe();
 }
 
 // ===== DRAW =====
