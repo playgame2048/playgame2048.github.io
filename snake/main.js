@@ -206,3 +206,7 @@ gameOverScreen.addEventListener("click", () => {
   // ما كنديرو reset لا والو
 });
 
+document.getElementById("darkBtn").onclick = () => {
+  document.body.classList.toggle("dark");
+  console.log("DARK MODE:", document.body.classList.contains("dark"));
+};
