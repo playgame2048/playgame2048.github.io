@@ -77,7 +77,12 @@ function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
   // grid
-  ctx.strokeStyle = "rgba(255,255,255,0.05)";
+  if(document.body.classList.contains("dark")){
+  ctx.strokeStyle = "rgba(34,197,94,0.15)"; // light خضرا ناعمة
+}else{
+  ctx.strokeStyle = "rgba(0,0,0,0.08)";
+}
+
   for(let i=0;i<canvas.width;i+=box){
     ctx.beginPath();
     ctx.moveTo(i,0); ctx.lineTo(i,canvas.height); ctx.stroke();
@@ -190,6 +195,10 @@ restartBtn.onclick = () => {
     window.open(restartLink, "_blank");
     return;
   }
+
+  document.getElementById("darkBtn").onclick = () => {
+  document.body.classList.toggle("dark");
+};
 
   clearInterval(intervalId);   // 🔴 مهم
   initGame();
