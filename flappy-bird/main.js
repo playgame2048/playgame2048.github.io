@@ -15,16 +15,17 @@ const restartLink = "PUT_YOUR_LINK_HERE";
 function init() {
   bird = {
     x: 60,
-    y: 200,
+    y: canvas.height / 2, // bird يبدأ فوسط الشاشة
     size: 14,
     velocity: 0
   };
 
   pipes = [];
   score = 0;
-  gravity = 0.4;
+  gravity = 0.3;        // ممكن تخفف شوية، مثلا 0.25 فالأول
   gameSpeed = 2;
   gameRunning = true;
+  frames = 0;           // إعادة frames
   gameOverScreen.style.display = "none";
 }
 
