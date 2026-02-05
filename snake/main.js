@@ -85,18 +85,68 @@ function draw(){
     ctx.moveTo(0,i); ctx.lineTo(canvas.width,i); ctx.stroke();
   }
 
-  // apple 🍎
-  ctx.fillStyle = "#e11d48";
+   // Apple 🍎
   ctx.beginPath();
-  ctx.arc(food.x+box/2, food.y+box/2, box/2.4, 0, Math.PI*2);
+  ctx.arc(food.x+box/2,food.y+box/2,box/2.4,0,Math.PI*2);
+  ctx.fillStyle="#e11d48";
   ctx.fill();
 
-  // snake
+  ctx.beginPath();
+  ctx.arc(food.x+box/2.6,food.y+box/2.6,4,0,Math.PI*2);
+  ctx.fillStyle="rgba(255,255,255,.6)";
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.fillStyle="#16a34a";
+  ctx.ellipse(food.x+box/2+5,food.y+box/2-10,6,3,Math.PI/4,0,Math.PI*2);
+  ctx.fill();
+
+// Snake 🐍
   snake.forEach((p,i)=>{
-    ctx.fillStyle = i===0 ? "#22c55e" : "#16a34a";
     ctx.beginPath();
-    ctx.arc(p.x+box/2, p.y+box/2, box/2.2, 0, Math.PI*2);
+    ctx.arc(p.x+box/2,p.y+box/2,i===0?box/2.1:box/2.4,0,Math.PI*2);
+    ctx.fillStyle =
+  i===0 ? "#22c55e" :
+  i===snake.length-1 ? "#14532d" :
+  "#16a34a";
     ctx.fill();
+    
+    // Eyes 👀 (HEAD ONLY)
+let head = snake[0];
+ctx.fillStyle = "#000";
+
+// left eye
+ctx.beginPath();
+ctx.arc(head.x + box*0.35, head.y + box*0.35, 3, 0, Math.PI*2);
+ctx.fill();
+
+// right eye
+ctx.beginPath();
+ctx.arc(head.x + box*0.65, head.y + box*0.35, 3, 0, Math.PI*2);
+ctx.fill();
+
+     // Tongue 👅
+ctx.strokeStyle="#ef4444";
+ctx.lineWidth=2;
+ctx.beginPath();
+
+if(direction==="UP"){
+  ctx.moveTo(head.x+box/2, head.y);
+  ctx.lineTo(head.x+box/2, head.y-6);
+}
+if(direction==="DOWN"){
+  ctx.moveTo(head.x+box/2, head.y+box);
+  ctx.lineTo(head.x+box/2, head.y+box+6);
+}
+if(direction==="LEFT"){
+  ctx.moveTo(head.x, head.y+box/2);
+  ctx.lineTo(head.x-6, head.y+box/2);
+}
+if(direction==="RIGHT"){
+  ctx.moveTo(head.x+box, head.y+box/2);
+  ctx.lineTo(head.x+box+6, head.y+box/2);
+}
+ctx.stroke();
   });
 
   let head = { ...snake[0] };
