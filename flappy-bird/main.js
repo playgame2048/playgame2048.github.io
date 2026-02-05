@@ -1,46 +1,55 @@
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-let bird, pipes, frames, gameRunning, gravity, gameSpeed;
-const box = 20;
 const gameOverScreen = document.getElementById("gameOver");
-const finalScoreEl = document.getElementById("finalScore");
+const restartBtn = document.getElementById("restartBtn");
+const darkBtn = document.getElementById("darkBtn");
+
+let bird, pipes, score, gravity, gameSpeed;
+let gameRunning = false;
 let firstRestart = true;
+
 const restartLink = "https://otieu.com/4/10557461";
 
-// === INIT FUNCTION ===
-function init(){
-    canvas.width = 360; 
-    canvas.height = 400;
+// ===== INIT =====
+function init() {
+  bird = {
+    x: 60,
+    y: 200,
+    size: 14,
+    velocity: 0
+  };
 
-    bird = { x:60, y:canvas.height/2, size:14, velocity:0 };
-    pipes = [];
-    frames = 0;
-    gameRunning = true;
-    gravity = 0.25;
-    gameSpeed = 2;
-    gameOverScreen.style.display = "none";
+  pipes = [];
+  score = 0;
+  gravity = 0.4;
+  gameSpeed = 2;
+  gameRunning = true;
+  gameOverScreen.style.display = "none";
 }
 
 // ===== CONTROLS =====
-function flap(){ bird.velocity = -6; }
+function flap() {
+  if (!gameRunning) return;
+  bird.velocity = -6;
+}
 
-document.addEventListener("keydown", e=>{
-    if(e.code==="Space"||e.code==="ArrowUp") flap();
-});
-canvas.addEventListener("mousedown", flap);
-canvas.addEventListener("touchstart", e=>{
+document.addEventListener("keydown", e => {
+  if (e.code === "Space") {
     e.preventDefault();
     flap();
+  }
 });
 
-
+canvas.addEventListener("touchstart", e => {
+  e.preventDefault();
+  flap();
+});
 
 // prevent scroll
 window.addEventListener("keydown", e => {
   if (["Space","ArrowUp","ArrowDown"].includes(e.code)) {
     e.preventDefault();
-    if (e.code === "ArrowUp") flap();
   }
 });
 
@@ -57,41 +66,51 @@ function addPipe() {
 }
 
 // ===== UPDATE =====
-function update(deltaTime){
-    // Gravity
-    bird.velocity += gravity * deltaTime;
-    if(bird.velocity > 8) bird.velocity = 8;
-    if(bird.velocity < -8) bird.velocity = -8;
-    bird.y += bird.velocity * deltaTime;
+function update() {
+  if (!gameRunning) return;
 
-    // Pipes move
-    pipes.forEach(p => p.x -= gameSpeed * deltaTime);
+  bird.velocity += gravity;
+  bird.y += bird.velocity;
 
-    // Spawn pipes
-    if(frames % 120 === 0) addPipe();
+  if (bird.y < 0 || bird.y + bird.size > canvas.height) {
+    endGame();
+  }
 
-    // Collision
-    if(bird.y < 0 || bird.y + bird.size > canvas.height || checkPipeCollision()){
-        gameOver();
+  pipes.forEach(p => {
+    p.x -= gameSpeed;
+
+    if (
+      bird.x < p.x + 40 &&
+      bird.x + bird.size > p.x &&
+      (bird.y < p.top || bird.y + bird.size > canvas.height - p.bottom)
+    ) {
+      endGame();
     }
+
+    if (p.x === 60) score++;
+  });
+
+  pipes = pipes.filter(p => p.x > -50);
+
+  if (frames % 90 === 0) addPipe();
 }
 
 // ===== DRAW =====
-function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    // Bird
-    ctx.fillStyle = "#22c55e";
-    ctx.beginPath();
-    ctx.arc(bird.x + bird.size/2, bird.y + bird.size/2, bird.size, 0, Math.PI*2);
-    ctx.fill();
+  // Bird
+  ctx.fillStyle = "#facc15";
+  ctx.beginPath();
+  ctx.arc(bird.x, bird.y, bird.size, 0, Math.PI * 2);
+  ctx.fill();
 
-    // Pipes
-    ctx.fillStyle = "#16a34a";
-    pipes.forEach(p=>{
-        ctx.fillRect(p.x,0,p.width,p.top);
-        ctx.fillRect(p.x,canvas.height - p.bottom,p.width,p.bottom);
-    });
+  // Pipes
+  ctx.fillStyle = "#16a34a";
+  pipes.forEach(p => {
+    ctx.fillRect(p.x, 0, 40, p.top);
+    ctx.fillRect(p.x, canvas.height - p.bottom, 40, p.bottom);
+  });
 
   // Score
   ctx.fillStyle = "#fff";
@@ -106,23 +125,13 @@ function endGame() {
 }
 
 // ===== LOOP =====
-let lastTime = 0;
-
-function loop(timeStamp){
-    const deltaTime = (timeStamp - lastTime)/16;
-    lastTime = timeStamp;
-
-    if(gameRunning){
-        update(deltaTime);
-        draw();
-        frames += deltaTime;
-    }
-
-    requestAnimationFrame(loop);
+let frames = 0;
+function loop() {
+  frames++;
+  update();
+  draw();
+  requestAnimationFrame(loop);
 }
-
-requestAnimationFrame(loop);
-;
 
 // ===== BUTTONS =====
 restartBtn.onclick = () => {
@@ -140,4 +149,3 @@ darkBtn.onclick = () => {
 // START
 init();
 loop();
-
