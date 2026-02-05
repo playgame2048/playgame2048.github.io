@@ -71,10 +71,6 @@ function addPipe() {
 function update() {
   if (!gameRunning) return;
 
-bird.velocity += gravity * deltaTime;
-bird.y += bird.velocity * deltaTime;
-pipes.forEach(p => p.x -= gameSpeed * deltaTime);
-
   if (bird.y < 0 || bird.y + bird.size > canvas.height) {
     endGame();
   }
