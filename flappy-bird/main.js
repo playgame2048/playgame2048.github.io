@@ -83,10 +83,6 @@ requestAnimationFrame(loop);
 if(bird.velocity > 8) bird.velocity = 8; // max down
 if(bird.velocity < -8) bird.velocity = -8; // max up
 
-bird.y = canvas.height / 2;
-frames = 0; 
-if (frames < 60) return; // delay قبل ما يبان pipe
-
 // ===== PIPES =====
 function addPipe() {
   const gap = 120;
