@@ -145,5 +145,3 @@ restartBtn.onclick = () => {
   initGame();
   intervalId = setInterval(draw, 120); // 🔴 مهم
 };
-
-
