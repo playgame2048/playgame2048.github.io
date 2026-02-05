@@ -126,11 +126,14 @@ function endGame() {
 // ===== LOOP =====
 let frames = 0;
 function loop() {
-  frames++;
-  update();
-  draw();
+  if(gameRunning){
+    update();
+    draw();
+    frames++;
+  }
   requestAnimationFrame(loop);
 }
+loop();
 
 // ===== BUTTONS =====
 restartBtn.onclick = () => {
@@ -148,3 +151,4 @@ darkBtn.onclick = () => {
 // START
 init();
 loop();
+
