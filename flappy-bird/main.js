@@ -51,6 +51,7 @@ canvas.addEventListener("touchstart", e => {
 window.addEventListener("keydown", e => {
   if (["Space","ArrowUp","ArrowDown"].includes(e.code)) {
     e.preventDefault();
+    if (e.code === "ArrowUp") flap();
   }
 });
 
