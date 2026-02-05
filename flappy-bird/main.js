@@ -30,22 +30,18 @@ function init() {
 }
 
 // ===== CONTROLS =====
-function flap() {
-  if (!gameRunning) return;
-  bird.velocity = -6;
+function flap(){
+  bird.velocity = -6; // bird يرتفع
 }
-
-document.addEventListener("keydown", e => {
-  if (e.code === "Space") {
-    e.preventDefault();
-    flap();
-  }
+document.addEventListener("keydown", e=>{
+  if(e.code==="Space" || e.code==="ArrowUp") flap();
 });
-
-canvas.addEventListener("touchstart", e => {
+canvas.addEventListener("mousedown", flap);
+canvas.addEventListener("touchstart", e=>{
   e.preventDefault();
   flap();
 });
+
 
 // prevent scroll
 window.addEventListener("keydown", e => {
@@ -68,30 +64,24 @@ function addPipe() {
 }
 
 // ===== UPDATE =====
-function update() {
-  if (!gameRunning) return;
+function update(deltaTime){
+  // Gravity
+  bird.velocity += gravity * deltaTime;
+  if(bird.velocity > 8) bird.velocity = 8;
+  if(bird.velocity < -8) bird.velocity = -8;
 
-  if (bird.y < 0 || bird.y + bird.size > canvas.height) {
-    endGame();
+  bird.y += bird.velocity * deltaTime;
+
+  // Pipes movement
+  pipes.forEach(p => p.x -= gameSpeed * deltaTime);
+
+  // Spawn pipes every 120 frames
+  if(frames % 120 === 0) addPipe();
+
+  // Collision detection
+  if(bird.y < 0 || bird.y + bird.size > canvas.height || checkPipeCollision()){
+    gameOver();
   }
-
-  pipes.forEach(p => {
-    p.x -= gameSpeed;
-
-    if (
-      bird.x < p.x + 40 &&
-      bird.x + bird.size > p.x &&
-      (bird.y < p.top || bird.y + bird.size > canvas.height - p.bottom)
-    ) {
-      endGame();
-    }
-
-    if (p.x === 60) score++;
-  });
-
-  pipes = pipes.filter(p => p.x > -50);
-
-  if (frames % 120 === 0) addPipe();
 }
 
 // ===== DRAW =====
@@ -124,16 +114,22 @@ function endGame() {
 }
 
 // ===== LOOP =====
-let frames = 0;
-function loop() {
+let lastTime = 0;
+
+function loop(timeStamp){
+  const deltaTime = (timeStamp - lastTime)/16; // normalize fps
+  lastTime = timeStamp;
+
   if(gameRunning){
-    update();
+    update(deltaTime);
     draw();
-    frames++;
+    frames += deltaTime;
   }
+
   requestAnimationFrame(loop);
 }
-loop();
+
+requestAnimationFrame(loop);
 
 // ===== BUTTONS =====
 restartBtn.onclick = () => {
