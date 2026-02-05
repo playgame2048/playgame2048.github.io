@@ -77,11 +77,7 @@ function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
   // grid
-  if(document.body.classList.contains("dark")){
-  ctx.strokeStyle = "rgba(34,197,94,0.15)"; // light خضرا ناعمة
-}else{
-  ctx.strokeStyle = "rgba(0,0,0,0.08)";
-}
+ctx.strokeStyle="rgba(255,255,255,.05)";
 
   for(let i=0;i<canvas.width;i+=box){
     ctx.beginPath();
