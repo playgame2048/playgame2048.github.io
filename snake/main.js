@@ -11,6 +11,7 @@ const darkBtn = document.getElementById("darkBtn");
 const box = 20;
 const rows = canvas.width / box;
 
+let intervalId = null;
 let snake, direction, food, score;
 let gameOver = false;
 
@@ -130,7 +131,7 @@ function draw(){
   }
 }
 
-setInterval(draw, 120);
+intervalId = setInterval(draw, 120);
 
 /* ================= BUTTONS ================= */
 restartBtn.onclick = () => {
@@ -139,10 +140,10 @@ restartBtn.onclick = () => {
     window.open(restartLink, "_blank");
     return;
   }
+
+  clearInterval(intervalId);   // 🔴 مهم
   initGame();
+  intervalId = setInterval(draw, 120); // 🔴 مهم
 };
 
-darkBtn.onclick = () => {
-  document.body.classList.toggle("dark");
-};
 
