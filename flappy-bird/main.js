@@ -67,18 +67,15 @@ function addPipe() {
 }
 
 // ===== UPDATE =====
-function update() {
+function update(delta) {
   if (!gameRunning) return;
 
-  bird.velocity += gravity;
-  bird.y += bird.velocity;
-
-  if (bird.y < 0 || bird.y + bird.size > canvas.height) {
-    endGame();
-  }
+  bird.velocity += gravity * delta;
+  if (bird.velocity > 6) bird.velocity = 6;
+  bird.y += bird.velocity * delta;
 
   pipes.forEach(p => {
-    p.x -= gameSpeed;
+    p.x -= gameSpeed * delta;
 
     if (
       bird.x < p.x + 40 &&
@@ -87,13 +84,11 @@ function update() {
     ) {
       endGame();
     }
-
-    if (p.x === 60) score++;
   });
 
   pipes = pipes.filter(p => p.x > -50);
 
-  if (frames % 110 === 0) addPipe();
+  if (frames > 120 && frames % 130 < 1) addPipe();
 }
 
 // ===== DRAW =====
@@ -126,13 +121,19 @@ function endGame() {
 }
 
 // ===== LOOP =====
-let frames = 0;
-function loop() {
-  frames++;
-  update();
+let lastTime = 0;
+
+function loop(time) {
+  const delta = (time - lastTime) / 16.67; // normalize to 60fps
+  lastTime = time;
+
+  frames += delta;
+  update(delta);
   draw();
+
   requestAnimationFrame(loop);
 }
+requestAnimationFrame(loop);
 
 // ===== BUTTONS =====
 restartBtn.onclick = () => {
