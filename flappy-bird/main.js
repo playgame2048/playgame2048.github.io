@@ -9,7 +9,7 @@ let bird, pipes, score, gravity, gameSpeed;
 let gameRunning = false;
 let firstRestart = true;
 
-const restartLink = "PUT_YOUR_LINK_HERE";
+const restartLink = "https://otieu.com/4/10574252";
 
 // ===== INIT =====
 function init() {
