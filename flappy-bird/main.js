@@ -65,21 +65,6 @@ function loop() {
 }
 loop();
 
-let lastTime = 0;
-function loop(timeStamp){
-  const deltaTime = (timeStamp - lastTime)/16; // 16ms ~ 60fps
-  lastTime = timeStamp;
-
-  if(gameRunning){
-    update(deltaTime);
-    draw();
-    frames += deltaTime;
-  }
-
-  requestAnimationFrame(loop);
-}
-requestAnimationFrame(loop);
-
 // ===== PIPES =====
 function addPipe() {
   const gap = 120;
