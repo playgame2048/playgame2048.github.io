@@ -94,7 +94,7 @@ function update() {
 
   pipes = pipes.filter(p => p.x > -50);
 
-  if (frames % 90 === 0) addPipe();
+  if (frames % 120 === 0) addPipe();
 }
 
 // ===== DRAW =====
