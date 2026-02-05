@@ -6,7 +6,16 @@ body{
   transition:.3s;
 }
 
-body.dark{background:#020617;color:#fff}
+body {
+  background: #f4f4f5;
+  color: #111;
+  transition: 0.3s;
+}
+
+body.dark {
+  background: #020617;
+  color: #e5e7eb;
+}
 
 .title{
   font-size:2.5rem;
