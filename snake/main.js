@@ -195,3 +195,9 @@ restartBtn.onclick = () => {
   initGame();
   intervalId = setInterval(draw, 120); // 🔴 مهم
 };
+
+gameOverScreen.addEventListener("click", () => {
+  gameOverScreen.style.display = "none";
+  // ما كنديرو reset لا والو
+});
+
