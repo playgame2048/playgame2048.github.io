@@ -119,9 +119,6 @@ if (!p.passed && p.x + 40 < bird.x) {
   }
 }
 
-    gameSpeed = Math.min(gameSpeed, 5);
-gravity = Math.min(gravity, 0.6);
-
     if (
       bird.x + bird.size > p.x &&
       bird.x - bird.size < p.x + 40 &&
