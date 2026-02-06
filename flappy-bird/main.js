@@ -122,14 +122,62 @@ function update(delta) {
 }
 
 // ===== DRAW =====
+function drawBird() {
+  const x = bird.x;
+  const y = bird.y;
+  const s = bird.size;
+
+  // BODY
+  ctx.fillStyle = "#facc15";
+  ctx.beginPath();
+  ctx.ellipse(x, y, s + 4, s, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // WING
+  ctx.fillStyle = "#eab308";
+  ctx.beginPath();
+  ctx.ellipse(x - 4, y + 2, s - 4, s - 6, Math.PI / 6, 0, Math.PI * 2);
+  ctx.fill();
+
+  // EYE
+  ctx.fillStyle = "#000";
+  ctx.beginPath();
+  ctx.arc(x + 4, y - 4, 2.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // BEAK
+  ctx.fillStyle = "#fb923c";
+  ctx.beginPath();
+  ctx.moveTo(x + s + 2, y);
+  ctx.lineTo(x + s + 10, y - 4);
+  ctx.lineTo(x + s + 10, y + 4);
+  ctx.closePath();
+  ctx.fill();
+
+  // LEGS
+  ctx.strokeStyle = "#78350f";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x - 4, y + s);
+  ctx.lineTo(x - 6, y + s + 8);
+  ctx.moveTo(x + 2, y + s);
+  ctx.lineTo(x, y + s + 8);
+  ctx.stroke();
+
+  // TAIL (BACK)
+  ctx.fillStyle = "#f59e0b";
+  ctx.beginPath();
+  ctx.moveTo(x - s - 4, y);
+  ctx.lineTo(x - s - 12, y - 6);
+  ctx.lineTo(x - s - 12, y + 6);
+  ctx.closePath();
+  ctx.fill();
+}
+
 function draw() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // Bird
-  ctx.fillStyle = "#facc15";
-  ctx.beginPath();
-  ctx.arc(bird.x, bird.y, bird.size, 0, Math.PI * 2);
-  ctx.fill();
+  drawBird();
 
   // Pipes
   ctx.fillStyle = "#16a34a";
