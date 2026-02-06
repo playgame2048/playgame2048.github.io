@@ -14,12 +14,12 @@ const restartLink = "https://otieu.com/4/10557461";
 
 // ===== INIT =====
 function init() {
-  bird = {
-    x: 60,
-    y: canvas.height / 2,
-    size: 14,
-    velocity: 0
-  };
+bird = {
+  x: 60,
+  y: canvas.height / 2,
+  size: 14,
+  velocity: -2
+};
 
   pipes = [];
   score = 0;
@@ -75,18 +75,22 @@ function update(delta) {
 
   frames++;
 
-  // Bird physics
   bird.velocity += gravity * delta;
-  if (bird.velocity > 7) bird.velocity = 7;
+  bird.velocity = Math.min(bird.velocity, 7);
   bird.y += bird.velocity * delta;
 
-  // Ground / ceiling collision
-  if (bird.y < bird.size || bird.y + bird.size >= canvas.height) {
+  // Ceiling
+  if (bird.y - bird.size <= 0) {
+    bird.y = bird.size;
+    bird.velocity = 0;
+  }
+
+  // Ground
+  if (bird.y + bird.size >= canvas.height) {
     endGame();
     return;
   }
 
-  // Pipes
   pipes.forEach(p => {
     p.x -= gameSpeed * delta;
 
@@ -102,7 +106,6 @@ function update(delta) {
 
   pipes = pipes.filter(p => p.x > -50);
 
-  // Add pipes
   if (frames % 120 === 0) addPipe();
 }
 
