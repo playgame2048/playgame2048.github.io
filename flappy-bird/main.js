@@ -10,6 +10,7 @@ let gameRunning = false;
 let firstRestart = true;
 let keyLocked = false;
 let lastTime = 0;
+let gameStarted = false;
 
 const restartLink = "https://otieu.com/4/10557461";
 
@@ -30,10 +31,16 @@ bird = {
 
   gameRunning = true;
   gameOverScreen.style.display = "none";
+  gameStarted = false;
 }
 
 // ===== CONTROLS =====
 function flap() {
+  if (!gameStarted) {
+    gameStarted = true;
+    bird.velocity = -6;
+    return;
+  }
   if (!gameRunning) return;
   bird.velocity = -6;
 }
@@ -73,6 +80,7 @@ function addPipe() {
 // ===== UPDATE =====
 function update(delta) {
   if (!gameRunning) return;
+  if (!gameStarted) return;
 
   frames++;
 
