@@ -182,13 +182,34 @@ ctx.strokeStyle = "#14532d"; // اللون ديال outline
 ctx.lineWidth = 3; // سمك الخط الخارجي
 
 pipes.forEach(p => {
-  // pipe top
-  ctx.fillRect(p.x, 0, 40, p.top);
-  ctx.strokeRect(p.x, 0, 40, p.top);
+  const pipeWidth = 40;
+  const radius = 10; // radius ديال رأس pipe
 
-  // pipe bottom
-  ctx.fillRect(p.x, canvas.height - p.bottom, 40, p.bottom);
-  ctx.strokeRect(p.x, canvas.height - p.bottom, 40, p.bottom);
+  // ===== TOP PIPE =====
+  ctx.fillStyle = "#16a34a";
+  ctx.strokeStyle = "#14532d";
+  ctx.lineWidth = 3;
+
+  // body rectangle
+  ctx.fillRect(p.x, radius, pipeWidth, p.top - radius);
+  ctx.strokeRect(p.x, radius, pipeWidth, p.top - radius);
+
+  // top semi-circle
+  ctx.beginPath();
+  ctx.arc(p.x + pipeWidth/2, p.top, radius, Math.PI, 0, false);
+  ctx.fill();
+  ctx.stroke();
+
+  // ===== BOTTOM PIPE =====
+  // body rectangle
+  ctx.fillRect(p.x, canvas.height - p.bottom, pipeWidth, p.bottom - radius);
+  ctx.strokeRect(p.x, canvas.height - p.bottom, pipeWidth, p.bottom - radius);
+
+  // bottom semi-circle
+  ctx.beginPath();
+  ctx.arc(p.x + pipeWidth/2, canvas.height - p.bottom, radius, 0, Math.PI, false);
+  ctx.fill();
+  ctx.stroke();
 });
 
   // Score
