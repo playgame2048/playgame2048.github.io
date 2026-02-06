@@ -11,6 +11,7 @@ let firstRestart = true;
 let keyLocked = false;
 let lastTime = 0;
 let gameStarted = false;
+let passedPipes = 0;
 
 const restartLink = "https://otieu.com/4/10557461";
 
@@ -25,10 +26,11 @@ bird = {
 
   pipes = [];
   score = 0;
-  gravity = 0.35;
+  passedPipes = 0;
   gameSpeed = 2;
+  gravity = 0.25;
   frames = 0;
-
+  
   gameRunning = true;
   gameOverScreen.style.display = "none";
   gameStarted = false;
@@ -67,13 +69,14 @@ window.addEventListener("keydown", e => {
 
 // ===== PIPES =====
 function addPipe() {
-  const gap = 120;
+  const gap = 140;
   const topHeight = Math.random() * 200 + 40;
 
   pipes.push({
     x: canvas.width,
     top: topHeight,
-    bottom: canvas.height - topHeight - gap
+    bottom: canvas.height - topHeight - gap,
+    passed: false   // 👈 مهم
   });
 }
 
@@ -102,6 +105,22 @@ function update(delta) {
 
   pipes.forEach(p => {
     p.x -= gameSpeed * delta;
+
+    // SCORE + SPEED INCREASE
+if (!p.passed && p.x + 40 < bird.x) {
+  p.passed = true;
+  score++;
+  passedPipes++;
+
+  // every 8 pipes increase difficulty
+  if (passedPipes % 8 === 0) {
+    gameSpeed += 0.3;
+    gravity += 0.03;
+  }
+}
+
+    gameSpeed = Math.min(gameSpeed, 5);
+gravity = Math.min(gravity, 0.6);
 
     if (
       bird.x + bird.size > p.x &&
