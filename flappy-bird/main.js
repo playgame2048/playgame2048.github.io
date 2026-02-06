@@ -125,65 +125,47 @@ function update(delta) {
 function drawBird() {
   const x = bird.x;
   const y = bird.y;
-  const r = bird.size;
+  const r = bird.size; // small body
 
-  const angle = Math.max(Math.min(bird.velocity / 8, 0.6), -0.4);
+  const angle = Math.max(Math.min(bird.velocity / 8, 0.5), -0.4);
 
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(angle);
 
-  /* ===== BODY ===== */
-  const bodyGrad = ctx.createLinearGradient(0, -r, 0, r);
-  bodyGrad.addColorStop(0, "#fde68a");
-  bodyGrad.addColorStop(0.5, "#facc15");
-  bodyGrad.addColorStop(1, "#eab308");
-
-  ctx.fillStyle = bodyGrad;
+  // ===== BODY (small oval) =====
+  ctx.fillStyle = "#fde68a";
   ctx.beginPath();
-  ctx.ellipse(0, 0, r + 8, r + 5, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 0, r + 4, r + 2.5, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  /* ===== BELLY ===== */
-  ctx.fillStyle = "rgba(255,255,255,0.35)";
+  // ===== WING =====
+  ctx.fillStyle = "#fbbf24";
   ctx.beginPath();
-  ctx.ellipse(4, 4, r + 2, r, 0, 0, Math.PI * 2);
+  ctx.ellipse(-5, 2, r - 1.5, r - 3, Math.sin(Date.now()/120)*0.4, 0, Math.PI*2);
   ctx.fill();
 
-  /* ===== WING ===== */
+  // ===== TAIL =====
   ctx.fillStyle = "#f59e0b";
   ctx.beginPath();
-  ctx.ellipse(-6, 4, r - 2, r - 4, Math.sin(Date.now()/120)*0.4, 0, Math.PI*2);
+  ctx.moveTo(-r - 4, 0);
+  ctx.lineTo(-r - 12, -5);
+  ctx.lineTo(-r - 10, 0);
+  ctx.lineTo(-r - 12, 5);
+  ctx.lineTo(-r - 4, 0);
   ctx.fill();
 
-  /* ===== EYE ===== */
+  // ===== EYE =====
   ctx.fillStyle = "#000";
   ctx.beginPath();
-  ctx.arc(6, -4, 3, 0, Math.PI * 2);
+  ctx.arc(3, -2, 2, 0, Math.PI*2);
   ctx.fill();
 
-  ctx.fillStyle = "#fff";
-  ctx.beginPath();
-  ctx.arc(7, -5, 1.3, 0, Math.PI * 2);
-  ctx.fill();
-
-  /* ===== BEAK (CURVED) ===== */
+  // ===== BEAK =====
   ctx.fillStyle = "#fb923c";
   ctx.beginPath();
-  ctx.moveTo(r + 6, -2);
-  ctx.quadraticCurveTo(r + 16, 0, r + 6, 4);
-  ctx.closePath();
-  ctx.fill();
-
-  /* ===== BACK / TAIL ===== */
-  ctx.fillStyle = "#d97706";
-  ctx.beginPath();
-  ctx.moveTo(-r - 6, -2);
-  ctx.lineTo(-r - 18, -8);
-  ctx.lineTo(-r - 14, 0);
-  ctx.lineTo(-r - 18, 8);
-  ctx.lineTo(-r - 6, 2);
-  ctx.closePath();
+  ctx.moveTo(r + 4, -1);
+  ctx.quadraticCurveTo(r + 10, 0, r + 4, 2);
   ctx.fill();
 
   ctx.restore();
