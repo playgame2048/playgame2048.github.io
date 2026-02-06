@@ -9,6 +9,7 @@ let bird, pipes, score, gravity, gameSpeed;
 let gameRunning = false;
 let firstRestart = true;
 let keyLocked = false;
+let lastTime = 0;
 
 const restartLink = "https://otieu.com/4/10557461";
 
@@ -18,7 +19,7 @@ bird = {
   x: 60,
   y: canvas.height / 2,
   size: 14,
-  velocity: -2
+  velocity: -6
 };
 
   pipes = [];
@@ -76,17 +77,17 @@ function update(delta) {
   frames++;
 
   bird.velocity += gravity * delta;
-  bird.velocity = Math.min(bird.velocity, 7);
+  bird.velocity = Math.min(bird.velocity, 6);
   bird.y += bird.velocity * delta;
 
   // Ceiling
-  if (bird.y - bird.size <= 0) {
+  if (bird.y - bird.size < 0) {
     bird.y = bird.size;
     bird.velocity = 0;
   }
 
   // Ground
-  if (bird.y + bird.size >= canvas.height) {
+  if (bird.y + bird.size > canvas.height) {
     endGame();
     return;
   }
@@ -95,10 +96,12 @@ function update(delta) {
     p.x -= gameSpeed * delta;
 
     if (
-      bird.x < p.x + 40 &&
       bird.x + bird.size > p.x &&
-      (bird.y - bird.size < p.top ||
-       bird.y + bird.size > canvas.height - p.bottom)
+      bird.x - bird.size < p.x + 40 &&
+      (
+        bird.y - bird.size < p.top ||
+        bird.y + bird.size > canvas.height - p.bottom
+      )
     ) {
       endGame();
     }
@@ -139,10 +142,8 @@ function endGame() {
 }
 
 // ===== LOOP =====
-let lastTime = 0;
-
 function loop(time) {
-  const delta = ((time - lastTime) / 16.67, 2); // normalize to 60fps
+  const delta = (time - lastTime) / 16.67; // normalize to 60fps
   lastTime = time;
 
   update(delta);
@@ -150,7 +151,6 @@ function loop(time) {
 
   requestAnimationFrame(loop);
 }
-requestAnimationFrame(loop);
 
 // ===== BUTTONS =====
 restartBtn.onclick = () => {
