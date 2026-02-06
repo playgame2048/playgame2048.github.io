@@ -125,53 +125,62 @@ function update(delta) {
 function drawBird() {
   const x = bird.x;
   const y = bird.y;
-  const s = bird.size;
+  const r = bird.size;
 
-  // BODY
+  // rotation based on velocity (real feel)
+  const angle = Math.max(Math.min(bird.velocity / 10, 0.5), -0.5);
+
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
+
+  // ===== BODY (gradient like emoji) =====
+  const bodyGrad = ctx.createRadialGradient(-r/3, -r/3, r/4, 0, 0, r+6);
+  bodyGrad.addColorStop(0, "#fff7cc");
+  bodyGrad.addColorStop(0.4, "#fde047");
+  bodyGrad.addColorStop(1, "#f59e0b");
+
+  ctx.fillStyle = bodyGrad;
+  ctx.beginPath();
+  ctx.ellipse(0, 0, r + 6, r + 2, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ===== WING =====
   ctx.fillStyle = "#facc15";
   ctx.beginPath();
-  ctx.ellipse(x, y, s + 4, s, 0, 0, Math.PI * 2);
+  ctx.ellipse(-6, 4, r - 4, r - 6, Math.sin(Date.now()/120) * 0.4, 0, Math.PI * 2);
   ctx.fill();
 
-  // WING
-  ctx.fillStyle = "#eab308";
-  ctx.beginPath();
-  ctx.ellipse(x - 4, y + 2, s - 4, s - 6, Math.PI / 6, 0, Math.PI * 2);
-  ctx.fill();
-
-  // EYE
+  // ===== EYE (emoji style) =====
   ctx.fillStyle = "#000";
   ctx.beginPath();
-  ctx.arc(x + 4, y - 4, 2.5, 0, Math.PI * 2);
+  ctx.arc(4, -4, 3, 0, Math.PI * 2);
   ctx.fill();
 
-  // BEAK
+  ctx.fillStyle = "#fff";
+  ctx.beginPath();
+  ctx.arc(5, -5, 1.2, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ===== BEAK =====
   ctx.fillStyle = "#fb923c";
   ctx.beginPath();
-  ctx.moveTo(x + s + 2, y);
-  ctx.lineTo(x + s + 10, y - 4);
-  ctx.lineTo(x + s + 10, y + 4);
+  ctx.moveTo(r + 6, 0);
+  ctx.lineTo(r + 14, -4);
+  ctx.lineTo(r + 14, 4);
   ctx.closePath();
   ctx.fill();
 
-  // LEGS
-  ctx.strokeStyle = "#78350f";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(x - 4, y + s);
-  ctx.lineTo(x - 6, y + s + 8);
-  ctx.moveTo(x + 2, y + s);
-  ctx.lineTo(x, y + s + 8);
-  ctx.stroke();
-
-  // TAIL (BACK)
+  // ===== TAIL =====
   ctx.fillStyle = "#f59e0b";
   ctx.beginPath();
-  ctx.moveTo(x - s - 4, y);
-  ctx.lineTo(x - s - 12, y - 6);
-  ctx.lineTo(x - s - 12, y + 6);
+  ctx.moveTo(-r - 6, 0);
+  ctx.lineTo(-r - 16, -6);
+  ctx.lineTo(-r - 16, 6);
   ctx.closePath();
   ctx.fill();
+
+  ctx.restore();
 }
 
 function draw() {
