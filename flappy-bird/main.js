@@ -109,7 +109,7 @@ function update(delta) {
 
   pipes = pipes.filter(p => p.x > -50);
 
-  if (frames % 120 === 0) addPipe();
+  if (frames % 160 === 0) addPipe();
 }
 
 // ===== DRAW =====
