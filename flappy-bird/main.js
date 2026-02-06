@@ -176,12 +176,20 @@ function draw() {
 
   drawBird();
 
-  // Pipes
-  ctx.fillStyle = "#16a34a";
-  pipes.forEach(p => {
-    ctx.fillRect(p.x, 0, 40, p.top);
-    ctx.fillRect(p.x, canvas.height - p.bottom, 40, p.bottom);
-  });
+// ===== PIPES =====
+ctx.fillStyle = "#16a34a"; // اللون ديال pipe
+ctx.strokeStyle = "#14532d"; // اللون ديال outline
+ctx.lineWidth = 3; // سمك الخط الخارجي
+
+pipes.forEach(p => {
+  // pipe top
+  ctx.fillRect(p.x, 0, 40, p.top);
+  ctx.strokeRect(p.x, 0, 40, p.top);
+
+  // pipe bottom
+  ctx.fillRect(p.x, canvas.height - p.bottom, 40, p.bottom);
+  ctx.strokeRect(p.x, canvas.height - p.bottom, 40, p.bottom);
+});
 
   // Score
   ctx.fillStyle = "#fff";
