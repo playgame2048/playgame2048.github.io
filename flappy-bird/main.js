@@ -8,6 +8,7 @@ const darkBtn = document.getElementById("darkBtn");
 let bird, pipes, score, gravity, gameSpeed;
 let gameRunning = false;
 let firstRestart = true;
+let keyLocked = false;
 
 const restartLink = "https://otieu.com/4/10557461";
 
@@ -15,15 +16,17 @@ const restartLink = "https://otieu.com/4/10557461";
 function init() {
   bird = {
     x: 60,
-    y: 200,
+    y: canvas.height / 2,
     size: 14,
     velocity: 0
   };
 
   pipes = [];
   score = 0;
-  gravity = 0.25;
+  gravity = 0.35;
   gameSpeed = 2;
+  frames = 0;
+
   gameRunning = true;
   gameOverScreen.style.display = "none";
 }
@@ -70,17 +73,28 @@ function addPipe() {
 function update(delta) {
   if (!gameRunning) return;
 
+  frames++;
+
+  // Bird physics
   bird.velocity += gravity * delta;
-  if (bird.velocity > 6) bird.velocity = 6;
+  if (bird.velocity > 7) bird.velocity = 7;
   bird.y += bird.velocity * delta;
 
+  // Ground / ceiling collision
+  if (bird.y < bird.size || bird.y + bird.size >= canvas.height) {
+    endGame();
+    return;
+  }
+
+  // Pipes
   pipes.forEach(p => {
     p.x -= gameSpeed * delta;
 
     if (
       bird.x < p.x + 40 &&
       bird.x + bird.size > p.x &&
-      (bird.y < p.top || bird.y + bird.size > canvas.height - p.bottom)
+      (bird.y - bird.size < p.top ||
+       bird.y + bird.size > canvas.height - p.bottom)
     ) {
       endGame();
     }
@@ -88,7 +102,8 @@ function update(delta) {
 
   pipes = pipes.filter(p => p.x > -50);
 
-  if (frames > 120 && frames % 130 < 1) addPipe();
+  // Add pipes
+  if (frames % 120 === 0) addPipe();
 }
 
 // ===== DRAW =====
@@ -124,10 +139,9 @@ function endGame() {
 let lastTime = 0;
 
 function loop(time) {
-  const delta = (time - lastTime) / 16.67; // normalize to 60fps
+  const delta = ((time - lastTime) / 16.67, 2); // normalize to 60fps
   lastTime = time;
 
-  frames += delta;
   update(delta);
   draw();
 
