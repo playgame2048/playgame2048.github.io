@@ -82,18 +82,69 @@ body.dark canvas {
   font-size: 20px;
 }
 
-/* Blog */
+/* Blog Section */
 .blog {
-  padding: 20px;
-  text-align: left;
+  background: #0b0b0f; /* Dark mode background */
+  color: #fff;
+  padding: 40px 20px;
+  border-top: 2px solid #222;
+}
+
+.blog-container {
+  max-width: 900px;
+  margin: auto;
 }
 
 .blog h2 {
-  margin-top: 15px;
-  margin-bottom: 5px;
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #facc15;
 }
 
-.blog p {
-  font-size: 14px;
+.blog h3 {
+  font-size: 1.3rem;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #34d399;
+}
+
+.blog p, .blog ul {
+  font-size: 1rem;
+  line-height: 1.6;
   opacity: 0.85;
+}
+
+.blog ul li {
+  margin: 8px 0;
+}
+
+.support-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 18px;
+  background: #4caf50;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.support-btn:hover {
+  background: #22c55e;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .blog h2 {
+    font-size: 1.5rem;
+  }
+
+  .blog h3 {
+    font-size: 1.1rem;
+  }
+
+  .blog p, .blog ul {
+    font-size: 0.95rem;
+  }
 }
