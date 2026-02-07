@@ -177,20 +177,33 @@ function draw() {
   drawBird();
 
   pipes.forEach(p => {
-    const bodyW = 40;
+  const bodyW = 40; // عرض الجسم ديال pipe
+  const headW = 55;  // عرض الرأس شوية أكبر
+  const headH = 14;  // ارتفاع الرأس
+  const offset = (headW - bodyW) / 2;
 
-    ctx.fillStyle = "#16a34a";
-    ctx.strokeStyle = "#14532d";
-    ctx.lineWidth = 3;
+  ctx.fillStyle = "#16a34a";
+  ctx.strokeStyle = "#14532d";
+  ctx.lineWidth = 3;
 
-    // top pipe (body only)
-    ctx.fillRect(p.x, 0, bodyW, p.top);
-    ctx.strokeRect(p.x, 0, bodyW, p.top);
+  // ===== TOP PIPE =====
+  // body
+  ctx.fillRect(p.x, 0, bodyW, p.top);
+  ctx.strokeRect(p.x, 0, bodyW, p.top);
 
-    // bottom pipe (body only)
-    ctx.fillRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
-    ctx.strokeRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
-  });
+  // head
+  ctx.fillRect(p.x - offset, p.top - headH, headW, headH);
+  ctx.strokeRect(p.x - offset, p.top - headH, headW, headH);
+
+  // ===== BOTTOM PIPE =====
+  // body
+  ctx.fillRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
+  ctx.strokeRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
+
+  // head
+  ctx.fillRect(p.x - offset, canvas.height - p.bottom, headW, headH);
+  ctx.strokeRect(p.x - offset, canvas.height - p.bottom, headW, headH);
+});
 
   // Score
   ctx.fillStyle = "#fff";
