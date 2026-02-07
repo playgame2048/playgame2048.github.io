@@ -104,16 +104,15 @@ function update(delta) {
   pipes.forEach(p => {
     p.x -= gameSpeed * delta;
 
-    if (
-      bird.x + bird.size > p.x &&
-      bird.x - bird.size < p.x + 40 &&
-      (
-        bird.y - bird.size < p.top ||
-        bird.y + bird.size > canvas.height - p.bottom
-      )
-    ) {
-      endGame();
-    }
+   const pipeWidth = 40;
+
+if (
+  bird.x < p.x + pipeWidth &&
+  bird.x + bird.size > p.x &&
+  (bird.y < p.top || bird.y + bird.size > canvas.height - p.bottom)
+) {
+  endGame();
+}
   });
 
   pipes = pipes.filter(p => p.x > -50);
