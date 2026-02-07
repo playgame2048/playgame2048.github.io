@@ -82,18 +82,71 @@ body.dark canvas {
   font-size: 20px;
 }
 
-/* Blog */
+/* Blog Section */
 .blog {
-  padding: 20px;
-  text-align: left;
+  background: #0b0b0f;
+  padding: 30px 15px;
+}
+
+.blog-container {
+  max-width: 900px;
+  margin: auto;
 }
 
 .blog h2 {
-  margin-top: 15px;
-  margin-bottom: 5px;
+  color: #facc15;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
 }
 
-.blog p {
-  font-size: 14px;
+.blog h3 {
+  color: #34d399;
+  font-size: 1.3rem;
+  margin-top: 18px;
+  margin-bottom: 8px;
+}
+
+.blog p, .blog ul {
+  font-size: 1rem;
   opacity: 0.85;
+  line-height: 1.6;
+}
+
+.blog ul li {
+  margin: 8px 0;
+}
+
+.support-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 16px;
+  background: #4caf50;
+  color: #fff;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.support-btn:hover {
+  background: #22c55e;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .game-section {
+    width: 90%;
+  }
+  
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .blog h2 {
+    font-size: 1.5rem;
+  }
+
+  .blog h3 {
+    font-size: 1.1rem;
+  }
 }
