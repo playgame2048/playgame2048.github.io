@@ -1,184 +1,99 @@
-/* ===== Reset ===== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* ===== Body & Background ===== */
 body {
   font-family: Arial, sans-serif;
-  color: #fff;
-  background: #08090d; /* dark base */
-  overflow-x: hidden;
-}
-
-/* soft gradient + noise (like Snake Game) */
-body::before {
-  content:"";
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(0,200,255,0.12), transparent 60%),
-    radial-gradient(circle at 80% 70%, rgba(255,100,0,0.12), transparent 60%),
-    radial-gradient(circle at 50% 100%, rgba(70,0,255,0.1), transparent 70%),
-    linear-gradient(180deg,#0a0b0e,#050607 70%);
-  z-index: -1;
-  pointer-events: none;
-}
-
-body::after {
-  content:"";
-  position: fixed;
-  inset: 0;
-  background-image: url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
-  opacity: 0.15;
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* Hero Section */
-.hero {
+  background: #f4f4f4;
+  color: #111;
   text-align: center;
-  padding: 25px 10px 10px;
+  overflow: hidden;
 }
 
-.hero h1 {
-  font-size: 2.5rem;
-  color: #facc15;
-  margin-bottom: 5px;
+body.dark {
+  background: #0b0d12;
+  color: #eee;
 }
 
-.hero p {
-  font-size: 1rem;
-  opacity: 0.8;
+/* Header */
+.top {
+  padding: 12px;
 }
 
-/* Game Section */
-.game-section {
-  width: 360px;
-  margin: 20px auto;
-  position: relative;
-}
-
-canvas#game {
-  display: block;
-  background: #111;
-  border-radius: 12px;
-  margin: 0 auto;
-}
-
-/* Buttons */
-.game-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.game-buttons button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  background: #4caf50;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.game-buttons button:hover {
-  background: #22c55e;
-}
-
-/* Game Over Overlay */
-.game-over {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0,0,0,0.85);
-  padding: 20px 30px;
-  border-radius: 12px;
-  text-align: center;
-  display: none;
-}
-
-.game-over h2 {
-  color: #f87171;
-  font-size: 1.8rem;
+.top h1 {
   margin-bottom: 10px;
 }
 
-.game-over p {
-  font-size: 1rem;
+.top-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
-/* Blog Section */
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #22c55e;
+  color: #fff;
+  font-weight: bold;
+}
+
+body.dark button {
+  background: #16a34a;
+}
+
+/* Game */
+.game-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+canvas {
+  background: linear-gradient(#60a5fa, #e0f2fe);
+  border-radius: 12px;
+}
+
+body.dark canvas {
+  background: linear-gradient(#020617, #020617);
+  box-shadow: 0 0 25px rgba(34,197,94,0.25);
+}
+
+/* Game Over */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.6);
+}
+
+.overlay-box {
+  background: #111;
+  color: #fff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  font-size: 20px;
+}
+
+/* Blog */
 .blog {
-  background: #0b0b0f;
-  padding: 30px 15px;
-}
-
-.blog-container {
-  max-width: 900px;
-  margin: auto;
+  padding: 20px;
+  text-align: left;
 }
 
 .blog h2 {
-  color: #facc15;
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-}
-
-.blog h3 {
-  color: #34d399;
-  font-size: 1.3rem;
-  margin-top: 18px;
-  margin-bottom: 8px;
-}
-
-.blog p, .blog ul {
-  font-size: 1rem;
-  opacity: 0.85;
-  line-height: 1.6;
-}
-
-.blog ul li {
-  margin: 8px 0;
-}
-
-.support-btn {
-  display: inline-block;
   margin-top: 15px;
-  padding: 10px 16px;
-  background: #4caf50;
-  color: #fff;
-  border-radius: 6px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: 0.3s;
+  margin-bottom: 5px;
 }
 
-.support-btn:hover {
-  background: #22c55e;
-}
-
-/* Responsive */
-@media (max-width: 480px) {
-  .game-section {
-    width: 90%;
-  }
-  
-  .hero h1 {
-    font-size: 2rem;
-  }
-
-  .blog h2 {
-    font-size: 1.5rem;
-  }
-
-  .blog h3 {
-    font-size: 1.1rem;
-  }
+.blog p {
+  font-size: 14px;
+  opacity: 0.85;
 }
