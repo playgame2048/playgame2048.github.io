@@ -177,37 +177,48 @@ function draw() {
   drawBird();
 
 // ===== PIPES =====
-ctx.fillStyle = "#16a34a"; // اللون ديال pipe
-ctx.strokeStyle = "#14532d"; // اللون ديال outline
-ctx.lineWidth = 3; // سمك الخط الخارجي
-
 pipes.forEach(p => {
-  const pipeWidth = 40;
-  const radius = 10; // radius ديال رأس pipe
+  const bodyW = 40;
+  const headW = 50;
+  const headH = 14;
+  const offset = (headW - bodyW) / 2;
 
-  // ===== TOP PIPE =====
+  // COLORS
   ctx.fillStyle = "#16a34a";
   ctx.strokeStyle = "#14532d";
   ctx.lineWidth = 3;
 
-  // body rectangle
-  ctx.fillRect(p.x, radius, pipeWidth, p.top - radius);
-  ctx.strokeRect(p.x, radius, pipeWidth, p.top - radius);
+  // ===== TOP PIPE =====
+  // body
+  ctx.fillRect(p.x, 0, bodyW, p.top);
+  ctx.strokeRect(p.x, 0, bodyW, p.top);
 
-  // top semi-circle
-  ctx.beginPath();
-  ctx.arc(p.x + pipeWidth/2, p.top, radius, Math.PI, 0, false);
+  // head (las9 f body)
+  roundRect(
+    ctx,
+    p.x - offset,
+    p.top - headH,
+    headW,
+    headH,
+    6
+  );
   ctx.fill();
   ctx.stroke();
 
   // ===== BOTTOM PIPE =====
-  // body rectangle
-  ctx.fillRect(p.x, canvas.height - p.bottom, pipeWidth, p.bottom - radius);
-  ctx.strokeRect(p.x, canvas.height - p.bottom, pipeWidth, p.bottom - radius);
+  // body
+  ctx.fillRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
+  ctx.strokeRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
 
-  // bottom semi-circle
-  ctx.beginPath();
-  ctx.arc(p.x + pipeWidth/2, canvas.height - p.bottom, radius, 0, Math.PI, false);
+  // head (las9 f body)
+  roundRect(
+    ctx,
+    p.x - offset,
+    canvas.height - p.bottom,
+    headW,
+    headH,
+    6
+  );
   ctx.fill();
   ctx.stroke();
 });
