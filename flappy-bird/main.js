@@ -178,31 +178,21 @@ function draw() {
 
   pipes.forEach(p => {
     const bodyW = 40;
-    const headW = 50;
-    const headH = 14;
-    const offset = (headW - bodyW) / 2;
 
     ctx.fillStyle = "#16a34a";
     ctx.strokeStyle = "#14532d";
     ctx.lineWidth = 3;
 
-    // top pipe
+    // top pipe (body only)
     ctx.fillRect(p.x, 0, bodyW, p.top);
     ctx.strokeRect(p.x, 0, bodyW, p.top);
 
-    roundRect(ctx, p.x - offset, p.top - headH, headW, headH, 6);
-    ctx.fill();
-    ctx.stroke();
-
-    // bottom pipe
+    // bottom pipe (body only)
     ctx.fillRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
     ctx.strokeRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
-
-    roundRect(ctx, p.x - offset, canvas.height - p.bottom, headW, headH, 6);
-    ctx.fill();
-    ctx.stroke();
   });
 
+  // Score
   ctx.fillStyle = "#fff";
   ctx.font = "18px Arial";
   ctx.fillText("Score: " + score, 10, 25);
