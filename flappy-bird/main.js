@@ -11,27 +11,29 @@ let firstRestart = true;
 let keyLocked = false;
 let lastTime = 0;
 let gameStarted = false;
+let frames = 0;
 
 const restartLink = "https://otieu.com/4/10557461";
 
 // ===== INIT =====
 function init() {
-bird = {
-  x: 60,
-  y: canvas.height / 2,
-  size: 14,
-  velocity: -6
-};
+  bird = {
+    x: 60,
+    y: canvas.height / 2,
+    size: 14,
+    velocity: 0
+  };
 
   pipes = [];
   score = 0;
   gameSpeed = 2;
   gravity = 0.25;
   frames = 0;
-  
+
   gameRunning = true;
-  gameOverScreen.style.display = "none";
   gameStarted = false;
+  gameOverScreen.style.display = "none";
+  lastTime = 0; // ✅ مهم
 }
 
 // ===== CONTROLS =====
@@ -46,23 +48,15 @@ function flap() {
 }
 
 document.addEventListener("keydown", e => {
-  if (e.code === "Space") {
+  if (e.code === "Space" || e.code === "ArrowUp") {
     e.preventDefault();
     flap();
   }
-  if (e.code === "ArrowUp") flap();
 });
 
 canvas.addEventListener("touchstart", e => {
   e.preventDefault();
   flap();
-});
-
-// prevent scroll
-window.addEventListener("keydown", e => {
-  if (["Space","ArrowUp","ArrowDown"].includes(e.code)) {
-    e.preventDefault();
-  }
 });
 
 // ===== PIPES =====
@@ -74,14 +68,13 @@ function addPipe() {
     x: canvas.width,
     top: topHeight,
     bottom: canvas.height - topHeight - gap,
-    passed: false   // 👈 مهم
+    passed: false
   });
 }
 
 // ===== UPDATE =====
 function update(delta) {
-  if (!gameRunning) return;
-  if (!gameStarted) return;
+  if (!gameRunning || !gameStarted) return;
 
   frames++;
 
@@ -89,13 +82,13 @@ function update(delta) {
   bird.velocity = Math.min(bird.velocity, 6);
   bird.y += bird.velocity * delta;
 
-  // Ceiling
+  // ceiling
   if (bird.y - bird.size < 0) {
     bird.y = bird.size;
     bird.velocity = 0;
   }
 
-  // Ground
+  // ground
   if (bird.y + bird.size > canvas.height) {
     endGame();
     return;
@@ -104,27 +97,34 @@ function update(delta) {
   pipes.forEach(p => {
     p.x -= gameSpeed * delta;
 
-   const pipeWidth = 40;
+    const pipeWidth = 40;
 
-if (
-  bird.x < p.x + pipeWidth &&
-  bird.x + bird.size > p.x &&
-  (bird.y < p.top || bird.y + bird.size > canvas.height - p.bottom)
-) {
-  endGame();
-}
+    // collision
+    if (
+      bird.x < p.x + pipeWidth &&
+      bird.x + bird.size > p.x &&
+      (bird.y < p.top || bird.y + bird.size > canvas.height - p.bottom)
+    ) {
+      endGame();
+    }
+
+    // ✅ SCORE FIX
+    if (!p.passed && p.x + pipeWidth < bird.x) {
+      p.passed = true;
+      score++;
+    }
   });
 
-  pipes = pipes.filter(p => p.x > -50);
+  pipes = pipes.filter(p => p.x > -60);
 
   if (frames % 160 === 0) addPipe();
 }
 
-// ===== DRAW =====
+// ===== DRAW BIRD =====
 function drawBird() {
   const x = bird.x;
   const y = bird.y;
-  const r = bird.size; // small body
+  const r = bird.size;
 
   const angle = Math.max(Math.min(bird.velocity / 8, 0.5), -0.4);
 
@@ -132,35 +132,35 @@ function drawBird() {
   ctx.translate(x, y);
   ctx.rotate(angle);
 
-  // ===== BODY (small oval) =====
+  // body
   ctx.fillStyle = "#fde68a";
   ctx.beginPath();
   ctx.ellipse(0, 0, r + 4, r + 2.5, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // ===== WING =====
+  // wing
   ctx.fillStyle = "#fbbf24";
   ctx.beginPath();
   ctx.ellipse(-5, 2, r - 1.5, r - 3, Math.sin(Date.now()/120)*0.4, 0, Math.PI*2);
   ctx.fill();
 
-  // ===== TAIL =====
+  // tail
   ctx.fillStyle = "#f59e0b";
   ctx.beginPath();
   ctx.moveTo(-r - 4, 0);
   ctx.lineTo(-r - 12, -5);
   ctx.lineTo(-r - 10, 0);
   ctx.lineTo(-r - 12, 5);
-  ctx.lineTo(-r - 4, 0);
+  ctx.closePath();
   ctx.fill();
 
-  // ===== EYE =====
+  // eye
   ctx.fillStyle = "#000";
   ctx.beginPath();
   ctx.arc(3, -2, 2, 0, Math.PI*2);
   ctx.fill();
 
-  // ===== BEAK =====
+  // beak
   ctx.fillStyle = "#fb923c";
   ctx.beginPath();
   ctx.moveTo(r + 4, -1);
@@ -170,59 +170,39 @@ function drawBird() {
   ctx.restore();
 }
 
+// ===== DRAW =====
 function draw() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
   drawBird();
 
-// ===== PIPES =====
-pipes.forEach(p => {
-  const bodyW = 40;
-  const headW = 50;
-  const headH = 14;
-  const offset = (headW - bodyW) / 2;
+  pipes.forEach(p => {
+    const bodyW = 40;
+    const headW = 50;
+    const headH = 14;
+    const offset = (headW - bodyW) / 2;
 
-  // COLORS
-  ctx.fillStyle = "#16a34a";
-  ctx.strokeStyle = "#14532d";
-  ctx.lineWidth = 3;
+    ctx.fillStyle = "#16a34a";
+    ctx.strokeStyle = "#14532d";
+    ctx.lineWidth = 3;
 
-  // ===== TOP PIPE =====
-  // body
-  ctx.fillRect(p.x, 0, bodyW, p.top);
-  ctx.strokeRect(p.x, 0, bodyW, p.top);
+    // top pipe
+    ctx.fillRect(p.x, 0, bodyW, p.top);
+    ctx.strokeRect(p.x, 0, bodyW, p.top);
 
-  // head (las9 f body)
-  roundRect(
-    ctx,
-    p.x - offset,
-    p.top - headH,
-    headW,
-    headH,
-    6
-  );
-  ctx.fill();
-  ctx.stroke();
+    roundRect(ctx, p.x - offset, p.top - headH, headW, headH, 6);
+    ctx.fill();
+    ctx.stroke();
 
-  // ===== BOTTOM PIPE =====
-  // body
-  ctx.fillRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
-  ctx.strokeRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
+    // bottom pipe
+    ctx.fillRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
+    ctx.strokeRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
 
-  // head (las9 f body)
-  roundRect(
-    ctx,
-    p.x - offset,
-    canvas.height - p.bottom,
-    headW,
-    headH,
-    6
-  );
-  ctx.fill();
-  ctx.stroke();
-});
+    roundRect(ctx, p.x - offset, canvas.height - p.bottom, headW, headH, 6);
+    ctx.fill();
+    ctx.stroke();
+  });
 
-  // Score
   ctx.fillStyle = "#fff";
   ctx.font = "18px Arial";
   ctx.fillText("Score: " + score, 10, 25);
@@ -236,7 +216,9 @@ function endGame() {
 
 // ===== LOOP =====
 function loop(time) {
-  const delta = (time - lastTime) / 16.67; // normalize to 60fps
+  if (!lastTime) lastTime = time; // ✅ أهم سطر
+
+  const delta = (time - lastTime) / 16.67;
   lastTime = time;
 
   update(delta);
