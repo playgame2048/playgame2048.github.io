@@ -138,3 +138,12 @@ body.dark .blog-card p {
 .blog-card {
   position: static;
 }
+
+.blog {
+  width: 100%;
+  flex-basis: 100%;
+}
+
+.blog-container {
+  align-self: center;
+}
