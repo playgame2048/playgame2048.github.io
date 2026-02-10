@@ -85,14 +85,16 @@ body.dark canvas {
 /* ===== Blog Snake Layout ===== */
 .blog {
   padding: 40px 15px;
-  background: #020617; /* page bg */
+  background: transparent; /* حيدنا الخلفية الكبيرة */
+  display: flex;
+  justify-content: center; /* فالوسط */
 }
 
 /* container ديال الكتابة */
 .blog-container {
   max-width: 420px;
-  margin-left: auto;   /* يخليها فاليمين */
-  margin-right: 40px;
+  width: 100%;
+  margin: 0 auto; /* center حقيقي */
 }
 
 /* card ديال الكتابة */
