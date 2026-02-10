@@ -147,3 +147,12 @@ body.dark .blog-card p {
 .blog-container {
   align-self: center;
 }
+
+.blog {
+  text-align: center;
+}
+
+.blog-card {
+  display: inline-block;
+  text-align: left;
+}
