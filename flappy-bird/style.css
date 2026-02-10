@@ -52,6 +52,7 @@ body.dark button {
   display: flex;
   justify-content: center;
   margin-top: 10px;
+  margin-bottom: 40px;
 }
 
 canvas {
@@ -85,8 +86,9 @@ body.dark canvas {
 /* ===== Blog Snake Layout ===== */
 .blog {
   padding: 40px 15px;
+  width: 100%;
   background: transparent; /* حيدنا الخلفية الكبيرة */
-  display: flex;
+  display: block;
   justify-content: center; /* فالوسط */
 }
 
@@ -130,4 +132,10 @@ body.dark .blog-card {
 
 body.dark .blog-card p {
   color: #f9fafb;
+}
+
+.blog,
+.blog-container,
+.blog-card {
+  position: static;
 }
