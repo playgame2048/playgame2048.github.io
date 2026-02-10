@@ -87,6 +87,7 @@ body.dark canvas {
 .blog {
   padding: 40px 15px;
   width: 100%;
+  position: relative;  /* مهم */
   background: transparent; /* حيدنا الخلفية الكبيرة */
   display: block;
   justify-content: center; /* فالوسط */
