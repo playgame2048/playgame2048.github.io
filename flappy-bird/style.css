@@ -82,69 +82,50 @@ body.dark canvas {
   font-size: 20px;
 }
 
-/* Blog Section */
+/* ===== Blog Snake Layout ===== */
 .blog {
-  background: #0b0b0f; /* Dark mode background */
-  color: #fff;
-  padding: 40px 20px;
-  border-top: 2px solid #222;
+  padding: 40px 15px;
+  background: #020617; /* page bg */
 }
 
+/* container ديال الكتابة */
 .blog-container {
-  max-width: 900px;
-  margin: auto;
+  max-width: 420px;
+  margin-left: auto;   /* يخليها فاليمين */
+  margin-right: 40px;
 }
 
-.blog h2 {
-  font-size: 2rem;
-  margin-bottom: 15px;
-  color: #facc15;
+/* card ديال الكتابة */
+.blog-card {
+  background: #05070d;
+  padding: 22px 24px;
+  border-radius: 14px;
+  color: #e5e7eb;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.05);
 }
 
-.blog h3 {
-  font-size: 1.3rem;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  color: #34d399;
+/* العناوين */
+.blog-card h1,
+.blog-card h2,
+.blog-card h3 {
+  color: #ffffff;
 }
 
-.blog p, .blog ul {
-  font-size: 1rem;
+/* النص */
+.blog-card p {
+  color: #d1d5db;
   line-height: 1.6;
-  opacity: 0.85;
 }
 
-.blog ul li {
-  margin: 8px 0;
+/* ===== Dark Mode Light ===== */
+body.dark .blog-card {
+  background: #05070d;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 0 40px rgba(34,197,94,0.18),
+    0 0 80px rgba(59,130,246,0.12);
 }
 
-.support-btn {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 10px 18px;
-  background: #4caf50;
-  color: #fff;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-.support-btn:hover {
-  background: #22c55e;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .blog h2 {
-    font-size: 1.5rem;
-  }
-
-  .blog h3 {
-    font-size: 1.1rem;
-  }
-
-  .blog p, .blog ul {
-    font-size: 0.95rem;
-  }
+body.dark .blog-card p {
+  color: #f9fafb;
 }
