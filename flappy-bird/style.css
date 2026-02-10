@@ -82,71 +82,51 @@ body.dark canvas {
   font-size: 20px;
 }
 
-/* Blog Section */
+/* ===== Blog Section (Snake Style) ===== */
 .blog {
-  background: #0b0b0f;
-  padding: 30px 15px;
+  position: relative;
+  padding: 40px 15px;
+  background: #07090f;
+  overflow: hidden;
 }
 
+/* Light effects (snake exact vibe) */
+.blog::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(34,197,94,0.12), transparent 60%),
+    radial-gradient(circle at 80% 30%, rgba(59,130,246,0.10), transparent 65%),
+    radial-gradient(circle at 50% 90%, rgba(168,85,247,0.10), transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Noise texture */
+.blog::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+  opacity: 0.12;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* keep text above background */
 .blog-container {
-  max-width: 900px;
-  margin: auto;
+  position: relative;
+  z-index: 1;
 }
 
-.blog h2 {
-  color: #facc15;
-  font-size: 1.8rem;
-  margin-bottom: 15px;
+body.dark .blog {
+  background: #020617;
 }
 
-.blog h3 {
-  color: #34d399;
-  font-size: 1.3rem;
-  margin-top: 18px;
-  margin-bottom: 8px;
-}
-
-.blog p, .blog ul {
-  font-size: 1rem;
-  opacity: 0.85;
-  line-height: 1.6;
-}
-
-.blog ul li {
-  margin: 8px 0;
-}
-
-.support-btn {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 10px 16px;
-  background: #4caf50;
-  color: #fff;
-  border-radius: 6px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-.support-btn:hover {
-  background: #22c55e;
-}
-
-/* Responsive */
-@media (max-width: 480px) {
-  .game-section {
-    width: 90%;
-  }
-  
-  .hero h1 {
-    font-size: 2rem;
-  }
-
-  .blog h2 {
-    font-size: 1.5rem;
-  }
-
-  .blog h3 {
-    font-size: 1.1rem;
-  }
+body.dark .blog::before {
+  background:
+    radial-gradient(circle at 25% 25%, rgba(34,197,94,0.18), transparent 60%),
+    radial-gradient(circle at 75% 40%, rgba(59,130,246,0.14), transparent 65%),
+    radial-gradient(circle at 50% 90%, rgba(168,85,247,0.14), transparent 70%);
 }
