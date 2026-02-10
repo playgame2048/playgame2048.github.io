@@ -59,6 +59,21 @@ canvas.addEventListener("touchstart", e => {
   flap();
 });
 
+function resetGame() {
+  bird.y = 150;
+  bird.velocity = 0;
+  pipes = [];
+  score = 0;
+  gameOver = false;
+}
+
+const overlay = document.getElementById("gameOver");
+
+overlay.addEventListener("click", () => {
+  overlay.style.display = "none";
+  resetGame(); // دالة ديال restart
+});
+
 // ===== PIPES =====
 function addPipe() {
   const gap = 140;
