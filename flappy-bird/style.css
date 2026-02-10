@@ -9,7 +9,7 @@ body {
   background: #f4f4f4;
   color: #111;
   text-align: center;
-  overflow: hidden;
+  overflow: auto;
 }
 
 body.dark {
