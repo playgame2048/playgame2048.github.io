@@ -157,3 +157,42 @@ body.dark .blog-card p {
   display: inline-block;
   text-align: left;
 }
+
+/* ===== Blog spacing & typography ===== */
+
+/* المسافة بين العناصر */
+.blog-card h2 {
+  margin-bottom: 16px;
+  font-size: 1.6rem;
+  color: #facc15; /* yellow */
+}
+
+.blog-card h3 {
+  margin-top: 24px;
+  margin-bottom: 10px;
+  font-size: 1.25rem;
+  color: #34d399; /* green */
+}
+
+/* الفقرات */
+.blog-card p {
+  margin-bottom: 14px;
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+
+/* اللائحة */
+.blog-card ul {
+  margin: 12px 0 18px;
+  padding-left: 18px;
+}
+
+.blog-card ul li {
+  margin: 8px 0;
+  line-height: 1.6;
+}
+
+/* زر الدعم */
+.blog-card .support-btn {
+  margin-top: 18px;
+}
