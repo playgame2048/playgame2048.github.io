@@ -12,6 +12,7 @@ let gameOver = false;
 let score = 0;
 let frames = 0;
 let gameSpeed = 3;
+let nextSpawn = 0;
 
 /* =========================
    DINO
@@ -99,9 +100,14 @@ function update() {
   obstacles = obstacles.filter(o => o.x + o.w > 0);
 
   // Spawn obstacles
-  if (frames % 120 === 0) {
-    addObstacle();
-  }
+if (frames > nextSpawn) {
+  addObstacle();
+
+  // Random distance between 80 و 200 frames
+  let randomDelay = Math.floor(Math.random() * 100) + (80 - gameSpeed * 5);
+
+  nextSpawn = frames + randomDelay;
+}
 
    if (frames % 500 === 0) {
   gameSpeed += 0.25;
