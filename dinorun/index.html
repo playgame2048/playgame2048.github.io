@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dino Game Online – Play Chrome Dinosaur Game</title>
+  <meta name="description" content="Play Dino Game Online. Chrome Dinosaur Game with score, dark mode, and tips on how to win." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark">
+
+  <!-- Header -->
+  <header class="top">
+    <h1>🦕 DINO RUN</h1>
+    <div class="top-buttons">
+      <button id="darkToggle">Dark Mode</button>
+    </div>
+  </header>
+
+  <!-- Game -->
+  <main>
+    <div class="game-wrapper">
+
+      <div class="score-box">
+        Score: <span id="score">0</span>
+      </div>
+
+      <canvas id="game" width="500" height="260"></canvas>
+
+      <div class="overlay" id="startScreen">
+        <div class="overlay-box">
+          Click to Start
+        </div>
+      </div>
+
+      <div class="overlay" id="gameOver">
+        <div class="overlay-box">
+          Game Over<br>
+          Click to Restart
+        </div>
+      </div>
+
+    </div>
+
+    <button id="restartBtn" class="restart-btn">Restart</button>
+
+    <!-- Blog -->
+    <section class="blog">
+      <div class="blog-container">
+        <div class="blog-card">
+          <h2>🦖 Dino Game Online</h2>
+          <p>
+            Dino Game is inspired by the famous Chrome Dinosaur Game.
+            Jump over obstacles, survive as long as possible, and beat your high score.
+          </p>
+
+          <h3>🎮 How to Play</h3>
+          <p>
+            Click anywhere or press Space to jump.
+            Avoid hitting the cactuses.
+          </p>
+
+          <h3>🏆 How to Win</h3>
+          <p>
+            Focus on timing your jumps.
+            The longer you survive, the higher your score.
+          </p>
+
+          <a href="#" class="support-btn">Support Us ❤️</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
