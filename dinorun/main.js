@@ -48,6 +48,13 @@ function update() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  ctx.strokeStyle = "#475569";
+ctx.lineWidth = 2;
+ctx.beginPath();
+ctx.moveTo(0, 240);
+ctx.lineTo(canvas.width, 240);
+ctx.stroke();
+
   // Dino
   dino.vy += dino.gravity;
   dino.y += dino.vy;
@@ -58,14 +65,44 @@ function update() {
     dino.onGround = true;
   }
 
-  ctx.fillStyle = "#22c55e";
-  ctx.fillRect(dino.x, dino.y, dino.w, dino.h);
+  function drawDino(x, y) {
+  ctx.fillStyle = "#e5e7eb"; // light gray like Google Dino
+
+  // body
+  ctx.fillRect(x, y + 10, 28, 20);
+
+  // head
+  ctx.fillRect(x + 18, y, 18, 18);
+
+  // eye
+  ctx.fillStyle = "#020617";
+  ctx.fillRect(x + 30, y + 6, 3, 3);
+
+  ctx.fillStyle = "#e5e7eb";
+
+  // legs
+  ctx.fillRect(x + 6, y + 30, 6, 10);
+  ctx.fillRect(x + 16, y + 30, 6, 10);
+
+  // tail
+  ctx.fillRect(x - 8, y + 16, 8, 6);
+}
 
   // Obstacles
   obstacles.forEach(o => {
     o.x -= 4;
-    ctx.fillStyle = "#facc15";
-    ctx.fillRect(o.x, o.y, o.w, o.h);
+   function drawCactus(o) {
+  ctx.fillStyle = "#22c55e";
+
+  // main stem
+  ctx.fillRect(o.x, o.y, 12, 40);
+
+  // left arm
+  ctx.fillRect(o.x - 6, o.y + 10, 6, 16);
+
+  // right arm
+  ctx.fillRect(o.x + 12, o.y + 16, 6, 14);
+}
 
     if (
       dino.x < o.x + o.w &&
