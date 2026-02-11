@@ -236,44 +236,55 @@ body.dark-mode canvas {
     }
 }
 
-@media (max-width: 600px) {
-    .game-header {
-        flex-direction: column;
-        gap: 10px;
-    }
-    .game-title {
-        font-size: 1.8rem;
-    }
-    .header-buttons {
-        width: 100%;
-        justify-content: center;
-    }
+/* ===== HEADER: title فوق و buttons تحت، وسط ===== */
+.game-header {
+    display: flex;
+    flex-direction: column;    /* title فـوق buttons */
+    align-items: center;      /* كلشي فالنص */
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 10px;      /* مسافة تحت الـ header */
 }
 
-/* ===== GAME TITLE ===== */
 .game-title {
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: #0f172a;
     text-shadow: 0 0 10px #facc15, 0 0 20px #fbbf24;
-    margin: 0;
+    margin: 0 0 15px 0;       /* تحت العنوان مسافة 15px */
     letter-spacing: 3px;
+    text-align: center;
 }
 
 .header-buttons {
     display: flex;
-    gap: 15px;
-}
-
-/* تعديل بسيط عشان الـ header يبقى مرن */
-.game-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    gap: 20px;               /* بين الزراير */
+    justify-content: center;
     flex-wrap: wrap;
 }
 
-/* نسخة Dark Mode */
+/* تعديل على الزر باش يكون متناسق */
+.btn {
+    /* باقي الخصائص باقية، غير نضمنو العرض اليدوي */
+    min-width: 140px;
+}
+
+/* ===== DARK MODE ===== */
 body.dark-mode .game-title {
     color: #facc15;
     text-shadow: 0 0 15px #facc15, 0 0 30px #f59e0b;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    .game-title {
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+    }
+    .header-buttons {
+        gap: 12px;
+    }
+    .btn {
+        min-width: 120px;
+        padding: 10px 16px;
+    }
 }
