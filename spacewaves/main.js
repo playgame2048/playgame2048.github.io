@@ -2,8 +2,8 @@
 //  SPACE WAVES - F-16 FIGHTER vs ROCKETS
 //  CHANGE THESE LINKS TO YOUR OWN URLs
 // =============================================
-const FIRST_RESTART_LINK = 'https://your-link-here.com';   // 🔁 first restart click
-const SUPPORT_LINK = 'https://your-support-page.com';      // 💙 support button
+const FIRST_RESTART_LINK = 'https://omg10.com/4/10599305';   // 🔁 first restart click
+const SUPPORT_LINK = 'https://ko-fi.com/help_tommy';      // 💙 support button
 
 // ===== CANVAS SETUP =====
 const canvas = document.getElementById('gameCanvas');
