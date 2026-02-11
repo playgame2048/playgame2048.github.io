@@ -235,3 +235,45 @@ body.dark-mode canvas {
         padding: 5px 12px;
     }
 }
+
+@media (max-width: 600px) {
+    .game-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .game-title {
+        font-size: 1.8rem;
+    }
+    .header-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ===== GAME TITLE ===== */
+.game-title {
+    font-size: 2rem;
+    color: #0f172a;
+    text-shadow: 0 0 10px #facc15, 0 0 20px #fbbf24;
+    margin: 0;
+    letter-spacing: 3px;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+/* تعديل بسيط عشان الـ header يبقى مرن */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* نسخة Dark Mode */
+body.dark-mode .game-title {
+    color: #facc15;
+    text-shadow: 0 0 15px #facc15, 0 0 30px #f59e0b;
+}
