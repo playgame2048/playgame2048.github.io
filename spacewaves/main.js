@@ -1,5 +1,5 @@
 // =============================================
-//  SPACE WAVES - FULL GAME (works with any canvas size)
+//  SPACE WAVES - KEYBOARD + MOUSE CONTROL
 //  CHANGE THESE LINKS TO YOUR OWN URLs
 // =============================================
 const FIRST_RESTART_LINK = 'https://your-link-here.com';   // 🔁 first restart click
@@ -28,6 +28,11 @@ const ENEMY_RADIUS = 12;
 const ENEMY_SPEED = 1.8;
 const SPAWN_RATE = 28;
 let frameCounter = 0;
+
+// ===== KEYBOARD CONTROL =====
+let leftPressed = false;
+let rightPressed = false;
+const MOVE_SPEED = 6; // pixels per frame
 
 // ===== RESTART BUTTON DUAL BEHAVIOR =====
 let firstRestartClick = true;
@@ -65,7 +70,7 @@ darkToggle.addEventListener('click', () => {
 // ===== SUPPORT BUTTON LINK =====
 document.getElementById('supportLinkBtn').href = SUPPORT_LINK;
 
-// ===== MOUSE / TOUCH CONTROL =====
+// ===== MOUSE / TOUCH CONTROL (keep it) =====
 function handleMove(e) {
     if (!gameActive && gameOver) return;
     e.preventDefault();
@@ -84,6 +89,27 @@ function handleMove(e) {
 canvas.addEventListener('mousemove', handleMove);
 canvas.addEventListener('touchmove', handleMove, { passive: false });
 canvas.addEventListener('touchstart', handleMove, { passive: false });
+
+// ===== KEYBOARD EVENT LISTENERS =====
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+        leftPressed = true;
+        e.preventDefault(); // منع التمرير
+    } else if (e.key === 'ArrowRight') {
+        rightPressed = true;
+        e.preventDefault();
+    }
+});
+
+window.addEventListener('keyup', (e) => {
+    if (e.key === 'ArrowLeft') {
+        leftPressed = false;
+        e.preventDefault();
+    } else if (e.key === 'ArrowRight') {
+        rightPressed = false;
+        e.preventDefault();
+    }
+});
 
 // ===== SPAWN ENEMY =====
 function spawnEnemy() {
@@ -190,18 +216,32 @@ function draw() {
 // ===== UPDATE =====
 function update() {
     if (gameActive && !gameOver) {
+        // ===== KEYBOARD MOVEMENT =====
+        if (leftPressed) {
+            playerX -= MOVE_SPEED;
+        }
+        if (rightPressed) {
+            playerX += MOVE_SPEED;
+        }
+        // clamp player position
+        playerX = Math.min(Math.max(playerX, playerRadius + 5), canvas.width - playerRadius - 5);
+
+        // move enemies
         for (let i = enemies.length - 1; i >= 0; i--) {
             enemies[i].y += enemies[i].speed;
             if (enemies[i].y > canvas.height + ENEMY_RADIUS) {
                 enemies.splice(i, 1);
             }
         }
+        // spawn enemies
         frameCounter++;
         if (frameCounter % SPAWN_RATE === 0) {
             spawnEnemy();
         }
+        // increase score
         score += 0.1;
         scoreEl.textContent = Math.floor(score);
+        // collision
         checkCollisions();
     }
     draw();
