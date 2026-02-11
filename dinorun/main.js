@@ -80,7 +80,7 @@ function update() {
   if (frames % 500 === 0) gameSpeed += 0.25;
 
   // score
-  if (running) score++;
+  if (running) score += 0.1; // كل frame يزِيد شوية
 }
 
 /* =========================
@@ -125,7 +125,7 @@ function draw() {
   ctx.fillStyle = "#ffffff";
   ctx.font = "bold 20px Arial";
   ctx.textAlign = "right";
-  ctx.fillText("Score: " + score, canvas.width - 20, 30);
+  ctx.fillText("Score: " + Math.floor(score), canvas.width - 20, 30);
 }
 
 /* =========================
