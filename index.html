@@ -1,79 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- ===== MONETAG MULTITAG – PLACE HIGHEST ===== -->
+  <script src="https://domain.com/multitag.min.js" data-zone="YOUR_ZONE_ID" data-sdk="show_YOUR_ZONE_ID"></script>
+  <!-- ============================================= -->
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Play Game – Free Online Games</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🎮 GameVerse · Free Online Arcade</title>
+  
+  <!-- Font Awesome 6 (Free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Hero Section -->
+  <!-- Hero Section – gaming vibe -->
   <header class="hero">
     <div class="hero-content">
-      <h1>🎮 Play Game</h1>
-      <p class="subtitle">Play classic puzzle games instantly, no download, no signup</p>
+      <h1 class="glitch" data-text="🎮 GameVerse">🎮 GameVerse</h1>
+      <p class="subtitle">Classic arcade games, remastered. No download. No signup. <span class="highlight">Instant play.</span></p>
+      <div class="hero-cta">
+        <a href="#games" class="btn-glow">🎯 EXPLORE GAMES</a>
+      </div>
     </div>
+    <div class="hero-decoration"></div>
   </header>
 
-  <!-- Games Section -->
-  <main class="container">
-    <div class="games">
+  <!-- Main Games Grid -->
+  <main class="container" id="games">
+    <h2 class="section-title">⚡ TODAY'S PICKS <span>· 7 games ready</span></h2>
+    <div class="games-grid">
 
-      <!-- Block Puzzle Card -->
-      <div class="card">
-        <h2>🧩 Tetris Game</h2>
-        <p>Place falling blocks, clear lines, and challenge your reflexes.</p>
-        <a href="Tetris/index.html">Play Now</a>
+      <!-- 1. Tetris -->
+      <div class="game-card">
+        <div class="card-img" style="background: linear-gradient(145deg, #1e3c4f, #0f2835);">
+          <i class="fas fa-cubes"></i>
+        </div>
+        <div class="card-info">
+          <h3>Tetris</h3>
+          <p>Place falling blocks, clear lines. Endless challenge.</p>
+          <div class="card-footer">
+            <span class="game-badge">🧩 Puzzle</span>
+            <a href="Tetris/index.html" class="play-btn"><i class="fas fa-play"></i> Play</a>
+          </div>
+        </div>
       </div>
 
-      <!-- 2048 Card -->
-      <div class="card">
-        <h2>🔢 2048</h2>
-        <p>Combine numbers and reach the 2048 tile in this classic puzzle.</p>
-        <a href="2048/index.html">Play Now</a>
-      </div>
-      
-      <!-- Snake Game Card -->
-      <div class="card">
-        <h2>🐍 Snake</h2>
-        <p>Control the snake, eat apples, and grow longer without hitting walls.</p>
-        <a href="snake/index.html">Play Now</a>
-      </div>
-
-      <!-- Tic Tac Toe Card -->
-      <div class="card">
-        <h2>❌⭕ Tic Tac Toe</h2>
-        <p>Play against AI or a friend in this classic strategy game.</p>
-        <a href="tic tac toe/index.html">Play Now</a>
+      <!-- 2. 2048 -->
+      <div class="game-card">
+        <div class="card-img" style="background: linear-gradient(145deg, #2c3a5e, #1c2a44);">
+          <i class="fas fa-hashtag"></i>
+        </div>
+        <div class="card-info">
+          <h3>2048</h3>
+          <p>Combine numbers, reach the 2048 tile. Addictive.</p>
+          <div class="card-footer">
+            <span class="game-badge">🔢 Math</span>
+            <a href="2048/index.html" class="play-btn"><i class="fas fa-play"></i> Play</a>
+          </div>
+        </div>
       </div>
 
-      <!-- Flappy Bird Card -->
-      <div class="card">
-        <h2>🦜 Flappy Bird</h2>
-        <p>Tap or press Space to flap the bird and navigate through the pipes.</p>
-        <a href="flappybird/index.html">Play Now</a>
+      <!-- 3. Snake -->
+      <div class="game-card">
+        <div class="card-img" style="background: linear-gradient(145deg, #2f5e3a, #1e4026);">
+          <i class="fas fa-apple-alt"></i>
+        </div>
+        <div class="card-info">
+          <h3>Snake</h3>
+          <p>Eat apples, grow longer, don't crash.</p>
+          <div class="card-footer">
+            <span class="game-badge">🐍 Arcade</span>
+            <a href="snake/index.html" class="play-btn"><i class="fas fa-play"></i> Play</a>
+          </div>
+        </div>
       </div>
 
-      <!-- Dino Game Card -->
-      <div class="card">
-        <h2>🦖 Dino Game</h2>
-        <p>Jump over cactuses, survive as long as possible, and beat your high score.</p>
-        <a href="dino/index.html">Play Now</a>
+      <!-- 4. Tic Tac Toe -->
+      <div class="game-card">
+        <div class="card-img" style="background: linear-gradient(145deg, #4a3a5e, #312644);">
+          <i class="fas fa-hashtag"></i> <!-- changed to grid -->
+        </div>
+        <div class="card-info">
+          <h3>Tic Tac Toe</h3>
+          <p>Vs AI or friend. Classic strategy.</p>
+          <div class="card-footer">
+            <span class="game-badge">❌⭕ Strategy</span>
+            <a href="tic tac toe/index.html" class="play-btn"><i class="fas fa-play"></i> Play</a>
+          </div>
+        </div>
       </div>
 
-      <!-- Space Waves Card -->
-      <div class="card">
-        <h2>🚀 Space Waves</h2>
-        <p>Navigate your spaceship through waves of asteroids and enemies in space.</p>
-        <a href="spacewaves/index.html">Play Now</a>
+      <!-- 5. Flappy Bird -->
+      <div class="game-card">
+        <div class="card-img" style="background: linear-gradient(145deg, #4f5a2c, #2f3a1a);">
+          <i class="fas fa-dove"></i>
+        </div>
+        <div class="card-info">
+          <h3>Flappy Bird</h3>
+          <p>Tap to fly, avoid pipes. Hard but fair.</p>
+          <div class="card-footer">
+            <span class="game-badge">🦜 Reflex</span>
+            <a href="flappybird/index.html" class="play-btn"><i class="fas fa-play"></i> Play</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Dino Game -->
+      <div class="game-card">
+        <div class="card-img" style="background: linear-gradient(145deg, #3a4e4a, #24322f);">
+          <i class="fas fa-dragon"></i>
+        </div>
+        <div class="card-info">
+          <h3>Dino Game</h3>
+          <p>Jump cacti, survive forever. High score.</p>
+          <div class="card-footer">
+            <span class="game-badge">🦖 Runner</span>
+            <a href="dino/index.html" class="play-btn"><i class="fas fa-play"></i> Play</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Space Waves (your custom game) -->
+      <div class="game-card">
+        <div class="card-img" style="background: linear-gradient(145deg, #1e3f5c, #0e2638);">
+          <i class="fas fa-rocket"></i>
+        </div>
+        <div class="card-info">
+          <h3>Space Waves</h3>
+          <p>F-16 vs rockets. Survive the wave.</p>
+          <div class="card-footer">
+            <span class="game-badge">🚀 Shooter</span>
+            <a href="spacewaves/index.html" class="play-btn"><i class="fas fa-play"></i> Play</a>
+          </div>
+        </div>
       </div>
 
     </div>
   </main>
 
-  <footer>© 2026 PlayGmae – Free Online Games</footer>
+  <!-- Call to action / Support -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2>✨ More games every week</h2>
+      <p>We’re building the best free arcade. Support us with one click.</p>
+      <a href="#" id="supportLandingBtn" class="btn-cta"><i class="fas fa-heart"></i> SUPPORT</a>
+    </div>
+  </section>
 
+  <!-- Footer -->
+  <footer>
+    <p>© 2026 GameVerse · Free Online Games · All games are property of their respective owners.</p>
+    <p class="footer-links">
+      <a href="#">Privacy</a> · 
+      <a href="#">Contact</a> · 
+      <a href="#" id="footerSupport">Support</a>
+    </p>
+  </footer>
+
+  <!-- Monetag service worker (required) – place sw.js in root -->
+  <script>
+    // Set your support link (change it!)
+    const SUPPORT_LINK = 'https://your-support-page.com';
+    document.getElementById('supportLandingBtn')?.setAttribute('href', SUPPORT_LINK);
+    document.getElementById('footerSupport')?.setAttribute('href', SUPPORT_LINK);
+  </script>
 </body>
 </html>
-
