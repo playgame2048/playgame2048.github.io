@@ -29,8 +29,8 @@ body.dark {
 .top-buttons {
   display: flex;
   justify-content: center;
-  gap: 16px;          /* المسافة بين Restart و Dark Mode */
-  margin-top: 16px;  /* تهبيط الأزرار على العنوان */
+  gap: 18px;          /* المسافة بين Restart و Dark Mode */
+  margin-top: 24px;  /* تهبيط الأزرار على العنوان */
 }
 
 button {
