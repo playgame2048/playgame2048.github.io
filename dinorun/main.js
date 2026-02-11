@@ -8,11 +8,12 @@ const darkToggle = document.getElementById("darkToggle");
 
 let running = false;
 let gameOver = false;
-let score = 0;
 let frames = 0;
 let gameSpeed = 3;
 let nextSpawn = 0;
 let firstRestart = true;
+let score = 0;
+let highScore = localStorage.getItem("dinoHighScore") || 0;
 
 const dino = {
   x: 50,
@@ -41,46 +42,55 @@ function addObstacle() {
 }
 
 function update() {
+  if (!running) return;
+
   frames++;
 
-  // Dino gravity
+  // Gravity
   dino.vy += dino.gravity;
   dino.y += dino.vy;
+
   if (dino.y >= 200) {
     dino.y = 200;
     dino.vy = 0;
     dino.onGround = true;
   }
 
-  // obstacles move
+  // Obstacles movement
   obstacles.forEach(o => {
     o.x -= gameSpeed;
 
-    // collision
-    if (dino.x < o.x + o.w &&
-        dino.x + dino.w > o.x &&
-        dino.y < o.y + o.h &&
-        dino.y + dino.h > o.y) {
+    // Collision
+    if (
+      dino.x < o.x + o.w &&
+      dino.x + dino.w > o.x &&
+      dino.y < o.y + o.h &&
+      dino.y + dino.h > o.y
+    ) {
       gameOver = true;
       running = false;
       gameOverScreen.style.display = "flex";
+
+      // حفظ highScore
+      if (score > highScore) {
+        highScore = score;
+        localStorage.setItem("dinoHighScore", highScore);
+      }
     }
   });
 
-  // remove offscreen
-  obstacles = obstacles.filter(o => o.x + 20 > 0);
+  // Remove offscreen
+  obstacles = obstacles.filter(o => o.x + o.w > 0);
 
-  // spawn
+  // Spawn obstacles
   if (frames > nextSpawn) {
     addObstacle();
-    nextSpawn = frames + Math.floor(Math.random() * 100 + 80);
+    let randomDelay = Math.floor(Math.random() * 100) + (80 - gameSpeed * 5);
+    nextSpawn = frames + randomDelay;
   }
 
-  // increase speed
-  if (frames % 500 === 0) gameSpeed += 0.25;
-
-  // score
-  if (running) score += 0.1; // كل frame يزِيد شوية
+  // زيادة score تدريجياً
+  score += 0.1;
 }
 
 /* =========================
@@ -103,11 +113,10 @@ function resetGame() {
 /* =========================
    DRAW
 ========================= */
-
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // ground
+  // Ground line
   ctx.strokeStyle = "#475569";
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -115,17 +124,15 @@ function draw() {
   ctx.lineTo(canvas.width, 240);
   ctx.stroke();
 
-  // dino
   drawDino(dino.x, dino.y);
-
-  // obstacles
   obstacles.forEach(o => drawCactus(o));
 
-  // score
+  // Score
   ctx.fillStyle = "#ffffff";
   ctx.font = "bold 20px Arial";
   ctx.textAlign = "right";
   ctx.fillText("Score: " + Math.floor(score), canvas.width - 20, 30);
+  ctx.fillText("High: " + Math.floor(highScore), canvas.width - 20, 55);
 }
 
 /* =========================
