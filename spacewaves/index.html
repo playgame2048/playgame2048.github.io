@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🌊 SPACE WAVES</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Header with Restart & Dark Mode -->
+        <div class="game-header">
+            <button id="restartBtn" class="btn restart-btn">⟳ RESTART</button>
+            <button id="darkModeToggle" class="btn dark-btn">🌙 DARK</button>
+        </div>
+
+        <!-- Game Canvas -->
+        <div class="game-container">
+            <canvas id="gameCanvas" width="800" height="500"></canvas>
+            <div id="scoreBoard" class="score-board">
+                <span>⭐ SCORE: <span id="scoreValue">0</span></span>
+                <span>🏆 HIGH: <span id="highScoreValue">0</span></span>
+            </div>
+        </div>
+
+        <!-- BLOG SECTION (below game) -->
+        <div class="blog-section">
+            <div class="blog-card">
+                <h3>🕹️ HOW TO PLAY</h3>
+                <p>Move your <strong>mouse</strong> (or finger) left/right on the canvas. Your spaceship follows. Avoid the incoming <strong>waves</strong>. Each wave you survive adds to your score.</p>
+            </div>
+            <div class="blog-card">
+                <h3>🏁 HOW TO WIN</h3>
+                <p>There is no end – the universe is infinite. Try to beat your <strong>personal high score</strong>. Stay alive as long as you can!</p>
+            </div>
+            <div class="blog-card support-card">
+                <h3>💙 SUPPORT US</h3>
+                <p>If you enjoy Space Waves, please support the creator by clicking the button below.</p>
+                <!-- SUPPORT BUTTON – change the link in main.js (SUPPORT_LINK) -->
+                <a id="supportLinkBtn" href="#" target="_blank" class="support-btn">🚀 SUPPORT</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
