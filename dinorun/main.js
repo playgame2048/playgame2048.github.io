@@ -44,26 +44,67 @@ function spawnObstacle() {
 }
 
 function update() {
-  if (!running) return;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  ctx.strokeStyle = "#475569";
-ctx.lineWidth = 2;
-ctx.beginPath();
-ctx.moveTo(0, 240);
-ctx.lineTo(canvas.width, 240);
-ctx.stroke();
-
-  // Dino
+  // Gravity Dino
   dino.vy += dino.gravity;
   dino.y += dino.vy;
 
-  if (dino.y >= 200) {
+  // الأرض
+  if (dino.y > 200) {
     dino.y = 200;
     dino.vy = 0;
-    dino.onGround = true;
   }
+
+  // obstacles move
+  obstacles.forEach(o => {
+    o.x -= gameSpeed;
+
+    // collision
+    if (dino.x + dino.w > o.x &&
+        dino.x < o.x + 12 &&
+        dino.y + dino.h > o.y) {
+      endGame();
+    }
+  });
+
+  // remove offscreen
+  obstacles = obstacles.filter(o => o.x + 20 > 0);
+
+  // إضافة obstacles كل فترة
+  if (frames % 120 === 0) addObstacle();
+}
+
+// Dino
+let dino = {
+  x: 50,       // position horizontal
+  y: 200,      // position vertical (على الأرض)
+  w: 28,       // width
+  h: 28,       // height
+  vy: 0,       // velocity vertical
+  gravity: 0.6,
+  jumpPower: -12
+};
+
+// obstacles (cactus)
+let obstacles = [];
+let gameSpeed = 5;
+
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // الأرض line
+  ctx.strokeStyle = "#475569";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(0, 240);
+  ctx.lineTo(canvas.width, 240);
+  ctx.stroke();
+
+  // Dino
+  drawDino(dino.x, dino.y);
+
+  // obstacles
+  obstacles.forEach(o => drawCactus(o));
+}
 
   function drawDino(x, y) {
   ctx.fillStyle = "#e5e7eb"; // light gray like Google Dino
@@ -88,9 +129,6 @@ ctx.stroke();
   ctx.fillRect(x - 8, y + 16, 8, 6);
 }
 
-  // Obstacles
-  obstacles.forEach(o => {
-    o.x -= 4;
    function drawCactus(o) {
   ctx.fillStyle = "#22c55e";
 
@@ -102,6 +140,15 @@ ctx.stroke();
 
   // right arm
   ctx.fillRect(o.x + 12, o.y + 16, 6, 14);
+}
+  
+  function addObstacle() {
+  let cactus = {
+    x: canvas.width,
+    y: 200,  // الأرض line
+    passed: false
+  };
+  obstacles.push(cactus);
 }
 
     if (
@@ -122,6 +169,15 @@ ctx.stroke();
   scoreEl.textContent = score;
 
   requestAnimationFrame(update);
+}
+
+let frames = 0;
+
+function loop() {
+  frames++;
+  update();
+  draw();
+  requestAnimationFrame(loop);
 }
 
 // Controls
