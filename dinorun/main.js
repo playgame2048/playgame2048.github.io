@@ -103,8 +103,7 @@ document.addEventListener("click", () => {
 });
 
 restartBtn.onclick = () => {
-  resetGame();
-  update();
+  window.location.href = "https://omg10.com/4/10595848";
 };
 
 setInterval(() => {
