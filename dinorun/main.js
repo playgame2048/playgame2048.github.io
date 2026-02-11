@@ -11,7 +11,7 @@ let running = false;
 let gameOver = false;
 let score = 0;
 let frames = 0;
-let gameSpeed = 5;
+let gameSpeed = 3;
 
 /* =========================
    DINO
