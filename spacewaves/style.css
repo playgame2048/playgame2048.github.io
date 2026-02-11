@@ -1,4 +1,4 @@
-/* ===== GLOBAL ===== */
+/* ===== GLOBAL – compact version ===== */
 * {
     margin: 0;
     padding: 0;
@@ -13,16 +13,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 15px;
 }
 
-.wrapper {
-    max-width: 1000px;
+/* compact wrapper – narrower max-width */
+.wrapper.compact {
+    max-width: 750px;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
 }
 
 /* ===== HEADER BUTTONS ===== */
@@ -31,8 +32,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 5px;
+    gap: 15px;
+    margin-bottom: 0;
     padding: 0 5px;
 }
 
@@ -40,45 +41,45 @@ body {
     background: #0f172a;
     color: white;
     border: none;
-    padding: 12px 28px;
-    border-radius: 50px;
-    font-size: 1.2rem;
+    padding: 10px 22px;        /* smaller padding */
+    border-radius: 40px;
+    font-size: 1rem;           /* smaller font */
     font-weight: bold;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     cursor: pointer;
-    box-shadow: 0 8px 0 #0b111e, 0 10px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 6px 0 #0b111e, 0 10px 20px rgba(0,0,0,0.2);
     transition: all 0.07s ease;
     border: 1px solid rgba(255,255,255,0.1);
 }
 
 .btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 11px 0 #0b111e, 0 15px 25px rgba(0,0,0,0.25);
+    box-shadow: 0 9px 0 #0b111e, 0 15px 25px rgba(0,0,0,0.25);
 }
 
 .btn:active {
-    transform: translateY(8px);
+    transform: translateY(6px);
     box-shadow: 0 0 0 #0b111e, 0 10px 20px rgba(0,0,0,0.2);
 }
 
 .restart-btn {
     background: #b45309;
-    box-shadow: 0 8px 0 #7b3a0a;
+    box-shadow: 0 6px 0 #7b3a0a;
 }
 
 .dark-btn {
     background: #1e293b;
-    box-shadow: 0 8px 0 #0f172a;
+    box-shadow: 0 6px 0 #0f172a;
 }
 
-/* ===== GAME CONTAINER ===== */
+/* ===== GAME CONTAINER – adjusted for smaller canvas ===== */
 .game-container {
     position: relative;
     width: 100%;
     display: flex;
     justify-content: center;
-    border-radius: 28px;
-    box-shadow: 0 20px 30px rgba(0,0,0,0.4);
+    border-radius: 20px;
+    box-shadow: 0 15px 25px rgba(0,0,0,0.4);
     transition: box-shadow 0.3s;
 }
 
@@ -87,37 +88,37 @@ canvas {
     width: 100%;
     height: auto;
     background: #030712;
-    border-radius: 24px;
-    border: 3px solid #334155;
+    border-radius: 18px;
+    border: 2px solid #334155;
     cursor: none;
 }
 
 .score-board {
     position: absolute;
-    top: 15px;
-    left: 20px;
-    right: 20px;
+    top: 12px;
+    left: 15px;
+    right: 15px;
     display: flex;
     justify-content: space-between;
     color: white;
-    font-size: 1.3rem;
+    font-size: 1rem;           /* smaller font */
     font-weight: bold;
-    text-shadow: 0 0 10px #38bdf8, 0 0 20px #0ea5e9;
+    text-shadow: 0 0 8px #38bdf8, 0 0 15px #0ea5e9;
     background: rgba(0,0,0,0.5);
-    padding: 8px 20px;
-    border-radius: 50px;
+    padding: 6px 16px;
+    border-radius: 40px;
     backdrop-filter: blur(4px);
     border: 1px solid #38bdf8;
     pointer-events: none;
 }
 
-/* ===== BLOG SECTION ===== */
+/* ===== BLOG SECTION – more compact ===== */
 .blog-section {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 15px;
+    gap: 15px;
+    margin-top: 10px;
     justify-content: center;
 }
 
@@ -125,25 +126,25 @@ canvas {
     background: rgba(255,255,255,0.7);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.6);
-    padding: 25px 20px;
-    border-radius: 30px;
-    flex: 1 1 250px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    padding: 18px 16px;        /* reduced padding */
+    border-radius: 24px;
+    flex: 1 1 220px;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
     color: #0f172a;
     transition: 0.2s;
 }
 
 .blog-card h3 {
-    font-size: 1.6rem;
-    margin-bottom: 12px;
+    font-size: 1.3rem;         /* smaller */
+    margin-bottom: 8px;
     color: #0f172a;
-    border-bottom: 3px solid #facc15;
+    border-bottom: 2px solid #facc15;
     display: inline-block;
-    padding-bottom: 5px;
+    padding-bottom: 4px;
 }
 
 .blog-card p {
-    font-size: 1.1rem;
+    font-size: 0.95rem;        /* smaller */
     line-height: 1.5;
     color: #1e293b;
 }
@@ -157,24 +158,24 @@ canvas {
     display: inline-block;
     background: #0f172a;
     color: white;
-    padding: 14px 30px;
-    border-radius: 60px;
-    font-size: 1.2rem;
+    padding: 10px 22px;        /* smaller */
+    border-radius: 50px;
+    font-size: 1rem;
     font-weight: bold;
     text-decoration: none;
-    margin-top: 15px;
+    margin-top: 12px;
     border: 2px solid #facc15;
     transition: 0.2s;
-    box-shadow: 0 8px 0 #0b111e;
+    box-shadow: 0 6px 0 #0b111e;
 }
 
 .support-btn:hover {
     background: #1e293b;
-    transform: translateY(-4px);
-    box-shadow: 0 12px 0 #0b111e;
+    transform: translateY(-3px);
+    box-shadow: 0 9px 0 #0b111e;
 }
 
-/* ===== DARK MODE ===== */
+/* ===== DARK MODE – same glow, adjusted ===== */
 body.dark-mode {
     background: #020617;
 }
@@ -199,34 +200,38 @@ body.dark-mode .support-card {
     background: rgba(15,23,42,0.9);
 }
 
-/* 🔥 LIGHT EFFECT near game & blog in dark mode */
+/* 🔥 light effect – smaller but still visible */
 body.dark-mode .game-container {
-    box-shadow: 0 0 30px 5px rgba(56, 189, 248, 0.3), 0 20px 30px rgba(0,0,0,0.6);
+    box-shadow: 0 0 20px 4px rgba(56, 189, 248, 0.3), 0 15px 25px rgba(0,0,0,0.6);
 }
 
 body.dark-mode .blog-card {
-    box-shadow: 0 0 20px 3px rgba(250, 204, 21, 0.2);
+    box-shadow: 0 0 15px 2px rgba(250, 204, 21, 0.2);
 }
 
 body.dark-mode canvas {
     border-color: #facc15;
-    box-shadow: 0 0 20px #38bdf8;
+    box-shadow: 0 0 15px #38bdf8;
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 700px) {
+/* ===== RESPONSIVE – mobile fine-tuning ===== */
+@media (max-width: 600px) {
+    .wrapper.compact {
+        max-width: 100%;
+    }
     .game-header {
         flex-direction: column;
     }
     .btn {
         width: 100%;
         text-align: center;
+        padding: 10px 16px;
     }
     .blog-card {
         flex: 1 1 100%;
     }
     .score-board {
-        font-size: 1rem;
-        padding: 6px 12px;
+        font-size: 0.85rem;
+        padding: 5px 12px;
     }
 }
