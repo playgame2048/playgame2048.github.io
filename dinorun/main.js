@@ -14,10 +14,6 @@ let gameSpeed = 3;
 let nextSpawn = 0;
 let firstRestart = true;
 
-/* =========================
-   DINO
-========================= */
-
 const dino = {
   x: 50,
   y: 200,
@@ -29,11 +25,11 @@ const dino = {
   onGround: true
 };
 
+let obstacles = [];
+
 /* =========================
    OBSTACLES
 ========================= */
-
-let obstacles = [];
 
 function addObstacle() {
   obstacles.push({
@@ -42,6 +38,49 @@ function addObstacle() {
     w: 20,
     h: 40
   });
+}
+
+function update() {
+  frames++;
+
+  // Dino gravity
+  dino.vy += dino.gravity;
+  dino.y += dino.vy;
+  if (dino.y >= 200) {
+    dino.y = 200;
+    dino.vy = 0;
+    dino.onGround = true;
+  }
+
+  // obstacles move
+  obstacles.forEach(o => {
+    o.x -= gameSpeed;
+
+    // collision
+    if (dino.x < o.x + o.w &&
+        dino.x + dino.w > o.x &&
+        dino.y < o.y + o.h &&
+        dino.y + dino.h > o.y) {
+      gameOver = true;
+      running = false;
+      gameOverScreen.style.display = "flex";
+    }
+  });
+
+  // remove offscreen
+  obstacles = obstacles.filter(o => o.x + 20 > 0);
+
+  // spawn
+  if (frames > nextSpawn) {
+    addObstacle();
+    nextSpawn = frames + Math.floor(Math.random() * 100 + 80);
+  }
+
+  // increase speed
+  if (frames % 500 === 0) gameSpeed += 0.25;
+
+  // score
+  if (running) score++;
 }
 
 /* =========================
@@ -62,81 +101,31 @@ function resetGame() {
 }
 
 /* =========================
-   UPDATE
-========================= */
-
-function update() {
-  if (!running) return;
-
-  frames++;
-
-  // Gravity
-  dino.vy += dino.gravity;
-  dino.y += dino.vy;
-
-  if (dino.y >= 200) {
-    dino.y = 200;
-    dino.vy = 0;
-    dino.onGround = true;
-  }
-
-  // Obstacles movement
-  obstacles.forEach(o => {
-    o.x -= gameSpeed;
-
-    // Collision
-    if (
-      dino.x < o.x + o.w &&
-      dino.x + dino.w > o.x &&
-      dino.y < o.y + o.h &&
-      dino.y + dino.h > o.y
-    ) {
-      gameOver = true;
-      running = false;
-      gameOverScreen.style.display = "flex";
-    }
-  });
-
-  // Remove offscreen
-  obstacles = obstacles.filter(o => o.x + o.w > 0);
-
-  // Spawn obstacles
-if (frames > nextSpawn) {
-  addObstacle();
-
-  // Random distance between 80 و 200 frames
-  let randomDelay = Math.floor(Math.random() * 100) + (80 - gameSpeed * 5);
-
-  nextSpawn = frames + randomDelay;
-}
-
-   if (frames % 500 === 0) {
-  gameSpeed += 0.25;
-}
-
-/* =========================
    DRAW
 ========================= */
 
 function draw() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // الأرض
+  // ground
   ctx.strokeStyle = "#475569";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(0,240);
-  ctx.lineTo(canvas.width,240);
+  ctx.moveTo(0, 240);
+  ctx.lineTo(canvas.width, 240);
   ctx.stroke();
 
-  drawDino(dino.x,dino.y);
-  obstacles.forEach(o=>drawCactus(o));
+  // dino
+  drawDino(dino.x, dino.y);
+
+  // obstacles
+  obstacles.forEach(o => drawCactus(o));
 
   // score
-  ctx.fillStyle = document.body.classList.contains("dark") ? "#fff" : "#111";
-  ctx.font="bold 20px Arial";
-  ctx.textAlign="right";
-  ctx.fillText(score.toString().padStart(5,"0"), canvas.width-20, 30);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 20px Arial";
+  ctx.textAlign = "right";
+  ctx.fillText("Score: " + score, canvas.width - 20, 30);
 }
 
 /* =========================
@@ -175,7 +164,9 @@ function drawCactus(o) {
 ========================= */
 
 function loop() {
-  update();
+  if (running) {
+    update();
+  }
   draw();
   requestAnimationFrame(loop);
 }
@@ -187,23 +178,14 @@ loop();
 ========================= */
 
 document.addEventListener("keydown", (e) => {
+  if (e.code === "Space" || e.code === "ArrowUp") e.preventDefault();
 
-  if (e.code === "Space" || e.code === "ArrowUp") {
-    e.preventDefault();
-  }
-
-  if (!running && !gameOver && (e.code === "Space" || e.code === "ArrowUp")) {
+  if (!running && !gameOver) {
     startScreen.style.display = "none";
     resetGame();
-    return;
-  }
-
-  if (gameOver && (e.code === "Space" || e.code === "ArrowUp")) {
+  } else if (gameOver) {
     resetGame();
-    return;
-  }
-
-  if (running && dino.onGround && (e.code === "Space" || e.code === "ArrowUp")) {
+  } else if (dino.onGround) {
     dino.vy = dino.jumpPower;
     dino.onGround = false;
   }
@@ -221,24 +203,14 @@ document.addEventListener("click", () => {
   }
 });
 
-/* =========================
-   RESTART LINK
-========================= */
-
 restartBtn.onclick = () => {
-
   if (firstRestart) {
     firstRestart = false;
     window.location.href = "https://omg10.com/4/10595848";
   } else {
     resetGame();
   }
-
 };
-
-/* =========================
-   DARK MODE
-========================= */
 
 darkToggle.onclick = () => {
   document.body.classList.toggle("dark");
