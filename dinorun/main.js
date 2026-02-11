@@ -55,6 +55,7 @@ function resetGame() {
   dino.onGround = true;
   score = 0;
   frames = 0;
+  nextSpawn = 0;
   gameOver = false;
   running = true;
   gameOverScreen.style.display = "none";
