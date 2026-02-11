@@ -103,6 +103,10 @@ function update() {
     addObstacle();
   }
 
+   if (frames % 500 === 0) {
+  gameSpeed += 0.25;
+}
+
   score++;
   scoreEl.textContent = score;
 }
