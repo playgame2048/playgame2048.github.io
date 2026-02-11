@@ -4,7 +4,6 @@ const ctx = canvas.getContext("2d");
 const startScreen = document.getElementById("startScreen");
 const gameOverScreen = document.getElementById("gameOver");
 const restartBtn = document.getElementById("restartBtn");
-const scoreEl = document.getElementById("score");
 const darkToggle = document.getElementById("darkToggle");
 
 let running = false;
