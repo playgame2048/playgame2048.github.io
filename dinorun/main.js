@@ -115,10 +115,6 @@ if (frames > nextSpawn) {
   gameSpeed += 0.25;
 }
 
-  score++;
-  scoreEl.textContent = score;
-}
-
 /* =========================
    DRAW
 ========================= */
