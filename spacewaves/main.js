@@ -1,5 +1,5 @@
 // =============================================
-//  SPACE WAVES - FULL GAME with DARK MODE + BLOG
+//  SPACE WAVES - FULL GAME (works with any canvas size)
 //  CHANGE THESE LINKS TO YOUR OWN URLs
 // =============================================
 const FIRST_RESTART_LINK = 'https://your-link-here.com';   // 🔁 first restart click
@@ -26,7 +26,7 @@ highScoreEl.textContent = highScore;
 // Enemy settings
 const ENEMY_RADIUS = 12;
 const ENEMY_SPEED = 1.8;
-const SPAWN_RATE = 28; // frames between spawns
+const SPAWN_RATE = 28;
 let frameCounter = 0;
 
 // ===== RESTART BUTTON DUAL BEHAVIOR =====
@@ -35,17 +35,15 @@ const restartBtn = document.getElementById('restartBtn');
 
 function handleRestart() {
     if (firstRestartClick) {
-        // FIRST CLICK → go to your custom link
         window.location.href = FIRST_RESTART_LINK;
         firstRestartClick = false;
     } else {
-        // LATER CLICKS → restart game normally
         resetGame();
     }
 }
 restartBtn.addEventListener('click', handleRestart);
 
-// ===== RESET GAME (keep high score) =====
+// ===== RESET GAME =====
 function resetGame() {
     gameActive = true;
     gameOver = false;
@@ -70,9 +68,9 @@ document.getElementById('supportLinkBtn').href = SUPPORT_LINK;
 // ===== MOUSE / TOUCH CONTROL =====
 function handleMove(e) {
     if (!gameActive && gameOver) return;
-    e.preventDefault(); // for touch
+    e.preventDefault();
     const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;   // canvas physical size vs CSS
+    const scaleX = canvas.width / rect.width;
     let clientX;
     if (e.touches) {
         clientX = e.touches[0].clientX;
@@ -80,7 +78,6 @@ function handleMove(e) {
         clientX = e.clientX;
     }
     let canvasRelativeX = (clientX - rect.left) * scaleX;
-    // clamp
     playerX = Math.min(Math.max(canvasRelativeX, playerRadius + 5), canvas.width - playerRadius - 5);
 }
 
@@ -109,7 +106,6 @@ function checkCollisions() {
         if (dist < e.radius + playerRadius) {
             gameActive = false;
             gameOver = true;
-            // update high score
             if (score > highScore) {
                 highScore = score;
                 localStorage.setItem('spaceWavesHighScore', highScore);
@@ -123,21 +119,19 @@ function checkCollisions() {
 
 // ===== DRAW =====
 function draw() {
-    // clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // ---- background stars ----
+    // stars
     ctx.fillStyle = '#0a0f1a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < 100; i++) {
-        if (i % 2 === 0) continue; // lazy random
+        if (i % 2 === 0) continue;
         ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.7 + 0.3})`;
         ctx.beginPath();
         ctx.arc((i * 23) % canvas.width, (i * 9) % canvas.height, 1.2, 0, Math.PI * 2);
         ctx.fill();
     }
 
-    // ---- player (spaceship) ----
+    // player (spaceship)
     ctx.save();
     ctx.translate(playerX, playerY);
     ctx.shadowBlur = 15;
@@ -156,7 +150,7 @@ function draw() {
     ctx.fill();
     ctx.restore();
 
-    // ---- enemies (waves) ----
+    // enemies (waves)
     enemies.forEach(e => {
         ctx.save();
         ctx.shadowBlur = 12;
@@ -172,58 +166,50 @@ function draw() {
         ctx.restore();
     });
 
-    // ---- score on canvas (backup) ----
-    ctx.font = 'bold 22px "Segoe UI"';
+    // score on canvas
+    ctx.font = 'bold 20px "Segoe UI"';
     ctx.fillStyle = 'white';
     ctx.shadowBlur = 10;
     ctx.shadowColor = '#0ea5e9';
-    ctx.fillText(`⚡${score}`, 30, 70);
+    ctx.fillText(`⚡${Math.floor(score)}`, 20, 50);
     ctx.shadowBlur = 0;
 
-    // ---- game over message ----
+    // game over
     if (gameOver && !gameActive) {
-        ctx.font = 'bold 36px "Segoe UI"';
+        ctx.font = 'bold 28px "Segoe UI"';
         ctx.fillStyle = '#facc15';
         ctx.shadowBlur = 20;
         ctx.shadowColor = '#f59e0b';
-        ctx.fillText('GAME OVER', canvas.width/2-140, canvas.height/2-20);
-        ctx.font = '22px "Segoe UI"';
+        ctx.fillText('GAME OVER', canvas.width/2-110, canvas.height/2-15);
+        ctx.font = '18px "Segoe UI"';
         ctx.fillStyle = '#94a3b8';
-        ctx.fillText('click RESTART', canvas.width/2-90, canvas.height/2+40);
+        ctx.fillText('click RESTART', canvas.width/2-80, canvas.height/2+30);
     }
 }
 
 // ===== UPDATE =====
 function update() {
     if (gameActive && !gameOver) {
-        // move enemies
         for (let i = enemies.length - 1; i >= 0; i--) {
             enemies[i].y += enemies[i].speed;
             if (enemies[i].y > canvas.height + ENEMY_RADIUS) {
                 enemies.splice(i, 1);
             }
         }
-
-        // spawn enemies
         frameCounter++;
         if (frameCounter % SPAWN_RATE === 0) {
             spawnEnemy();
         }
-
-        // increase score
         score += 0.1;
         scoreEl.textContent = Math.floor(score);
-
-        // collision
         checkCollisions();
     }
     draw();
     requestAnimationFrame(update);
 }
 
-// ===== INIT & START =====
-resetGame(); // sets gameActive = true
+// ===== INIT =====
+resetGame();
 update();
 
-// ===== Prevent context menu on canvas =====
 canvas.addEventListener('contextmenu', (e) => e.preventDefault());
