@@ -119,25 +119,25 @@ if (frames > nextSpawn) {
 ========================= */
 
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // Ground line
+  // الأرض
   ctx.strokeStyle = "#475569";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(0, 240);
-  ctx.lineTo(canvas.width, 240);
+  ctx.moveTo(0,240);
+  ctx.lineTo(canvas.width,240);
   ctx.stroke();
 
-  drawDino(dino.x, dino.y);
+  drawDino(dino.x,dino.y);
+  obstacles.forEach(o=>drawCactus(o));
 
-  obstacles.forEach(o => drawCactus(o));
+  // score
+  ctx.fillStyle = document.body.classList.contains("dark") ? "#fff" : "#111";
+  ctx.font="bold 20px Arial";
+  ctx.textAlign="right";
+  ctx.fillText(score.toString().padStart(5,"0"), canvas.width-20, 30);
 }
-
-ctx.fillStyle = "#ffffff";
-ctx.font = "bold 20px Arial";
-ctx.textAlign = "right";
-ctx.fillText("Score: " + score, canvas.width - 20, 30);
 
 /* =========================
    DINO DRAW
