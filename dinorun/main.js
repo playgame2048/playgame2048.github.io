@@ -88,6 +88,36 @@ function update() {
 }
 
 // Controls
+document.addEventListener("keydown", (e) => {
+
+  // حبّس scroll ديال Space و ArrowUp
+  if (e.code === "Space" || e.code === "ArrowUp") {
+    e.preventDefault();
+  }
+
+  // Start game
+  if (!running && !gameOver && (e.code === "Space" || e.code === "ArrowUp")) {
+    startScreen.style.display = "none";
+    resetGame();
+    update();
+    return;
+  }
+
+  // Restart after game over
+  if (gameOver && (e.code === "Space" || e.code === "ArrowUp")) {
+    resetGame();
+    update();
+    return;
+  }
+
+  // Jump
+  if (running && dino.onGround && (e.code === "Space" || e.code === "ArrowUp")) {
+    dino.vy = dino.jump;
+    dino.onGround = false;
+  }
+
+});
+
 document.addEventListener("click", () => {
   if (!running && !gameOver) {
     startScreen.style.display = "none";
