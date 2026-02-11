@@ -1,5 +1,5 @@
 // =============================================
-//  SPACE WAVES - KEYBOARD + MOUSE CONTROL
+//  SPACE WAVES - F-16 FIGHTER vs ROCKETS
 //  CHANGE THESE LINKS TO YOUR OWN URLs
 // =============================================
 const FIRST_RESTART_LINK = 'https://your-link-here.com';   // 🔁 first restart click
@@ -15,7 +15,7 @@ const highScoreEl = document.getElementById('highScoreValue');
 let gameActive = false;
 let gameOver = false;
 let playerX = canvas.width / 2;
-const playerRadius = 16;
+const playerRadius = 16;        // collision radius (unchanged)
 const playerY = canvas.height - 55;
 
 let enemies = [];
@@ -24,7 +24,7 @@ let highScore = localStorage.getItem('spaceWavesHighScore') || 0;
 highScoreEl.textContent = highScore;
 
 // Enemy settings
-const ENEMY_RADIUS = 12;
+const ENEMY_RADIUS = 12;        // collision radius (unchanged)
 const ENEMY_SPEED = 1.8;
 const SPAWN_RATE = 28;
 let frameCounter = 0;
@@ -32,7 +32,7 @@ let frameCounter = 0;
 // ===== KEYBOARD CONTROL =====
 let leftPressed = false;
 let rightPressed = false;
-const MOVE_SPEED = 6; // pixels per frame
+const MOVE_SPEED = 6;
 
 // ===== RESTART BUTTON DUAL BEHAVIOR =====
 let firstRestartClick = true;
@@ -70,7 +70,7 @@ darkToggle.addEventListener('click', () => {
 // ===== SUPPORT BUTTON LINK =====
 document.getElementById('supportLinkBtn').href = SUPPORT_LINK;
 
-// ===== MOUSE / TOUCH CONTROL (keep it) =====
+// ===== MOUSE / TOUCH CONTROL =====
 function handleMove(e) {
     if (!gameActive && gameOver) return;
     e.preventDefault();
@@ -94,13 +94,12 @@ canvas.addEventListener('touchstart', handleMove, { passive: false });
 window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') {
         leftPressed = true;
-        e.preventDefault(); // منع التمرير
+        e.preventDefault();
     } else if (e.key === 'ArrowRight') {
         rightPressed = true;
         e.preventDefault();
     }
 });
-
 window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowLeft') {
         leftPressed = false;
@@ -111,7 +110,7 @@ window.addEventListener('keyup', (e) => {
     }
 });
 
-// ===== SPAWN ENEMY =====
+// ===== SPAWN ENEMY (ROCKET) =====
 function spawnEnemy() {
     const x = Math.random() * (canvas.width - 2 * ENEMY_RADIUS) + ENEMY_RADIUS;
     enemies.push({
@@ -143,10 +142,119 @@ function checkCollisions() {
     return false;
 }
 
-// ===== DRAW =====
+// ============================================
+//  🎨 DRAW PLAYER – F-16 FIGHTER JET
+// ============================================
+function drawPlayer() {
+    ctx.save();
+    ctx.translate(playerX, playerY);
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = '#38bdf8';
+
+    // ----- Fuselage (main body) -----
+    ctx.fillStyle = '#facc15'; // gold
+    ctx.beginPath();
+    ctx.moveTo(0, -22);        // nose tip
+    ctx.lineTo(-12, 12);       // left rear
+    ctx.lineTo(12, 12);        // right rear
+    ctx.closePath();
+    ctx.fill();
+
+    // ----- Wings -----
+    ctx.fillStyle = '#fbbf24'; // lighter gold
+    // Left wing
+    ctx.beginPath();
+    ctx.moveTo(-12, 8);
+    ctx.lineTo(-22, 2);
+    ctx.lineTo(-22, -2);
+    ctx.lineTo(-12, 4);
+    ctx.closePath();
+    ctx.fill();
+    // Right wing
+    ctx.beginPath();
+    ctx.moveTo(12, 8);
+    ctx.lineTo(22, 2);
+    ctx.lineTo(22, -2);
+    ctx.lineTo(12, 4);
+    ctx.closePath();
+    ctx.fill();
+
+    // ----- Tail (vertical stabilizers) -----
+    ctx.fillStyle = '#f59e0b'; // orange
+    // Left tail
+    ctx.beginPath();
+    ctx.moveTo(-8, 12);
+    ctx.lineTo(-10, 20);
+    ctx.lineTo(-6, 20);
+    ctx.closePath();
+    ctx.fill();
+    // Right tail
+    ctx.beginPath();
+    ctx.moveTo(8, 12);
+    ctx.lineTo(10, 20);
+    ctx.lineTo(6, 20);
+    ctx.closePath();
+    ctx.fill();
+
+    // ----- Cockpit -----
+    ctx.fillStyle = '#0ea5e9'; // bright blue
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(0, -16, 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+}
+
+// ============================================
+//  🚀 DRAW ENEMY – ROCKET / MISSILE
+// ============================================
+function drawEnemy(x, y) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = '#0ea5e9';
+
+    // ----- Rocket body (main fuselage) -----
+    ctx.fillStyle = '#3b82f6'; // medium blue
+    ctx.beginPath();
+    ctx.rect(-4, -6, 8, 12);   // width 8, height 12, centered
+    ctx.fill();
+
+    // ----- Nose cone (pointing down) -----
+    ctx.fillStyle = '#ef4444'; // red
+    ctx.beginPath();
+    ctx.moveTo(-4, 6);
+    ctx.lineTo(0, 10);
+    ctx.lineTo(4, 6);
+    ctx.closePath();
+    ctx.fill();
+
+    // ----- Fins (top) -----
+    ctx.fillStyle = '#94a3b8'; // gray
+    // Left fin
+    ctx.beginPath();
+    ctx.moveTo(-4, -6);
+    ctx.lineTo(-8, -10);
+    ctx.lineTo(-4, -10);
+    ctx.closePath();
+    ctx.fill();
+    // Right fin
+    ctx.beginPath();
+    ctx.moveTo(4, -6);
+    ctx.lineTo(8, -10);
+    ctx.lineTo(4, -10);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+}
+
+// ===== DRAW (overridden) =====
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // stars
+
+    // ---- Stars background ----
     ctx.fillStyle = '#0a0f1a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < 100; i++) {
@@ -157,42 +265,13 @@ function draw() {
         ctx.fill();
     }
 
-    // player (spaceship)
-    ctx.save();
-    ctx.translate(playerX, playerY);
-    ctx.shadowBlur = 15;
-    ctx.shadowColor = '#38bdf8';
-    ctx.fillStyle = '#facc15';
-    ctx.beginPath();
-    ctx.moveTo(0, -playerRadius * 1.6);
-    ctx.lineTo(-playerRadius, playerRadius * 0.8);
-    ctx.lineTo(playerRadius, playerRadius * 0.8);
-    ctx.closePath();
-    ctx.fillStyle = '#fbbf24';
-    ctx.fill();
-    ctx.fillStyle = '#f59e0b';
-    ctx.beginPath();
-    ctx.arc(0, -6, 5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
+    // ---- Draw enemies (rockets) ----
+    enemies.forEach(e => drawEnemy(e.x, e.y));
 
-    // enemies (waves)
-    enemies.forEach(e => {
-        ctx.save();
-        ctx.shadowBlur = 12;
-        ctx.shadowColor = '#0ea5e9';
-        ctx.fillStyle = '#60a5fa';
-        ctx.beginPath();
-        ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#3b82f6';
-        ctx.beginPath();
-        ctx.arc(e.x - 2, e.y - 2, 4, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-    });
+    // ---- Draw player (F-16) ----
+    drawPlayer();
 
-    // score on canvas
+    // ---- Score on canvas ----
     ctx.font = 'bold 20px "Segoe UI"';
     ctx.fillStyle = 'white';
     ctx.shadowBlur = 10;
@@ -200,7 +279,7 @@ function draw() {
     ctx.fillText(`⚡${Math.floor(score)}`, 20, 50);
     ctx.shadowBlur = 0;
 
-    // game over
+    // ---- Game Over message ----
     if (gameOver && !gameActive) {
         ctx.font = 'bold 28px "Segoe UI"';
         ctx.fillStyle = '#facc15';
@@ -213,35 +292,28 @@ function draw() {
     }
 }
 
-// ===== UPDATE =====
+// ===== UPDATE (unchanged logic) =====
 function update() {
     if (gameActive && !gameOver) {
-        // ===== KEYBOARD MOVEMENT =====
-        if (leftPressed) {
-            playerX -= MOVE_SPEED;
-        }
-        if (rightPressed) {
-            playerX += MOVE_SPEED;
-        }
-        // clamp player position
+        // Keyboard movement
+        if (leftPressed) playerX -= MOVE_SPEED;
+        if (rightPressed) playerX += MOVE_SPEED;
         playerX = Math.min(Math.max(playerX, playerRadius + 5), canvas.width - playerRadius - 5);
 
-        // move enemies
+        // Move enemies
         for (let i = enemies.length - 1; i >= 0; i--) {
             enemies[i].y += enemies[i].speed;
             if (enemies[i].y > canvas.height + ENEMY_RADIUS) {
                 enemies.splice(i, 1);
             }
         }
-        // spawn enemies
+        // Spawn enemies
         frameCounter++;
-        if (frameCounter % SPAWN_RATE === 0) {
-            spawnEnemy();
-        }
-        // increase score
+        if (frameCounter % SPAWN_RATE === 0) spawnEnemy();
+        // Increase score
         score += 0.1;
         scoreEl.textContent = Math.floor(score);
-        // collision
+        // Collision
         checkCollisions();
     }
     draw();
