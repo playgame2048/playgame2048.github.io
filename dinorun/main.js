@@ -13,6 +13,7 @@ let score = 0;
 let frames = 0;
 let gameSpeed = 3;
 let nextSpawn = 0;
+let firstRestart = true;
 
 /* =========================
    DINO
@@ -225,7 +226,14 @@ document.addEventListener("click", () => {
 ========================= */
 
 restartBtn.onclick = () => {
-  window.location.href = "https://omg10.com/4/10595848";
+
+  if (firstRestart) {
+    firstRestart = false;
+    window.location.href = "https://omg10.com/4/10595848";
+  } else {
+    resetGame();
+  }
+
 };
 
 /* =========================
