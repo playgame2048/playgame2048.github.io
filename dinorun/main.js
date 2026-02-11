@@ -75,8 +75,8 @@ function update() {
   dino.vy += dino.gravity;
   dino.y += dino.vy;
 
-  if (dino.y >= 200) {
-    dino.y = 200;
+  if (dino.y >= 120) {
+    dino.y = 120;
     dino.vy = 0;
     dino.onGround = true;
   }
@@ -130,14 +130,19 @@ function draw() {
   ctx.strokeStyle = "#475569";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(0, 240);
-  ctx.lineTo(canvas.width, 240);
+  ctx.moveTo(0, 200);
+  ctx.lineTo(canvas.width, 200);
   ctx.stroke();
 
   drawDino(dino.x, dino.y);
 
   obstacles.forEach(o => drawCactus(o));
 }
+
+ctx.fillStyle = "#ffffff";
+ctx.font = "bold 20px Arial";
+ctx.textAlign = "right";
+ctx.fillText("Score: " + score, canvas.width - 20, 30);
 
 /* =========================
    DINO DRAW
