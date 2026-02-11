@@ -75,8 +75,8 @@ function update() {
   dino.vy += dino.gravity;
   dino.y += dino.vy;
 
-  if (dino.y >= 120) {
-    dino.y = 120;
+  if (dino.y >= 200) {
+    dino.y = 200;
     dino.vy = 0;
     dino.onGround = true;
   }
@@ -130,8 +130,8 @@ function draw() {
   ctx.strokeStyle = "#475569";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(0, 200);
-  ctx.lineTo(canvas.width, 200);
+  ctx.moveTo(0, 240);
+  ctx.lineTo(canvas.width, 240);
   ctx.stroke();
 
   drawDino(dino.x, dino.y);
