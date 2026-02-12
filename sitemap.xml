@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://playgame2048.github.io/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://playgame2048.github.io/tic%20tac%20toe/</loc>
+    <priority>0.8</priority>
+  </url> 
+  <url>
+    <loc>https://playgame2048.github.io/Tetris/</loc>
+    <priority>0.8</priority>
+  </url>
+   <url>
+    <loc>https://playgame2048.github.io/snake/</loc>
+    <priority>0.8</priority>
+  </url>
+   <url>
+    <loc>https://playgame2048.github.io/flappy-bird/</loc>
+    <priority>0.8</priority>
+  </url>
+   <url>
+    <loc>https://playgame2048.github.io/spacewaves/</loc>
+    <priority>0.8</priority>
+  </url>
+   <url>
+    <loc>https://playgame2048.github.io/dinorun/</loc>
+    <priority>0.8</priority>
+  </url>
+   <url>
+    <loc>https://playgame2048.github.io/2048/</loc>
+    <priority>0.8</priority>
+  </url>
+</urlset>
