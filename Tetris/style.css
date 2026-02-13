@@ -188,9 +188,9 @@ canvas {
   background: var(--grid-bg-light);
   border-radius: 18px;
   box-shadow: inset 0 0 0 2px rgba(0,0,0,0.05), 0 15px 25px rgba(0,0,0,0.2);
-  width: 100%;
-  height: auto;
-  aspect-ratio: 3 / 4;
+  width: 180px;        /* نفس العرض ديال canvas.width */
+  height: 240px;       /* نفس الطول ديال canvas.height */
+  aspect-ratio: auto;  /* عطل خاصية النسبة */
   display: block;
   image-rendering: crisp-edges; /* retro feel */
 }
@@ -412,4 +412,16 @@ body.dark footer {
   .score-box { padding: 8px 20px; }
   .score-value { font-size: 1.8rem; }
   .blog { padding: 20px; }
+}
+
+canvas {
+  width: 180px !important;
+  height: 240px !important;
+  aspect-ratio: auto !important;
+}
+
+.canvas-wrapper {
+  max-width: 180px;
+  margin-left: auto;
+  margin-right: auto;
 }
