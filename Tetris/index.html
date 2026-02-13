@@ -1,367 +1,106 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-F584GKZ8S7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F584GKZ8S7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F584GKZ8S7');
+  </script>
 
-  gtag('config', 'G-F584GKZ8S7');
-</script>
-  
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🧩 Tetris Game</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🧩 Tetris Classic – Free Block Puzzle</title>
 
-<style>
-:root{
-  --bg:#f2f2f2;
-  --text:#111;
-  --card:#fff;
-  --border:#ddd;
-}
-body.dark{
-  --bg:#121212;
-  --text:#eee;
-  --card:#1e1e1e;
-  --border:#333;
-}
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  text-align:center;
-  overscroll-behavior:none;
-}
-
-header{padding:10px}
-
-#score{
-  font-size:20px;
-  font-weight:bold;
-}
-
-canvas{
-  background:#ddd;
-  border-radius:10px;
-  margin:15px auto 5px;
-  display:block;
-}
-
-.controls-under{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  margin-bottom:10px;
-}
-
-button{
-  padding:8px 14px;
-  cursor:pointer;
-  font-size:16px;
-  touch-action:manipulation;
-}
-
-.mobile{
-  display:none;
-  justify-content:center;
-  gap:18px;
-  margin:10px 0;
-}
-
-.mobile button{
-  font-size:26px;
-  padding:14px 18px;
-}
-
-@media (max-width:768px){
-  .mobile{display:flex;}
-}
-
-/* BLOG */
-.blog{
-  max-width:700px;
-  margin:30px auto;
-  padding:25px;
-  background:var(--card);
-  border-radius:12px;
-  text-align:left;
-  font-size:16px;
-  border:1px solid var(--border);
-}
-.blog h2{
-  text-align:left;
-  margin-top:25px;
-}
-.blog p{
-  line-height:1.6;
-}
-.blog ul{
-  margin-left:20px;
-}
-
-.support-btn{
-  display:inline-block;
-  margin-top:10px;
-  padding:10px 18px;
-  background:#4caf50;
-  color:#fff;
-  border-radius:6px;
-  text-decoration:none;
-  font-weight:bold;
-}
-
-/* GAME OVER */
-#gameOver{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.7);
-  color:#fff;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  font-size:24px;
-}
-
-footer{font-size:12px;margin:15px}
-</style>
+  <!-- Main stylesheet (separate CSS file) -->
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <div class="game-container">
+    <header>
+      <h1 class="game-title">🧩 Tetris</h1>
+      <p class="game-subtitle">Classic block puzzle – simple to learn, hard to master</p>
+      
+      <div class="top-buttons">
+        <button onclick="restartGame()" class="btn restart-btn">⟳ New Game</button>
+        <button onclick="toggleDark()" class="btn dark-btn">🌙 Dark</button>
+      </div>
 
-<header>
-  <h1>🧩 Tetris Game</h1>
-  <p style="margin:4px 0;font-size:14px;opacity:.8">
-    A classic block game, simple to play, hard to master
-  </p>
-  <div id="score">Score: 0</div>
-</header>
+      <div class="score-area">
+        <div class="score-box">
+          <span class="score-label">Score</span>
+          <span id="score" class="score-value">0</span>
+        </div>
+      </div>
+    </header>
 
-<canvas id="game" width="300" height="400"></canvas>
+    <!-- Main game canvas -->
+    <div class="canvas-wrapper">
+      <canvas id="game" width="300" height="400"></canvas>
+    </div>
 
-<div class="controls-under">
-  <button type="button" onclick="restartGame()">⟳ Restart</button>
-  <button type="button" onclick="toggleDark()">🌙 Dark Mode</button>
-</div>
+    <!-- Desktop hint + mobile controls -->
+    <div class="control-row">
+      <div class="key-hint">⬅️ ➡️ ⬇️ ⬆️</div>
+      <div class="mobile-controls">
+        <button onclick="rotate(event)" class="mobile-btn">↻</button>
+        <button onclick="move(-1,event)" class="mobile-btn">←</button>
+        <button onclick="drop(event)" class="mobile-btn">↓</button>
+        <button onclick="move(1,event)" class="mobile-btn">→</button>
+      </div>
+    </div>
 
-<div class="mobile">
-  <button type="button" onclick="rotate(event)">⬆️</button>
-  <button type="button" onclick="move(-1,event)">⬅️</button>
-  <button type="button" onclick="drop(event)">⬇️</button>
-  <button type="button" onclick="move(1,event)">➡️</button>
-</div>
+    <!-- Monetag Ad (vignette) – kept exactly as you had it -->
+    <div class="ad-container">
+      <script>
+        (function(s){
+          s.dataset.zone='10534618';
+          s.src='https://gizokraijaw.net/vignette.min.js';
+        })([document.documentElement, document.body].filter(Boolean)
+          .pop()
+          .appendChild(document.createElement('script')));
+      </script>
+    </div>
 
-<section class="blog">
-  <h2>🎮 How to Play</h2>
-  <p>
-    Block Puzzle is a classic block-dropping game inspired by traditional
-    puzzle games. Your goal is to place blocks smartly and clear full rows
-    to earn points.
-  </p>
-  <ul>
-    <li>Move blocks left and right to position them</li>
-    <li>Rotate blocks to fit empty spaces</li>
-    <li>Complete full rows to clear them</li>
-    <li>The game ends when the grid is full</li>
-  </ul>
+    <!-- BLOG / INSTRUCTION SECTION – all your original content -->
+    <section class="blog">
+      <h2>🎮 How to Play</h2>
+      <p>Block Puzzle is a classic block-dropping game. Your goal is to place blocks smartly and clear full rows to earn points.</p>
+      <ul>
+        <li>Move blocks left and right to position them</li>
+        <li>Rotate blocks to fit empty spaces</li>
+        <li>Complete full rows to clear them</li>
+        <li>The game ends when the grid is full</li>
+      </ul>
 
-  <h2>🏆 How to Win & Improve</h2>
-  <p>
-    There is no final level to win. The challenge is to survive longer
-    and reach a higher score.
-  </p>
-  <ul>
-    <li>Keep the grid as low as possible</li>
-    <li>Plan moves before dropping blocks</li>
-    <li>Use rotations wisely</li>
-    <li>Stay calm and avoid rushing</li>
-  </ul>
+      <h2>🏆 How to Win & Improve</h2>
+      <p>There is no final level. The challenge is to survive longer and reach a higher score.</p>
+      <ul>
+        <li>Keep the grid as low as possible</li>
+        <li>Plan moves before dropping blocks</li>
+        <li>Use rotations wisely</li>
+        <li>Stay calm and avoid rushing</li>
+      </ul>
 
-  <h2>⛑️ Support the Game</h2>
-  <p>
-    If you enjoy this game and would like to support future updates,
-    you can help by making a small donation.
-  </p>
+      <h2>⛑️ Support the Game</h2>
+      <p>If you enjoy this game and would like to support future updates, you can help by making a small donation.</p>
+      <a class="support-btn" href="https://ko-fi.com/help_tommy" target="_blank">❤️ Support Us</a>
+    </section>
 
-  <a class="support-btn"
-     href="https://ko-fi.com/help_tommy"
-     target="_blank">
-    ❤️ Support Us
-  </a>
-</section>
+    <footer>© 2026 Block Puzzle · Classic Tetris-style</footer>
+  </div>
 
-<footer>© 2026 Block Puzzle</footer>
+  <!-- Game Over Modal -->
+  <div id="gameOver" class="game-overlay">
+    <div class="overlay-content">
+      <div class="overlay-title">Game Over</div>
+      <button onclick="restartGame()" class="btn restart-btn">♻️ Play Again</button>
+    </div>
+  </div>
 
-<div id="gameOver">
-  <div>Game Over</div>
-  <button type="button" onclick="restartGame()">♻️ Restart</button>
-</div>
-
-<script>
-const canvas=document.getElementById("game");
-const ctx=canvas.getContext("2d");
-
-const COLS=15, ROWS=20;
-const SIZE=canvas.width/COLS;
-
-let grid,current,score=0,gameOver=false;
-let restartClickedOnce=false;
-
-const scoreEl=document.getElementById("score");
-const overBox=document.getElementById("gameOver");
-
-// 🔗 Monetag link (Restart first click)
-const AFFILIATE_LINK="https://otieu.com/4/10534586";
-
-const SHAPES=[
- {shape:[[1,1],[1,1]], color:"#f44336"},
- {shape:[[1,1,1,1]], color:"#2196f3"},
- {shape:[[1,0],[1,0],[1,1]], color:"#4caf50"},
- {shape:[[0,1],[0,1],[1,1]], color:"#ff9800"},
- {shape:[[1,1,0],[0,1,1]], color:"#9c27b0"}
-];
-
-function emptyGrid(){
-  return Array.from({length:ROWS},()=>Array(COLS).fill(null));
-}
-
-function newBlock(){
-  const b=SHAPES[Math.floor(Math.random()*SHAPES.length)];
-  return{
-    x:6,y:0,
-    shape:JSON.parse(JSON.stringify(b.shape)),
-    color:b.color
-  };
-}
-
-function rotate(e){
-  if(e) e.preventDefault();
-  if(gameOver) return;
-  const r=current.shape[0].map((_,i)=>current.shape.map(row=>row[i]).reverse());
-  const old=current.shape;
-  current.shape=r;
-  if(collide()) current.shape=old;
-}
-
-function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  for(let y=0;y<ROWS;y++){
-    for(let x=0;x<COLS;x++){
-      ctx.fillStyle=grid[y][x]||"#bbb";
-      ctx.fillRect(x*SIZE,y*SIZE,SIZE-1,SIZE-1);
-    }
-  }
-  ctx.fillStyle=current.color;
-  current.shape.forEach((row,y)=>{
-    row.forEach((v,x)=>{
-      if(v){
-        ctx.fillRect((current.x+x)*SIZE,(current.y+y)*SIZE,SIZE-1,SIZE-1);
-      }
-    });
-  });
-}
-
-function collide(){
-  return current.shape.some((row,y)=>
-    row.some((v,x)=>{
-      if(!v)return false;
-      let ny=current.y+y, nx=current.x+x;
-      return ny>=ROWS||nx<0||nx>=COLS||grid[ny][nx];
-    })
-  );
-}
-
-function merge(){
-  current.shape.forEach((row,y)=>{
-    row.forEach((v,x)=>{
-      if(v) grid[current.y+y][current.x+x]=current.color;
-    });
-  });
-}
-
-function clearLines(){
-  for(let y=ROWS-1;y>=0;y--){
-    if(grid[y].every(c=>c)){
-      grid.splice(y,1);
-      grid.unshift(Array(COLS).fill(null));
-      score+=10;
-      y++;
-    }
-  }
-  scoreEl.textContent="Score: "+score;
-}
-
-function drop(e){
-  if(e) e.preventDefault();
-  if(gameOver) return;
-  current.y++;
-  if(collide()){
-    current.y--;
-    merge();
-    clearLines();
-    current=newBlock();
-    if(collide()){
-      gameOver=true;
-      overBox.style.display="flex";
-    }
-  }
-}
-
-function move(dir,e){
-  if(e) e.preventDefault();
-  if(gameOver) return;
-  current.x+=dir;
-  if(collide()) current.x-=dir;
-}
-
-document.addEventListener("keydown",e=>{
-  if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key))
-    e.preventDefault();
-  if(e.key==="ArrowLeft")move(-1);
-  if(e.key==="ArrowRight")move(1);
-  if(e.key==="ArrowDown")drop();
-  if(e.key==="ArrowUp")rotate();
-});
-
-function restartGame(){
-  if(!restartClickedOnce){
-    restartClickedOnce=true;
-    window.open(AFFILIATE_LINK,"_blank");
-    return;
-  }
-  start();
-}
-
-function start(){
-  grid=emptyGrid();
-  current=newBlock();
-  score=0;
-  gameOver=false;
-  scoreEl.textContent="Score: 0";
-  overBox.style.display="none";
-}
-
-function toggleDark(){
-  document.body.classList.toggle("dark");
-}
-
-start();
-setInterval(()=>{drop();draw();},700);
-</script>
-
-<!-- Monetag Vignette Ad -->
-<script>
-(function(s){
-  s.dataset.zone='10534618';
-  s.src='https://gizokraijaw.net/vignette.min.js';
-})([document.documentElement, document.body].filter(Boolean)
-  .pop()
-  .appendChild(document.createElement('script')));
-</script>
-
+  <!-- JavaScript (keep your original script, but we will put it in a separate file for cleanliness) -->
+  <script src="main.js"></script>
 </body>
 </html>
