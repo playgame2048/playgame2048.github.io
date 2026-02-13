@@ -354,3 +354,42 @@ div[style*="margin:20px auto; text-align:center;"] {
   .cell { font-size: 1.2rem; }
   .grid { gap: 8px; }
 }
+
+/* ===== تعديلات رفع اللعبة وتصغير العنوان ===== */
+
+/* تصغير العنوان ورفع المسافة الفوقية */
+.container {
+  padding-top: 15px !important;   /* كان 30px، خفناه */
+}
+
+.title {
+  font-size: 3.2rem !important;   /* كان 4.2rem، صغيرنا */
+  margin-bottom: 0 !important;    /* تقليل المسافة تحت العنوان */
+}
+
+.subtitle {
+  margin-bottom: 15px !important; /* تصغير المسافة تحت الوصف */
+}
+
+.top-buttons {
+  margin-bottom: 15px !important; /* تقليل المسافة تحت الأزرار */
+}
+
+.scoreboard {
+  margin-top: 5px !important;     /* رفع لوحة النقاط */
+}
+
+.game-center {
+  margin-top: 0 !important;       /* إزالة المسافة فوق اللوحة */
+  margin-bottom: 20px !important;
+}
+
+/* تحسين للموبايل */
+@media screen and (max-width: 600px) {
+  .title {
+    font-size: 2.4rem !important; /* أصغر فالمحمول */
+  }
+  .container {
+    padding-top: 10px !important;
+  }
+}
