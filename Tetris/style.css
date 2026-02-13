@@ -38,7 +38,7 @@ body.dark {
 
 /* ===== MAIN CONTAINER – GLASS CARD ===== */
 .game-container {
-  max-width: 800px;
+  max-width: 400px;
   width: 100%;
   background: var(--card-light);
   backdrop-filter: blur(16px);
@@ -180,6 +180,8 @@ body.dark .score-value {
   display: flex;
   justify-content: center;
   margin: 10px 0 10px;
+  max-width: 220px;  /* استعمل نفس الرقم لي ديرتو فـ width */
+  margin: 0 auto;
 }
 
 canvas {
