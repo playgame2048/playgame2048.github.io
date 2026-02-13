@@ -180,7 +180,7 @@ body.dark .score-value {
   display: flex;
   justify-content: center;
   margin: 10px 0 10px;
-  max-width: 220px;  /* استعمل نفس الرقم لي ديرتو فـ width */
+  max-width: 210px;  /* استعمل نفس الرقم لي ديرتو فـ width */
   margin: 0 auto;
 }
 
