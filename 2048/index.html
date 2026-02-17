@@ -2,115 +2,551 @@
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-F584GKZ8S7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-F584GKZ8S7');
-</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F584GKZ8S7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F584GKZ8S7');
+  </script>
   
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Play 2048 - Game & Tips</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>2048 – compact version</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      --bg-light: #f9f5f0;
+      --bg-dark: #0a0f1c;
+      --text-light: #2d3e4f;
+      --text-dark: #e2e8f0;
+      --card-light: rgba(255, 255, 255, 0.75);
+      --card-dark: rgba(20, 30, 45, 0.85);
+      --border-light: #e0e0e0;
+      --border-dark: #334155;
+
+      background: var(--bg-light);
+      color: var(--text-light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 15px;
+      transition: 0.2s;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    /* الحاوية الرئيسية – مصغرة */
+    .game-container {
+      max-width: 550px;
+      width: 100%;
+      background: var(--card-light);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-light);
+      border-radius: 36px;
+      padding: 20px 20px 25px;
+      box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
+      transition: 0.2s;
+    }
+
+    body.dark .game-container {
+      background: var(--card-dark);
+      border-color: var(--border-dark);
+    }
+
+    /* ===== HEADER ===== */
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .game-title {
+      font-size: 2.5rem;        /* أصغر */
+      font-weight: 800;
+      color: #ee7752;
+      background: linear-gradient(145deg, #ee7752, #e73c7e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .score-box {
+      background: rgba(238,119,82,0.15);
+      border-radius: 40px;
+      padding: 8px 18px;
+      min-width: 90px;
+      text-align: center;
+      border: 1px solid rgba(238,119,82,0.3);
+    }
+
+    .score-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-light);
+    }
+
+    .score-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #3a2c4a;
+      line-height: 1;
+    }
+
+    body.dark .score-value {
+      color: #fff;
+    }
+
+    /* ===== BUTTONS ROW ===== */
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 15px 0 12px;
+    }
+
+    .btn {
+      border: none;
+      padding: 10px 24px;
+      border-radius: 60px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: #3a2c4a;
+      color: white;
+      box-shadow: 0 5px 0 #1e1a2a;
+      cursor: pointer;
+      transition: 0.06s;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 0 #1e1a2a;
+    }
+
+    .dark-btn {
+      background: #334155;
+      box-shadow: 0 5px 0 #1f2a36;
+    }
+
+    /* ===== BOARD – الحجم المطلوب (400x400) ===== */
+    .board-wrapper {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+
+    #board-container {
+      position: relative;
+      width: 400px;            /* ثابت */
+      height: 400px;
+      background: rgba(170,140,120,0.2);
+      backdrop-filter: blur(4px);
+      border-radius: 24px;
+      padding: 12px;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    #grid, #tiles {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .grid-cell, .tile {
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(2px);
+      border-radius: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #3a2c4a;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+    }
+
+    .tile {
+      background: #f0e7db;
+      animation: pop 0.1s;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* ألوان الأرقام */
+    .tile[data-value="2"]    { background: #f0e7db; color: #5a4a3a; }
+    .tile[data-value="4"]    { background: #f3d9b1; color: #5a4a3a; }
+    .tile[data-value="8"]    { background: #f2b179; color: white; }
+    .tile[data-value="16"]   { background: #f59563; color: white; }
+    .tile[data-value="32"]   { background: #f67c5f; color: white; }
+    .tile[data-value="64"]   { background: #f65e3b; color: white; }
+    .tile[data-value="128"]  { background: #edcf72; color: white; font-size: 1.8rem; }
+    .tile[data-value="256"]  { background: #edcc61; color: white; font-size: 1.8rem; }
+    .tile[data-value="512"]  { background: #edc850; color: white; font-size: 1.8rem; }
+    .tile[data-value="1024"] { background: #edc53f; color: white; font-size: 1.6rem; }
+    .tile[data-value="2048"] { background: #edc22e; color: white; font-size: 1.6rem; }
+
+    /* ===== TOUCH / KEY HINT ===== */
+    .control-hint {
+      text-align: center;
+      margin: 12px 0 10px;
+      font-size: 1rem;
+      color: #64748b;
+    }
+
+    /* ===== AD CONTAINER ===== */
+    .ad-space {
+      margin: 20px 0 15px;
+      max-width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.02);
+      padding: 3px;
+    }
+
+    /* ===== BLOG – مصغر ===== */
+    .blog {
+      margin-top: 20px;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-light);
+      border-radius: 24px;
+      padding: 18px;
+      text-align: left;
+    }
+
+    body.dark .blog {
+      background: rgba(15,23,42,0.7);
+      border-color: var(--border-dark);
+    }
+
+    .blog h2 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      border-left: 5px solid #ee7752;
+      padding-left: 12px;
+    }
+
+    .blog p, .blog ul {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #475569;
+    }
+
+    body.dark .blog p,
+    body.dark .blog ul {
+      color: #cbd5e1;
+    }
+
+    .blog ul {
+      padding-left: 25px;
+    }
+
+    .support-btn {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 24px;
+      background: linear-gradient(145deg, #ee7752, #e73c7e);
+      color: white;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 5px 0 #aa3a22;
+    }
+
+    .support-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 0 #aa3a22;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 0.7rem;
+      color: #64748b;
+    }
+
+    /* تحسين للموبايل */
+    @media (max-width: 450px) {
+      #board-container {
+        width: 320px;
+        height: 320px;
+      }
+      .game-title { font-size: 2rem; }
+      .score-value { font-size: 1.5rem; }
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1 class="title">Play 2048</h1>
-      <p class="subtitle">Swipe or use arrow keys to merge tiles and reach 2048!</p>
-      <div class="top-buttons">
-        <button onclick="smartRestart()">⟳ Restart</button>
-        <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
+  <div class="game-container">
+    <div class="game-header">
+      <h1 class="game-title">2048</h1>
+      <div class="score-box">
+        <div class="score-label">Score</div>
+        <div id="score" class="score-value">0</div>
       </div>
-      <div class="scoreboard">
-        <div class="score">Score: <span id="score">0</span></div>
-        <div class="message hidden" id="message"></div>
+    </div>
+
+    <div class="button-row">
+      <button onclick="smartRestart()" class="btn">⟳ Restart</button>
+      <button onclick="toggleDarkMode()" class="btn dark-btn">🌙 Dark</button>
+    </div>
+
+    <!-- لوحة اللعب بالحجم المطلوب 400x400 -->
+    <div class="board-wrapper">
+      <div id="board-container">
+        <div id="grid"></div>
+        <div id="tiles"></div>
       </div>
-    </header>
+    </div>
 
-    <main>
-     <div class="game-wrapper">
+    <div class="control-hint">
+      ⬅️ ➡️ ⬆️ ⬇️  or  swipe
+    </div>
 
-  <div class="game-center">
-    <div id="grid" class="grid"></div>
+    <!-- Monetag Ad (غير رقم المنطقة) -->
+    <div class="ad-space">
+      <script>
+        (function(s){
+          s.dataset.zone='10519048';   // <-- ضع رقم منطقتك هنا
+          s.src='https://gizokraijaw.net/vignette.min.js';
+        })([document.documentElement, document.body].filter(Boolean)
+          .pop()
+          .appendChild(document.createElement('script')));
+      </script>
+    </div>
+
+    <!-- Blog Section (مصغر) -->
+    <section class="blog">
+      <h2>🎮 How to play</h2>
+      <p>Use arrow keys to move tiles. Combine same numbers to reach 2048.</p>
+      <ul>
+        <li>Keep your highest tile in a corner</li>
+        <li>Plan your moves</li>
+        <li>Don't rush</li>
+      </ul>
+      <h2>❤️ Support</h2>
+      <p>Enjoying the game? Help us keep it free!</p>
+      <a class="support-btn" href="https://ko-fi.com/help_tommy" target="_blank">❤️ Support</a>
+    </section>
+
+    <footer>© 2026 · compact 2048</footer>
   </div>
 
-        </div>
-      
-<div style="margin:20px auto; text-align:center;">
+  <!-- Game logic (نفس الكود الأصلي مع تغيير طفيف في smartRestart) -->
   <script>
-  (function(s){
-    s.dataset.zone='10519048';
-    s.src='https://gizokraijaw.net/vignette.min.js';
-  })([document.documentElement, document.body]
-    .filter(Boolean)
-    .pop()
-    .appendChild(document.createElement('script')));
+    // ---------- الإعدادات الأساسية ----------
+    const gridEl = document.getElementById('grid');
+    const tilesEl = document.getElementById('tiles');
+    const scoreEl = document.getElementById('score');
+    let board = [];
+    let score = 0;
+    let best = localStorage.getItem('best2048') || 0;
+
+    // 🔗 رابطك التابع (غيّره)
+    const AFFILIATE_LINK = 'https://otieu.com/4/10518966';
+    let adShown = false;
+
+    // تهيئة اللوحة
+    function initBoard() {
+      board = [
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0]
+      ];
+      score = 0;
+      updateScore();
+      addRandomTile();
+      addRandomTile();
+      render();
+    }
+
+    // إضافة رقم عشوائي (2 أو 4)
+    function addRandomTile() {
+      let empty = [];
+      for (let r = 0; r < 4; r++) {
+        for (let c = 0; c < 4; c++) {
+          if (board[r][c] === 0) empty.push({r, c});
+        }
+      }
+      if (empty.length === 0) return;
+      let {r, c} = empty[Math.floor(Math.random() * empty.length)];
+      board[r][c] = Math.random() < 0.9 ? 2 : 4;
+    }
+
+    // رسم اللوحة
+    function render() {
+      // رسم الخلفية
+      gridEl.innerHTML = '';
+      for (let i = 0; i < 16; i++) {
+        let cell = document.createElement('div');
+        cell.className = 'grid-cell';
+        gridEl.appendChild(cell);
+      }
+
+      // رسم البلاطات
+      tilesEl.innerHTML = '';
+      for (let r = 0; r < 4; r++) {
+        for (let c = 0; c < 4; c++) {
+          if (board[r][c] !== 0) {
+            let tile = document.createElement('div');
+            tile.className = 'tile';
+            tile.setAttribute('data-value', board[r][c]);
+            tile.style.gridRow = r + 1;
+            tile.style.gridColumn = c + 1;
+            tile.textContent = board[r][c];
+            tilesEl.appendChild(tile);
+          }
+        }
+      }
+    }
+
+    // تحديث النتيجة
+    function updateScore() {
+      scoreEl.textContent = score;
+      if (score > best) {
+        best = score;
+        localStorage.setItem('best2048', best);
+      }
+    }
+
+    // تحريك اللوحة (اتجاه)
+    function move(direction) {
+      let changed = false;
+      let newBoard = [[],[],[],[]];
+
+      for (let i = 0; i < 4; i++) {
+        let line = [];
+        for (let j = 0; j < 4; j++) {
+          if (direction === 'left') line.push(board[i][j]);
+          if (direction === 'right') line.push(board[i][3-j]);
+          if (direction === 'up') line.push(board[j][i]);
+          if (direction === 'down') line.push(board[3-j][i]);
+        }
+
+        let filtered = line.filter(v => v !== 0);
+        let merged = [];
+        let skip = false;
+
+        for (let k = 0; k < filtered.length; k++) {
+          if (skip) {
+            skip = false;
+            continue;
+          }
+          if (k < filtered.length - 1 && filtered[k] === filtered[k+1]) {
+            merged.push(filtered[k] * 2);
+            score += filtered[k] * 2;
+            skip = true;
+          } else {
+            merged.push(filtered[k]);
+          }
+        }
+        while (merged.length < 4) merged.push(0);
+
+        for (let j = 0; j < 4; j++) {
+          if (direction === 'left') newBoard[i][j] = merged[j];
+          if (direction === 'right') newBoard[i][3-j] = merged[j];
+          if (direction === 'up') newBoard[j][i] = merged[j];
+          if (direction === 'down') newBoard[3-j][i] = merged[j];
+        }
+      }
+
+      if (JSON.stringify(board) !== JSON.stringify(newBoard)) {
+        board = newBoard;
+        changed = true;
+      }
+
+      if (changed) {
+        addRandomTile();
+        render();
+        updateScore();
+      }
+    }
+
+    // التحقق من النهاية
+    function isGameOver() {
+      for (let r = 0; r < 4; r++) {
+        for (let c = 0; c < 4; c++) {
+          if (board[r][c] === 0) return false;
+          if (c < 3 && board[r][c] === board[r][c+1]) return false;
+          if (r < 3 && board[r][c] === board[r+1][c]) return false;
+        }
+      }
+      return true;
+    }
+
+    // إعادة التشغيل الذكية (أول نقرة → رابط)
+    function smartRestart() {
+      if (!adShown) {
+        adShown = true;
+        window.open(AFFILIATE_LINK, '_blank');
+        setTimeout(() => {
+          initBoard();
+        }, 500);
+      } else {
+        initBoard();
+      }
+    }
+
+    // الوضع الليلي
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+    }
+
+    // أحداث لوحة المفاتيح
+    document.addEventListener('keydown', (e) => {
+      if (e.key.startsWith('Arrow')) e.preventDefault();
+      if (e.key === 'ArrowLeft') move('left');
+      if (e.key === 'ArrowRight') move('right');
+      if (e.key === 'ArrowUp') move('up');
+      if (e.key === 'ArrowDown') move('down');
+      if (isGameOver()) alert('Game Over! Click Restart to try again.');
+    });
+
+    // أحداث السحب (لمسة)
+    let touchStartX = 0, touchStartY = 0;
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    });
+    document.addEventListener('touchend', (e) => {
+      let dx = e.changedTouches[0].clientX - touchStartX;
+      let dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 30) move('right');
+        if (dx < -30) move('left');
+      } else {
+        if (dy > 30) move('down');
+        if (dy < -30) move('up');
+      }
+    });
+
+    // بدء اللعبة
+    initBoard();
   </script>
-</div>
-
-      <section class="blog">
-         <h2>🎮  How to Play 2048</h2>
-        <p>2048 is a sliding tile puzzle game. Your goal is to combine tiles of the same number to reach the 2048 tile.</p>
-
-         <h3>🧠 Improve Your Brain Skills</h3>
-         <p>
-Want to get better at puzzle games like 2048?  
-Check this brain training course 👉  
-<a href="AFFILIATE_LINK" target="_blank">Start here</a>
-</p>
-        
-        <h3>🎲 How to Play</h3>
-        <ul>
-          <li>Use arrow keys on PC or swipe on mobile.</li>
-          <li>Combine tiles with the same number.</li>
-          <li>Every move adds a new tile (2 or 4).</li>
-        </ul>
-
-        <h3>🏆 How to Win</h3>
-        <ul>
-          <li>Keep your biggest tile in one corner.</li>
-          <li>Build the row/column around that corner.</li>
-          <li>Avoid moving the big tile away from the corner.</li>
-        </ul>
-
-        <h3>💎 Tips</h3>
-        <ul>
-          <li>Plan 2 moves ahead.</li>
-          <li>Don't swipe randomly.</li>
-          <li>Keep tiles organized by size.</li>
-        </ul>
-        
-        <div class="affiliate-box">
-          <h3>🧠 Want to get better at 2048?</h3>
-          <p>Train your brain and improve your strategy with this course.</p>
-          <a href="AFFILIATE_LINK" target="_blank">Start Brain Training →</a>
-        </div>
-
-        <div class="affiliate">
-          <h3>Improve Your Skills</h3>
-          <a href="YOUR_AFFILIATE_LINK" target="_blank">
-            📘 Learn JavaScript & Game Development (Affiliate)
-          </a>
-        </div>
-
-        <div class="donate">
-          <h3>Support the Game</h3>
-          <a href="https://ko-fi.com/help_tommy" target="_blank">
-            <p class="donate-text">      
-              💖 If you enjoy this game and want to support us,  
-              your donation helps keep the game free and updated. Thank you!
-            </p>
-            💖 Donate via Ko-fi
-          </a>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <script src="main.js"></script>
 </body>
 </html>
