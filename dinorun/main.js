@@ -220,4 +220,4 @@ restartBtn.onclick = () => {
 
 darkToggle.onclick = () => {
   document.body.classList.toggle("dark");
-};* {
+};
