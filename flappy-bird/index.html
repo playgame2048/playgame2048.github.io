@@ -2,59 +2,65 @@
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-F584GKZ8S7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F584GKZ8S7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F584GKZ8S7');
+  </script>
 
-  gtag('config', 'G-F584GKZ8S7');
-</script>
-  
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>🦜 Play Flappy Bird – Free Online Games</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🦜 Flappy Bird · classic</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="game-card">
+    <h1 class="game-title">🦜 Flappy Bird</h1>
+    <p class="game-subtitle">tap to fly · avoid pipes</p>
 
-<header class="top">
-  <h1>🦜 Flappy Bird</h1>
-
-  <div class="top-buttons">
-    <button id="restartBtn">⟳ Restart</button>
-    <button id="darkBtn">🌙 Dark Mode</button>
-  </div>
-</header>
-
-<main class="game-wrapper">
-  <canvas id="game" width="420" height="480"></canvas>
-
-  <div id="gameOver" class="overlay">
-    <div class="overlay-box">
-      <h2>GAME OVER</h2>
-      <p>Tap Restart to play again</p>
+    <!-- صف الأزرار -->
+    <div class="button-row">
+      <button id="darkBtn" class="btn dark-btn">🌙 Dark</button>
+      <button id="restartBtn" class="btn">⟳ Restart</button>
     </div>
-  </div>
-</main>
 
-  <div class="ads ads-under-game">
-  <script>(function(s){s.dataset.zone='10595787',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-</div>
+    <!-- لوحة اللعب -->
+    <div class="canvas-wrapper">
+      <canvas id="game" width="420" height="480"></canvas>
+      <div id="gameOver" class="game-overlay">
+        <div class="overlay-content">
+          <h2>GAME OVER</h2>
+          <p>tap restart to play again</p>
+        </div>
+      </div>
+    </div>
 
-<!-- Blog Section -->
-  <section class="blog">
-    <div class="blog-container">
-      <div class="blog-card">
-      <h2>🎮 How to Play Flappy Bird</h2>
-      <p>
-           Tap the screen or press spacebar to flap and navigate the bird through pipes.
-      </p>
+    <!-- Monetag Ad – غير رقم المنطقة -->
+    <div class="ad-space">
+      <script>
+        (function(s){
+          s.dataset.zone='10595787';   // <-- ضع رقم منطقتك هنا
+          s.src='https://nap5k.com/tag.min.js';
+        })([document.documentElement, document.body].filter(Boolean)
+          .pop()
+          .appendChild(document.createElement('script')));
+      </script>
+    </div>
 
-      <h3>🎯 How to Score</h3>
-      <p>Pass through each pipe to earn points. Focus on timing and control.</p>
+    <!-- Blog / تعليمات -->
+    <section class="blog">
+      <h2>🎮 How to Play</h2>
+      <p>Tap the screen or press spacebar to flap. Navigate the bird through the pipes without hitting them.</p>
 
-      <h3>💡 Tips to Win</h3>
+      <h3>🎯 Scoring</h3>
+      <p>Pass through each pipe to earn one point. The further you go, the higher your score.</p>
+
+      <h3>💡 Tips</h3>
       <ul>
         <li>Keep the bird near the middle for more control.</li>
         <li>Time your flaps, don't spam.</li>
@@ -63,13 +69,11 @@
 
       <h3>💖 Support Us</h3>
       <p>Enjoy our games? Support us by sharing or visiting our page.</p>
-      <a href="https://ko-fi.com/help_tommy" class="support-btn">Support Us</a>
-      </div>
-    </div>
-  </section>
+      <a href="https://ko-fi.com/help_tommy" class="support-btn">❤️ Support</a>
+    </section>
 
-</body>
-</html>
+    <footer>© 2026 · flappy bird classic</footer>
+  </div>
 
   <script src="main.js"></script>
 </body>
