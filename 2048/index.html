@@ -12,7 +12,7 @@
   
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>2048 – صف موحد</title>
+  <title>2048 – Score على اليسار</title>
   <style>
     * {
       margin: 0;
@@ -64,7 +64,6 @@
       border-color: var(--border-dark);
     }
 
-    /* العنوان في الوسط */
     .game-header {
       text-align: center;
       margin-bottom: 15px;
@@ -83,10 +82,10 @@
     /* ===== الصف الموحد (Score, Restart, Dark) ===== */
     .action-row {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;  /* Score يسار، Restart وسط، Dark يمين */
       align-items: center;
-      gap: 15px;
-      margin-bottom: 20px;  /* المسافة تحت الصف */
+      gap: 10px;
+      margin-bottom: 20px;
       flex-wrap: wrap;       /* للموبايل */
     }
 
@@ -117,7 +116,6 @@
       color: #fff;
     }
 
-    /* الأزرار */
     .btn {
       border: none;
       padding: 10px 24px;
@@ -130,7 +128,7 @@
       cursor: pointer;
       transition: 0.06s;
       border: 1px solid rgba(255,255,255,0.2);
-      white-space: nowrap;   /* منع الكسر */
+      white-space: nowrap;
     }
 
     .btn:hover {
@@ -147,7 +145,7 @@
     .board-wrapper {
       display: flex;
       justify-content: center;
-      margin-top: 10px;      /* نزول خفيف بعد الصف */
+      margin-top: 10px;
       margin-bottom: 15px;
     }
 
@@ -290,6 +288,7 @@
 
     @media (max-width: 500px) {
       .action-row {
+        justify-content: center;
         gap: 10px;
       }
       .btn {
@@ -315,12 +314,11 @@
 </head>
 <body>
   <div class="game-container">
-    <!-- العنوان في الوسط -->
     <div class="game-header">
       <h1 class="game-title">2048</h1>
     </div>
 
-    <!-- الصف الموحد: Score + Restart + Dark -->
+    <!-- الصف الموحد: Score (يسار) - Restart (وسط) - Dark (يمين) -->
     <div class="action-row">
       <div class="score-box">
         <div class="score-label">Score</div>
@@ -330,7 +328,6 @@
       <button onclick="toggleDarkMode()" class="btn dark-btn">🌙 Dark</button>
     </div>
 
-    <!-- اللوحة -->
     <div class="board-wrapper">
       <div id="board-container">
         <div id="grid"></div>
@@ -354,7 +351,6 @@
       </script>
     </div>
 
-    <!-- Blog Section -->
     <section class="blog">
       <h2>🎮 How to play</h2>
       <p>Use arrow keys to move tiles. Combine same numbers to reach 2048.</p>
@@ -372,7 +368,6 @@
   </div>
 
   <script>
-    // ---------- الإعدادات الأساسية ----------
     const gridEl = document.getElementById('grid');
     const tilesEl = document.getElementById('tiles');
     const scoreEl = document.getElementById('score');
@@ -380,8 +375,7 @@
     let score = 0;
     let best = localStorage.getItem('best2048') || 0;
 
-    // 🔗 رابطك التابع (غيّره)
-    const AFFILIATE_LINK = 'https://otieu.com/4/10518966';
+    const AFFILIATE_LINK = 'https://otieu.com/4/10518966'; // <-- غيّره لرابطك
     let adShown = false;
 
     function initBoard() {
