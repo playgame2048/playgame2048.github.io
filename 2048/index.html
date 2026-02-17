@@ -12,7 +12,7 @@
   
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>2048 – Score على اليسار</title>
+  <title>2048 – Score مبادل مع Dark</title>
   <style>
     * {
       margin: 0;
@@ -79,14 +79,14 @@
       display: inline-block;
     }
 
-    /* ===== الصف الموحد (Score, Restart, Dark) ===== */
+    /* ===== الصف الموحد (Dark - Restart - Score) ===== */
     .action-row {
       display: flex;
-      justify-content: space-between;  /* Score يسار، Restart وسط، Dark يمين */
+      justify-content: space-between;
       align-items: center;
       gap: 10px;
       margin-bottom: 20px;
-      flex-wrap: wrap;       /* للموبايل */
+      flex-wrap: wrap;
     }
 
     .score-box {
@@ -141,7 +141,6 @@
       box-shadow: 0 5px 0 #1f2a36;
     }
 
-    /* ===== اللوحة ===== */
     .board-wrapper {
       display: flex;
       justify-content: center;
@@ -318,14 +317,14 @@
       <h1 class="game-title">2048</h1>
     </div>
 
-    <!-- الصف الموحد: Score (يسار) - Restart (وسط) - Dark (يمين) -->
+    <!-- الصف الموحد: Dark (يسار) - Restart (وسط) - Score (يمين) -->
     <div class="action-row">
+      <button onclick="toggleDarkMode()" class="btn dark-btn">🌙 Dark</button>
+      <button onclick="smartRestart()" class="btn">⟳ Restart</button>
       <div class="score-box">
         <div class="score-label">Score</div>
         <div id="score" class="score-value">0</div>
       </div>
-      <button onclick="smartRestart()" class="btn">⟳ Restart</button>
-      <button onclick="toggleDarkMode()" class="btn dark-btn">🌙 Dark</button>
     </div>
 
     <div class="board-wrapper">
