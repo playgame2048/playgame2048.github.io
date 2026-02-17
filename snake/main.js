@@ -76,79 +76,161 @@ function draw(){
 
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // grid
-  ctx.strokeStyle = "rgba(255,255,255,.05)";
-  for(let i=0;i<canvas.width;i+=box){
+  // خلفية متدرجة خفيفة
+  const grad = ctx.createLinearGradient(0,0,canvas.width,canvas.height);
+  grad.addColorStop(0,"#1a2f3f");
+  grad.addColorStop(1,"#0e1a26");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // شبكة خافتة
+  ctx.strokeStyle = "rgba(255,255,255,0.08)";
+  ctx.lineWidth = 0.8;
+  for(let i=0;i<=canvas.width;i+=box){
     ctx.beginPath();
-    ctx.moveTo(i,0); ctx.lineTo(i,canvas.height); ctx.stroke();
+    ctx.moveTo(i,0); ctx.lineTo(i,canvas.height);
+    ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(0,i); ctx.lineTo(canvas.width,i); ctx.stroke();
+    ctx.moveTo(0,i); ctx.lineTo(canvas.width,i);
+    ctx.stroke();
   }
 
-   // Apple 🍎
-  ctx.beginPath();
-  ctx.arc(food.x+box/2,food.y+box/2,box/2.4,0,Math.PI*2);
-  ctx.fillStyle = "#e11d48";
-  ctx.fill();
+  // ======== APPLE (3D, واقعية) ========
+  const appleX = food.x + box/2;
+  const appleY = food.y + box/2;
+
+  // ظل التفاحة
+  ctx.save();
+  ctx.shadowColor = "rgba(0,0,0,0.5)";
+  ctx.shadowBlur = 8;
+  ctx.shadowOffsetY = 3;
+
+  // جسم التفاحة – تدرج كروي
+  const appleGrad = ctx.createRadialGradient(
+    appleX-4, appleY-4, 3,
+    appleX+2, appleY+2, box/1.8
+  );
+  appleGrad.addColorStop(0,"#f87171");
+  appleGrad.addColorStop(0.7,"#b91c1c");
+  appleGrad.addColorStop(1,"#7f1d1d");
 
   ctx.beginPath();
-  ctx.arc(food.x+box/2.6,food.y+box/2.6,4,0,Math.PI*2);
-  ctx.fillStyle = "rgba(255,255,255,.6)";
+  ctx.arc(appleX, appleY, box/2.2, 0, Math.PI*2);
+  ctx.fillStyle = appleGrad;
   ctx.fill();
 
+  // لمعة خفيفة
+  ctx.shadowBlur = 0;
   ctx.beginPath();
-  ctx.fillStyle = "#16a34a";
-  ctx.ellipse(food.x+box/2+5,food.y+box/2-10,6,3,Math.PI/4,0,Math.PI*2);
+  ctx.arc(appleX-4, appleY-4, 5, 0, Math.PI*2);
+  ctx.fillStyle = "rgba(255,255,255,0.25)";
   ctx.fill();
 
-// Snake 🐍
+  // الساق (stem)
+  ctx.beginPath();
+  ctx.moveTo(appleX+2, appleY-12);
+  ctx.lineTo(appleX+6, appleY-16);
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "#5b3e1d";
+  ctx.shadowBlur = 5;
+  ctx.shadowOffsetY = 1;
+  ctx.stroke();
+
+  // الورقة
+  ctx.beginPath();
+  ctx.ellipse(appleX+8, appleY-20, 5, 2, 0.3, 0, Math.PI*2);
+  ctx.fillStyle = "#2e7d32";
+  ctx.shadowBlur = 6;
+  ctx.fill();
+  ctx.restore();
+
+  // ======== SNAKE (3D) ========
   snake.forEach((p,i)=>{
+    const segX = p.x + box/2;
+    const segY = p.y + box/2;
+    const radius = i===0 ? box/2.1 : box/2.4;
+    const isHead = i===0;
+
+    // ظل كل قطعة
+    ctx.save();
+    ctx.shadowColor = "rgba(0,0,0,0.4)";
+    ctx.shadowBlur = 8;
+    ctx.shadowOffsetY = 3;
+
+    // تدرج لوني ثلاثي الأبعاد
+    const gradient = ctx.createRadialGradient(
+      segX-4, segY-4, 2,
+      segX+2, segY+2, radius+2
+    );
+    if(isHead){
+      gradient.addColorStop(0,"#86efac");
+      gradient.addColorStop(0.5,"#22c55e");
+      gradient.addColorStop(1,"#15803d");
+    } else {
+      gradient.addColorStop(0,"#4ade80");
+      gradient.addColorStop(0.6,"#16a34a");
+      gradient.addColorStop(1,"#14532d");
+    }
+
     ctx.beginPath();
-    ctx.arc(p.x+box/2,p.y+box/2,i===0?box/2.1:box/2.4,0,Math.PI*2);
-    ctx.fillStyle =
-  i===0 ? "#22c55e" :
-  i===snake.length-1 ? "#14532d" :
-  "#16a34a";
+    ctx.arc(segX, segY, radius, 0, Math.PI*2);
+    ctx.fillStyle = gradient;
     ctx.fill();
-    
-    // Eyes 👀 (HEAD ONLY)
-let head = snake[0];
-ctx.fillStyle = "#000";
 
-// left eye
-ctx.beginPath();
-ctx.arc(head.x + box*0.35, head.y + box*0.35, 3, 0, Math.PI*2);
-ctx.fill();
+    // لمعة خفيفة على العينين للرأس فقط
+    if(isHead){
+      // العين اليسرى
+      ctx.shadowBlur = 0;
+      ctx.beginPath();
+      ctx.arc(segX-5, segY-4, 3, 0, Math.PI*2);
+      ctx.fillStyle = "#ffffff";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(segX-6, segY-5, 1.2, 0, Math.PI*2);
+      ctx.fillStyle = "#000000";
+      ctx.fill();
 
-// right eye
-ctx.beginPath();
-ctx.arc(head.x + box*0.65, head.y + box*0.35, 3, 0, Math.PI*2);
-ctx.fill();
+      // العين اليمنى
+      ctx.beginPath();
+      ctx.arc(segX+5, segY-4, 3, 0, Math.PI*2);
+      ctx.fillStyle = "#ffffff";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(segX+4, segY-5, 1.2, 0, Math.PI*2);
+      ctx.fillStyle = "#000000";
+      ctx.fill();
 
-     // Tongue 👅
-ctx.strokeStyle = "#ef4444";
-ctx.lineWidth = 2;
-ctx.beginPath();
-
-if(direction==="UP"){
-  ctx.moveTo(head.x+box/2, head.y);
-  ctx.lineTo(head.x+box/2, head.y-6);
-}
-if(direction==="DOWN"){
-  ctx.moveTo(head.x+box/2, head.y+box);
-  ctx.lineTo(head.x+box/2, head.y+box+6);
-}
-if(direction==="LEFT"){
-  ctx.moveTo(head.x, head.y+box/2);
-  ctx.lineTo(head.x-6, head.y+box/2);
-}
-if(direction==="RIGHT"){
-  ctx.moveTo(head.x+box, head.y+box/2);
-  ctx.lineTo(head.x+box+6, head.y+box/2);
-}
-ctx.stroke();
+      // لسان أحمر (باتجاه الحركة)
+      ctx.strokeStyle = "#ef4444";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      if(direction==="UP"){
+        ctx.moveTo(segX, segY-radius-2);
+        ctx.lineTo(segX-2, segY-radius-8);
+        ctx.moveTo(segX, segY-radius-2);
+        ctx.lineTo(segX+2, segY-radius-8);
+      } else if(direction==="DOWN"){
+        ctx.moveTo(segX, segY+radius+2);
+        ctx.lineTo(segX-2, segY+radius+8);
+        ctx.moveTo(segX, segY+radius+2);
+        ctx.lineTo(segX+2, segY+radius+8);
+      } else if(direction==="LEFT"){
+        ctx.moveTo(segX-radius-2, segY);
+        ctx.lineTo(segX-radius-8, segY-2);
+        ctx.moveTo(segX-radius-2, segY);
+        ctx.lineTo(segX-radius-8, segY+2);
+      } else if(direction==="RIGHT"){
+        ctx.moveTo(segX+radius+2, segY);
+        ctx.lineTo(segX+radius+8, segY-2);
+        ctx.moveTo(segX+radius+2, segY);
+        ctx.lineTo(segX+radius+8, segY+2);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
   });
 
+  // حركة الثعبان (المنطق)
   let head = { ...snake[0] };
 
   if(direction==="UP") head.y -= box;
@@ -156,7 +238,7 @@ ctx.stroke();
   if(direction==="LEFT") head.x -= box;
   if(direction==="RIGHT") head.x += box;
 
-  // collision
+  // التحقق من الاصطدام
   if(
     head.x < 0 || head.y < 0 ||
     head.x >= canvas.width ||
@@ -183,7 +265,8 @@ ctx.stroke();
   }
 }
 
-intervalId = setInterval(draw, 120);
+// ⏬ تم تقليل السرعة (زيادة وقت الفريم) من 120 إلى 150
+intervalId = setInterval(draw, 150);
 
 /* ================= BUTTONS ================= */
 restartBtn.onclick = () => {
@@ -195,7 +278,7 @@ restartBtn.onclick = () => {
 
   clearInterval(intervalId);
   initGame();
-  intervalId = setInterval(draw, 120);
+  intervalId = setInterval(draw, 150);
 };
 
 darkBtn.onclick = () => {
