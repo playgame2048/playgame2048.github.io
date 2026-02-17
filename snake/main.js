@@ -16,7 +16,7 @@ let snake, direction, food, score;
 let gameOver = false;
 
 let firstRestart = true;
-const restartLink = "https://otieu.com/4/10557461";
+const restartLink = "https://otieu.com/4/10557461"; // <-- غيّره لرابطك
 
 /* ================= INIT ================= */
 function initGame(){
@@ -77,8 +77,7 @@ function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
   // grid
-ctx.strokeStyle="rgba(255,255,255,.05)";
-
+  ctx.strokeStyle = "rgba(255,255,255,.05)";
   for(let i=0;i<canvas.width;i+=box){
     ctx.beginPath();
     ctx.moveTo(i,0); ctx.lineTo(i,canvas.height); ctx.stroke();
@@ -89,16 +88,16 @@ ctx.strokeStyle="rgba(255,255,255,.05)";
    // Apple 🍎
   ctx.beginPath();
   ctx.arc(food.x+box/2,food.y+box/2,box/2.4,0,Math.PI*2);
-  ctx.fillStyle="#e11d48";
+  ctx.fillStyle = "#e11d48";
   ctx.fill();
 
   ctx.beginPath();
   ctx.arc(food.x+box/2.6,food.y+box/2.6,4,0,Math.PI*2);
-  ctx.fillStyle="rgba(255,255,255,.6)";
+  ctx.fillStyle = "rgba(255,255,255,.6)";
   ctx.fill();
 
   ctx.beginPath();
-  ctx.fillStyle="#16a34a";
+  ctx.fillStyle = "#16a34a";
   ctx.ellipse(food.x+box/2+5,food.y+box/2-10,6,3,Math.PI/4,0,Math.PI*2);
   ctx.fill();
 
@@ -127,8 +126,8 @@ ctx.arc(head.x + box*0.65, head.y + box*0.35, 3, 0, Math.PI*2);
 ctx.fill();
 
      // Tongue 👅
-ctx.strokeStyle="#ef4444";
-ctx.lineWidth=2;
+ctx.strokeStyle = "#ef4444";
+ctx.lineWidth = 2;
 ctx.beginPath();
 
 if(direction==="UP"){
@@ -167,8 +166,10 @@ ctx.stroke();
     gameOver = true;
     finalScoreEl.textContent = score;
     gameOverScreen.style.display = "flex";
-    gameOverSound.currentTime = 0;
-    gameOverSound.play();
+    if(gameOverSound) {
+      gameOverSound.currentTime = 0;
+      gameOverSound.play().catch(()=>{});
+    }
     return;
   }
 
@@ -192,21 +193,16 @@ restartBtn.onclick = () => {
     return;
   }
 
-  document.getElementById("darkBtn").onclick = () => {
-  document.body.classList.toggle("dark");
-};
-
-  clearInterval(intervalId);   // 🔴 مهم
+  clearInterval(intervalId);
   initGame();
-  intervalId = setInterval(draw, 120); // 🔴 مهم
+  intervalId = setInterval(draw, 120);
 };
 
-gameOverScreen.addEventListener("click", () => {
-  gameOverScreen.style.display = "none";
-  // ما كنديرو reset لا والو
-});
-
-document.getElementById("darkBtn").onclick = () => {
+darkBtn.onclick = () => {
   document.body.classList.toggle("dark");
-  console.log("DARK MODE:", document.body.classList.contains("dark"));
 };
+
+// إذا نقرت على خلفية Game Over لا تفعل شيئاً
+gameOverScreen.addEventListener("click", (e) => {
+  if(e.target === gameOverScreen) gameOverScreen.style.display = "none";
+});
