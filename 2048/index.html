@@ -310,19 +310,12 @@
       <h1 class="game-title">2048</h1>
     </div>
 
-    <!-- صف النتيجة وزر Dark معاً -->
-    <div class="score-row">
-      <div class="score-box">
-        <div class="score-label">Score</div>
-        <div id="score" class="score-value">0</div>
-      </div>
-      <button onclick="toggleDarkMode()" class="btn dark-btn">🌙 Dark</button>
-    </div>
-
-    <!-- صف Restart منفرد -->
-    <div class="restart-row">
-      <button onclick="smartRestart()" class="btn">⟳ Restart</button>
-    </div>
+ <!-- Combined row -->
+<div class="action-row">
+  <div class="score-box">...</div>
+  <button onclick="smartRestart()" class="btn">⟳ Restart</button>
+  <button onclick="toggleDarkMode()" class="btn dark-btn">🌙 Dark</button>
+</div>
 
     <!-- اللوحة (نزلت لتحت بفضل margin-top) -->
     <div class="board-wrapper">
