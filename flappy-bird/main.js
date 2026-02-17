@@ -8,12 +8,11 @@ const darkBtn = document.getElementById("darkBtn");
 let bird, pipes, score, gravity, gameSpeed;
 let gameRunning = false;
 let firstRestart = true;
-let keyLocked = false;
 let lastTime = 0;
 let gameStarted = false;
 let frames = 0;
 
-const restartLink = "https://otieu.com/4/10557461";
+const restartLink = "https://otieu.com/4/10557461"; // <-- غيّره لرابطك
 
 // ===== INIT =====
 function init() {
@@ -33,7 +32,7 @@ function init() {
   gameRunning = true;
   gameStarted = false;
   gameOverScreen.style.display = "none";
-  lastTime = 0; // ✅ مهم
+  lastTime = 0;
 }
 
 // ===== CONTROLS =====
@@ -57,21 +56,6 @@ document.addEventListener("keydown", e => {
 canvas.addEventListener("touchstart", e => {
   e.preventDefault();
   flap();
-});
-
-function resetGame() {
-  bird.y = 150;
-  bird.velocity = 0;
-  pipes = [];
-  score = 0;
-  gameOver = false;
-}
-
-const overlay = document.getElementById("gameOver");
-
-overlay.addEventListener("click", () => {
-  overlay.style.display = "none";
-  resetGame(); // دالة ديال restart
 });
 
 // ===== PIPES =====
@@ -123,7 +107,7 @@ function update(delta) {
       endGame();
     }
 
-    // ✅ SCORE FIX
+    // score (when pipe passes bird)
     if (!p.passed && p.x + pipeWidth < bird.x) {
       p.passed = true;
       score++;
@@ -135,7 +119,7 @@ function update(delta) {
   if (frames % 160 === 0) addPipe();
 }
 
-// ===== DRAW BIRD =====
+// ===== DRAW BIRD – محسن =====
 function drawBird() {
   const x = bird.x;
   const y = bird.y;
@@ -147,20 +131,23 @@ function drawBird() {
   ctx.translate(x, y);
   ctx.rotate(angle);
 
-  // body
-  ctx.fillStyle = "#fde68a";
+  // body (gradient)
+  const gradient = ctx.createLinearGradient(-r, -r, r, r);
+  gradient.addColorStop(0, "#fbbf24");
+  gradient.addColorStop(1, "#f59e0b");
+  ctx.fillStyle = gradient;
   ctx.beginPath();
   ctx.ellipse(0, 0, r + 4, r + 2.5, 0, 0, Math.PI * 2);
   ctx.fill();
 
   // wing
-  ctx.fillStyle = "#fbbf24";
+  ctx.fillStyle = "#f59e0b";
   ctx.beginPath();
   ctx.ellipse(-5, 2, r - 1.5, r - 3, Math.sin(Date.now()/120)*0.4, 0, Math.PI*2);
   ctx.fill();
 
   // tail
-  ctx.fillStyle = "#f59e0b";
+  ctx.fillStyle = "#d97706";
   ctx.beginPath();
   ctx.moveTo(-r - 4, 0);
   ctx.lineTo(-r - 12, -5);
@@ -176,7 +163,7 @@ function drawBird() {
   ctx.fill();
 
   // beak
-  ctx.fillStyle = "#fb923c";
+  ctx.fillStyle = "#e67e22";
   ctx.beginPath();
   ctx.moveTo(r + 4, -1);
   ctx.quadraticCurveTo(r + 10, 0, r + 4, 2);
@@ -185,45 +172,53 @@ function drawBird() {
   ctx.restore();
 }
 
+// ===== DRAW PIPES – كلاسيكية =====
+function drawPipes() {
+  pipes.forEach(p => {
+    const bodyW = 40;
+    const headW = 55;
+    const headH = 14;
+    const offset = (headW - bodyW) / 2;
+
+    ctx.fillStyle = "#16a34a";
+    ctx.strokeStyle = "#14532d";
+    ctx.lineWidth = 3;
+
+    // top pipe
+    ctx.fillRect(p.x, 0, bodyW, p.top);
+    ctx.strokeRect(p.x, 0, bodyW, p.top);
+    ctx.fillRect(p.x - offset, p.top - headH, headW, headH);
+    ctx.strokeRect(p.x - offset, p.top - headH, headW, headH);
+
+    // bottom pipe
+    ctx.fillRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
+    ctx.strokeRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
+    ctx.fillRect(p.x - offset, canvas.height - p.bottom, headW, headH);
+    ctx.strokeRect(p.x - offset, canvas.height - p.bottom, headW, headH);
+  });
+}
+
 // ===== DRAW =====
 function draw() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // sky gradient
+  const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  gradient.addColorStop(0, "#7dd3fc");
+  gradient.addColorStop(1, "#bae6fd");
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  drawPipes();
   drawBird();
 
-  pipes.forEach(p => {
-  const bodyW = 40; // عرض الجسم ديال pipe
-  const headW = 55;  // عرض الرأس شوية أكبر
-  const headH = 14;  // ارتفاع الرأس
-  const offset = (headW - bodyW) / 2;
-
-  ctx.fillStyle = "#16a34a";
-  ctx.strokeStyle = "#14532d";
-  ctx.lineWidth = 3;
-
-  // ===== TOP PIPE =====
-  // body
-  ctx.fillRect(p.x, 0, bodyW, p.top);
-  ctx.strokeRect(p.x, 0, bodyW, p.top);
-
-  // head
-  ctx.fillRect(p.x - offset, p.top - headH, headW, headH);
-  ctx.strokeRect(p.x - offset, p.top - headH, headW, headH);
-
-  // ===== BOTTOM PIPE =====
-  // body
-  ctx.fillRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
-  ctx.strokeRect(p.x, canvas.height - p.bottom, bodyW, p.bottom);
-
-  // head
-  ctx.fillRect(p.x - offset, canvas.height - p.bottom, headW, headH);
-  ctx.strokeRect(p.x - offset, canvas.height - p.bottom, headW, headH);
-});
-
-  // Score
+  // score
   ctx.fillStyle = "#fff";
-  ctx.font = "18px Arial";
-  ctx.fillText("Score: " + score, 10, 25);
+  ctx.font = "bold 18px 'Inter'";
+  ctx.shadowColor = "#000";
+  ctx.shadowBlur = 6;
+  ctx.fillText("Score: " + score, 10, 30);
+  ctx.shadowBlur = 0;
 }
 
 // ===== GAME OVER =====
@@ -234,8 +229,7 @@ function endGame() {
 
 // ===== LOOP =====
 function loop(time) {
-  if (!lastTime) lastTime = time; // ✅ أهم سطر
-
+  if (!lastTime) lastTime = time;
   const delta = (time - lastTime) / 16.67;
   lastTime = time;
 
@@ -258,6 +252,6 @@ darkBtn.onclick = () => {
   document.body.classList.toggle("dark");
 };
 
-// START
+// ===== START =====
 init();
 loop();
