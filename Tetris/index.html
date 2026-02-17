@@ -159,14 +159,15 @@
 
     /* ===== FIXED‑SIZE CANVAS – perfectly centered ===== */
     .canvas-wrapper {
+      max-width: 270px;
       display: flex;
       justify-content: center;
       margin: 10px 0 8px;
     }
 
     canvas {
-      width: 240px;        /* fixed pixel size – exactly what you asked for */
-      height: 320px;
+      width: 270px;        /* fixed pixel size – exactly what you asked for */
+      height: 360px;
       display: block;
       background: #cbd5e1;
       border-radius: 14px;
@@ -388,7 +389,7 @@
 
     <!-- fixed-size canvas wrapper -->
     <div class="canvas-wrapper">
-      <canvas id="game" width="240" height="320"></canvas>
+      <canvas id="game" width="270" height="360"></canvas>
     </div>
 
     <div class="control-panel">
