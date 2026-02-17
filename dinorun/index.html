@@ -2,84 +2,83 @@
 <html lang="en">
 <head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-F584GKZ8S7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F584GKZ8S7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F584GKZ8S7');
+  </script>
 
-  gtag('config', 'G-F584GKZ8S7');
-</script>
-  
   <meta charset="UTF-8" />
-  <title>Dino Game Online – Play Chrome Dinosaur Game</title>
-  <meta name="description" content="Play Dino Game Online. Chrome Dinosaur Game with score, dark mode, and tips on how to win." />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🦖 Dino Game – Chrome Style</title>
+  <meta name="description" content="Play the classic Chrome Dinosaur Game with obstacles, clouds, and high score." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="ads ads-under-game">
-  <script>(function(s){s.dataset.zone='10599415',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-</div>
+  <!-- Monetag Ad – ضع رقم منطقتك هنا -->
+  <div class="ad-space">
+    <script>
+      (function(s){
+        s.dataset.zone='10599415';   // <-- غيّره
+        s.src='https://nap5k.com/tag.min.js';
+      })([document.documentElement, document.body].filter(Boolean)
+        .pop()
+        .appendChild(document.createElement('script')));
+    </script>
+  </div>
 
-  <!-- Header -->
-  <header class="top">
-    <h1>🦖 DINO RUN</h1>
-    <div class="top-buttons">
-  <button id="restartBtn">⟳ Restart</button>
-  <button id="darkToggle">🌙 Dark Mode</button>
-</div>
-  </header>
+  <div class="game-card">
+    <h1 class="game-title">🦖 DINO RUN</h1>
+    <p class="game-subtitle">classic chrome runner</p>
 
-  <!-- Game -->
-  <main>
-    <div class="game-wrapper">
-
-      <canvas id="game" width="700" height="320"></canvas>
-
-      <div class="overlay" id="startScreen">
-        <div class="overlay-box">
-          Click to Start
-        </div>
-      </div>
-
-      <div class="overlay" id="gameOver">
-        <div class="overlay-box">
-          Game Over<br>
-          Click to Restart
-        </div>
-      </div>
-
+    <!-- صف الأزرار -->
+    <div class="button-row">
+      <button id="darkToggle" class="btn dark-btn">🌙 Dark</button>
+      <button id="restartBtn" class="btn">⟳ Restart</button>
     </div>
 
-    <!-- Blog -->
-    <section class="blog">
-      <div class="blog-container">
-        <div class="blog-card">
-          <h2>🦖 Dino Game Online</h2>
-          <p>
-            Dino Game is inspired by the famous Chrome Dinosaur Game.
-            Jump over obstacles, survive as long as possible, and beat your high score.
-          </p>
-
-          <h3>🎮 How to Play</h3>
-          <p>
-            Click anywhere or press Space to jump.
-            Avoid hitting the cactuses.
-          </p>
-
-          <h3>🏆 How to Win</h3>
-          <p>
-            Focus on timing your jumps.
-            The longer you survive, the higher your score.
-          </p>
-
-          <a href="#" class="support-btn">Support Us ❤️</a>
+    <!-- لوحة اللعب -->
+    <div class="canvas-wrapper">
+      <canvas id="game" width="700" height="320"></canvas>
+      <div id="startScreen" class="overlay">
+        <div class="overlay-box">Click or press Space to start</div>
+      </div>
+      <div id="gameOver" class="overlay">
+        <div class="overlay-box">
+          GAME OVER<br>
+          <span style="font-size: 1rem;">Tap Restart</span>
         </div>
       </div>
+    </div>
+
+    <!-- Blog / تعليمات -->
+    <section class="blog">
+      <h2>🦖 How to Play</h2>
+      <p>Press Space or click to jump. Avoid cacti on ground and birds in the sky. Score increases over time.</p>
+
+      <h3>🎯 Tips</h3>
+      <ul>
+        <li>Time your jumps carefully.</li>
+        <li>Birds fly at medium height – jump over them.</li>
+        <li>Each 100 points gives a bonus beep!</li>
+      </ul>
+
+      <a href="#" id="supportBtn" class="support-btn">❤️ Support Us</a>
     </section>
-  </main>
+
+    <footer>© 2026 · dino chrome style</footer>
+  </div>
+
+  <!-- صوت الإنجاز (اختياري) -->
+  <audio id="scoreSound" preload="auto">
+    <source src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVQAAACAgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgICAf39/f39/f3+AgIAAAAA=" type="audio/wav">
+  </audio>
 
   <script src="main.js"></script>
 </body>
