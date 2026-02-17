@@ -33,26 +33,56 @@ function init() {
   gravity = 0.25;
   frames = 0;
 
-  // إنشاء غيوم عشوائية
+  // إنشاء غيوم واقعية
   clouds = [];
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 6; i++) {
     clouds.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height * 0.4 + 20,
-      width: 60 + Math.random() * 40,
-      speed: 0.1 + Math.random() * 0.2
+      x: Math.random() * canvas.width * 1.5,
+      y: Math.random() * canvas.height * 0.5 + 10,
+      parts: [
+        { size: 30 + Math.random() * 20, offsetX: 0, offsetY: 0 },
+        { size: 25 + Math.random() * 15, offsetX: 25, offsetY: -8 },
+        { size: 28 + Math.random() * 15, offsetX: -20, offsetY: -5 },
+        { size: 20 + Math.random() * 10, offsetX: 40, offsetY: 2 },
+        { size: 18 + Math.random() * 10, offsetX: -35, offsetY: 3 }
+      ],
+      speed: 0.1 + Math.random() * 0.15,
+      opacity: 0.5 + Math.random() * 0.3
     });
   }
 
-  // إنشاء مبانٍ ثابتة في الخلفية (appartments)
+  // إنشاء مباني واقعية (سكاي لاين)
   buildings = [];
-  const buildingCount = 8;
+  const buildingCount = 12;
   for (let i = 0; i < buildingCount; i++) {
+    const width = 35 + Math.random() * 30;
+    const height = 100 + Math.random() * 200;
+    const x = i * (canvas.width / buildingCount) + 5;
+    const colorVal = 20 + Math.random() * 40;
+    const hasAntenna = Math.random() > 0.7;
+    const windows = [];
+    const windowRows = Math.floor(height / 18);
+    const windowCols = Math.floor(width / 12);
+    for (let r = 0; r < windowRows; r++) {
+      for (let c = 0; c < windowCols; c++) {
+        if (Math.random() > 0.3) { // بعض النوافذ فقط
+          windows.push({
+            x: 5 + c * 12,
+            y: height - 15 - r * 18,
+            w: 7,
+            h: 10,
+            lit: Math.random() > 0.5
+          });
+        }
+      }
+    }
     buildings.push({
-      x: i * (canvas.width / buildingCount) + 10,
-      width: 35 + Math.random() * 20,
-      height: 80 + Math.random() * 100,
-      color: `hsl(0, 0%, ${20 + Math.random() * 30}%)` // درجات رمادي
+      x: x,
+      width: width,
+      height: height,
+      color: `hsl(0, 0%, ${colorVal}%)`,
+      windows: windows,
+      hasAntenna: hasAntenna
     });
   }
 
@@ -145,49 +175,62 @@ function update(delta) {
 
   if (frames % 160 === 0) addPipe();
 
-  // تحريك الغيوم ببطء
+  // تحريك الغيوم
   clouds.forEach(c => {
     c.x -= c.speed * delta;
-    if (c.x + c.width < 0) {
-      c.x = canvas.width + Math.random() * 100;
-      c.y = Math.random() * canvas.height * 0.4 + 20;
+    if (c.x + 100 < 0) {
+      c.x = canvas.width + Math.random() * 200;
+      c.y = Math.random() * canvas.height * 0.5 + 10;
     }
   });
 }
 
-// ===== DRAW BUILDINGS =====
+// ===== DRAW BUILDINGS – سكاي لاين احترافي =====
 function drawBuildings() {
   buildings.forEach(b => {
-    // لون المبنى (رمادي مع اختلاف طفيف)
+    // رسم المبنى
     ctx.fillStyle = b.color;
     ctx.fillRect(b.x, canvas.height - b.height, b.width, b.height);
 
-    // نوافذ صغيرة
-    ctx.fillStyle = "#f1f5f9";
-    const windowSize = 8;
-    const rows = Math.floor(b.height / 20);
-    for (let r = 0; r < rows; r++) {
-      for (let w = 0; w < 2; w++) {
-        ctx.fillRect(
-          b.x + 5 + w * 15,
-          canvas.height - b.height + 10 + r * 18,
-          windowSize,
-          windowSize
-        );
-      }
+    // رسم النوافذ
+    b.windows.forEach(w => {
+      ctx.fillStyle = w.lit ? "#f1f5f9" : "#334155";
+      ctx.fillRect(b.x + w.x, canvas.height - b.height + w.y, w.w, w.h);
+    });
+
+    // رسم هوائي إذا وجد
+    if (b.hasAntenna) {
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(b.x + b.width / 2, canvas.height - b.height - 5);
+      ctx.lineTo(b.x + b.width / 2, canvas.height - b.height - 15);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(b.x + b.width / 2, canvas.height - b.height - 18, 3, 0, Math.PI * 2);
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fill();
     }
+
+    // خطوط ظل خفيفة
+    ctx.strokeStyle = "rgba(0,0,0,0.2)";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(b.x, canvas.height - b.height, b.width, b.height);
   });
 }
 
-// ===== DRAW CLOUDS =====
+// ===== DRAW CLOUDS – غيوم واقعية =====
 function drawClouds() {
   clouds.forEach(c => {
-    ctx.fillStyle = "rgba(255,255,255,0.5)";
-    ctx.beginPath();
-    ctx.arc(c.x, c.y, c.width * 0.3, 0, Math.PI * 2);
-    ctx.arc(c.x + c.width * 0.3, c.y - 5, c.width * 0.25, 0, Math.PI * 2);
-    ctx.arc(c.x + c.width * 0.6, c.y, c.width * 0.3, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.save();
+    ctx.globalAlpha = c.opacity;
+    ctx.fillStyle = "#ffffff";
+    c.parts.forEach(part => {
+      ctx.beginPath();
+      ctx.arc(c.x + part.offsetX, c.y + part.offsetY, part.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.restore();
   });
 }
 
@@ -256,10 +299,10 @@ function draw() {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  drawBuildings();   // المبانى في الخلفية
-  drawClouds();      // الغيوم
-  drawPipes();       // الأنابيب (في المقدمة)
-  drawBird();        // الطائر (في المقدمة)
+  drawBuildings();   // مباني واقعية
+  drawClouds();      // غيوم كثيفة
+  drawPipes();       // أنابيب خضراء
+  drawBird();        // طائر أصفر
 
   // النتيجة
   ctx.fillStyle = "#fff";
