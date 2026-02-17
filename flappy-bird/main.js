@@ -20,11 +20,10 @@ const restartLink = "https://otieu.com/4/10557461"; // <-- غيّره لرابط
 
 // ===== INIT =====
 function init() {
-  // طائر أكبر (radius 18 بدلاً من 14)
   bird = {
     x: 60,
     y: canvas.height / 2,
-    size: 18,            // أكبر
+    size: 14,
     velocity: 0
   };
 
@@ -34,37 +33,56 @@ function init() {
   gravity = 0.25;
   frames = 0;
 
-  // غيوم مبسطة قليلاً (عدد أقل من الأجزاء)
+  // إنشاء غيوم واقعية
   clouds = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     clouds.push({
       x: Math.random() * canvas.width * 1.5,
-      y: Math.random() * canvas.height * 0.4 + 20,
+      y: Math.random() * canvas.height * 0.5 + 10,
       parts: [
-        { size: 30 + Math.random() * 15, offsetX: 0, offsetY: 0 },
-        { size: 25 + Math.random() * 10, offsetX: 22, offsetY: -5 },
-        { size: 22 + Math.random() * 10, offsetX: -18, offsetY: -3 },
-        { size: 18 + Math.random() * 8, offsetX: 35, offsetY: 2 }
+        { size: 30 + Math.random() * 20, offsetX: 0, offsetY: 0 },
+        { size: 25 + Math.random() * 15, offsetX: 25, offsetY: -8 },
+        { size: 28 + Math.random() * 15, offsetX: -20, offsetY: -5 },
+        { size: 20 + Math.random() * 10, offsetX: 40, offsetY: 2 },
+        { size: 18 + Math.random() * 10, offsetX: -35, offsetY: 3 }
       ],
       speed: 0.1 + Math.random() * 0.15,
-      opacity: 0.6 + Math.random() * 0.3
+      opacity: 0.5 + Math.random() * 0.3
     });
   }
 
-  // مباني (نفسها مع تحسين بسيط)
+  // إنشاء مباني واقعية (سكاي لاين)
   buildings = [];
-  const buildingCount = 10;
+  const buildingCount = 12;
   for (let i = 0; i < buildingCount; i++) {
-    const width = 35 + Math.random() * 25;
-    const height = 100 + Math.random() * 180;
+    const width = 35 + Math.random() * 30;
+    const height = 100 + Math.random() * 200;
     const x = i * (canvas.width / buildingCount) + 5;
-    const colorVal = 20 + Math.random() * 30;
+    const colorVal = 20 + Math.random() * 40;
+    const hasAntenna = Math.random() > 0.7;
+    const windows = [];
+    const windowRows = Math.floor(height / 18);
+    const windowCols = Math.floor(width / 12);
+    for (let r = 0; r < windowRows; r++) {
+      for (let c = 0; c < windowCols; c++) {
+        if (Math.random() > 0.3) { // بعض النوافذ فقط
+          windows.push({
+            x: 5 + c * 12,
+            y: height - 15 - r * 18,
+            w: 7,
+            h: 10,
+            lit: Math.random() > 0.5
+          });
+        }
+      }
+    }
     buildings.push({
       x: x,
       width: width,
       height: height,
       color: `hsl(0, 0%, ${colorVal}%)`,
-      windows: Math.random() > 0.3 // بعض المباني لها نوافذ
+      windows: windows,
+      hasAntenna: hasAntenna
     });
   }
 
@@ -162,41 +180,46 @@ function update(delta) {
     c.x -= c.speed * delta;
     if (c.x + 100 < 0) {
       c.x = canvas.width + Math.random() * 200;
-      c.y = Math.random() * canvas.height * 0.4 + 20;
+      c.y = Math.random() * canvas.height * 0.5 + 10;
     }
   });
 }
 
-// ===== DRAW BUILDINGS – سكاي لاين =====
+// ===== DRAW BUILDINGS – سكاي لاين احترافي =====
 function drawBuildings() {
   buildings.forEach(b => {
+    // رسم المبنى
     ctx.fillStyle = b.color;
     ctx.fillRect(b.x, canvas.height - b.height, b.width, b.height);
 
-    // نوافذ بسيطة
-    if (b.windows) {
-      ctx.fillStyle = "#f1f5f9";
-      const windowSize = 8;
-      for (let r = 0; r < 3; r++) {
-        for (let c = 0; c < 2; c++) {
-          ctx.fillRect(
-            b.x + 6 + c * 15,
-            canvas.height - b.height + 12 + r * 20,
-            windowSize,
-            windowSize
-          );
-        }
-      }
+    // رسم النوافذ
+    b.windows.forEach(w => {
+      ctx.fillStyle = w.lit ? "#f1f5f9" : "#334155";
+      ctx.fillRect(b.x + w.x, canvas.height - b.height + w.y, w.w, w.h);
+    });
+
+    // رسم هوائي إذا وجد
+    if (b.hasAntenna) {
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(b.x + b.width / 2, canvas.height - b.height - 5);
+      ctx.lineTo(b.x + b.width / 2, canvas.height - b.height - 15);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(b.x + b.width / 2, canvas.height - b.height - 18, 3, 0, Math.PI * 2);
+      ctx.fillStyle = "#cbd5e1";
+      ctx.fill();
     }
 
-    // ظل خفيف
+    // خطوط ظل خفيفة
     ctx.strokeStyle = "rgba(0,0,0,0.2)";
     ctx.lineWidth = 2;
     ctx.strokeRect(b.x, canvas.height - b.height, b.width, b.height);
   });
 }
 
-// ===== DRAW CLOUDS =====
+// ===== DRAW CLOUDS – غيوم واقعية =====
 function drawClouds() {
   clouds.forEach(c => {
     ctx.save();
@@ -211,30 +234,30 @@ function drawClouds() {
   });
 }
 
-// ===== DRAW BIRD – مثل Flappybird.io بالضبط (2D أكبر) =====
+// ===== DRAW BIRD – كلاسيكي 2D =====
 function drawBird() {
   const x = bird.x;
   const y = bird.y;
   const r = bird.size;
 
-  // جسم الطائر (دائرة صفراء كبيرة)
+  // جسم الطائر (دائرة صفراء)
   ctx.fillStyle = "#fbbf24";
   ctx.beginPath();
-  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.arc(x, y, r + 2, 0, Math.PI * 2);
   ctx.fill();
 
-  // عين سوداء أكبر قليلاً
+  // عين سوداء
   ctx.fillStyle = "#000";
   ctx.beginPath();
-  ctx.arc(x + 4, y - 4, 3, 0, Math.PI * 2);
+  ctx.arc(x + 3, y - 3, 2.5, 0, Math.PI * 2);
   ctx.fill();
 
-  // منقار برتقالي واضح
+  // منقار برتقالي
   ctx.fillStyle = "#fb923c";
   ctx.beginPath();
-  ctx.moveTo(x + r + 2, y - 2);
-  ctx.lineTo(x + r + 10, y - 1);
-  ctx.lineTo(x + r + 2, y + 2);
+  ctx.moveTo(x + r + 2, y);
+  ctx.lineTo(x + r + 8, y - 2);
+  ctx.lineTo(x + r + 8, y + 2);
   ctx.closePath();
   ctx.fill();
 }
@@ -276,17 +299,17 @@ function draw() {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  drawBuildings();   // مباني
-  drawClouds();      // غيوم
-  drawPipes();       // أنابيب
-  drawBird();        // طائر أكبر
+  drawBuildings();   // مباني واقعية
+  drawClouds();      // غيوم كثيفة
+  drawPipes();       // أنابيب خضراء
+  drawBird();        // طائر أصفر
 
   // النتيجة
   ctx.fillStyle = "#fff";
-  ctx.font = "bold 20px 'Inter'";
+  ctx.font = "bold 18px 'Inter'";
   ctx.shadowColor = "#000";
-  ctx.shadowBlur = 8;
-  ctx.fillText("Score: " + score, 10, 35);
+  ctx.shadowBlur = 6;
+  ctx.fillText("Score: " + score, 10, 30);
   ctx.shadowBlur = 0;
 }
 
