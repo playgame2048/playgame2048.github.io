@@ -12,6 +12,9 @@ let lastTime = 0;
 let gameStarted = false;
 let frames = 0;
 
+// مصفوفة الغيوم (تتحرك ببطء)
+let clouds = [];
+
 const restartLink = "https://otieu.com/4/10557461"; // <-- غيّره لرابطك
 
 // ===== INIT =====
@@ -28,6 +31,17 @@ function init() {
   gameSpeed = 2;
   gravity = 0.25;
   frames = 0;
+
+  // إنشاء غيوم عشوائية
+  clouds = [];
+  for (let i = 0; i < 4; i++) {
+    clouds.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height * 0.3 + 20,
+      width: 60 + Math.random() * 40,
+      speed: 0.1 + Math.random() * 0.2
+    });
+  }
 
   gameRunning = true;
   gameStarted = false;
@@ -117,62 +131,58 @@ function update(delta) {
   pipes = pipes.filter(p => p.x > -60);
 
   if (frames % 160 === 0) addPipe();
+
+  // تحريك الغيوم ببطء
+  clouds.forEach(c => {
+    c.x -= c.speed * delta;
+    if (c.x + c.width < 0) {
+      c.x = canvas.width + Math.random() * 100;
+      c.y = Math.random() * canvas.height * 0.3 + 20;
+    }
+  });
 }
 
-// ===== DRAW BIRD – محسن =====
+// ===== DRAW CLOUDS =====
+function drawClouds() {
+  clouds.forEach(c => {
+    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, c.width * 0.3, 0, Math.PI * 2);
+    ctx.arc(c.x + c.width * 0.3, c.y - 5, c.width * 0.25, 0, Math.PI * 2);
+    ctx.arc(c.x + c.width * 0.6, c.y, c.width * 0.3, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+// ===== DRAW BIRD – كلاسيكي 2D =====
 function drawBird() {
   const x = bird.x;
   const y = bird.y;
   const r = bird.size;
 
-  const angle = Math.max(Math.min(bird.velocity / 8, 0.5), -0.4);
-
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(angle);
-
-  // body (gradient)
-  const gradient = ctx.createLinearGradient(-r, -r, r, r);
-  gradient.addColorStop(0, "#fbbf24");
-  gradient.addColorStop(1, "#f59e0b");
-  ctx.fillStyle = gradient;
+  // جسم الطائر (دائرة صفراء)
+  ctx.fillStyle = "#fbbf24";
   ctx.beginPath();
-  ctx.ellipse(0, 0, r + 4, r + 2.5, 0, 0, Math.PI * 2);
+  ctx.arc(x, y, r + 2, 0, Math.PI * 2);
   ctx.fill();
 
-  // wing
-  ctx.fillStyle = "#f59e0b";
-  ctx.beginPath();
-  ctx.ellipse(-5, 2, r - 1.5, r - 3, Math.sin(Date.now()/120)*0.4, 0, Math.PI*2);
-  ctx.fill();
-
-  // tail
-  ctx.fillStyle = "#d97706";
-  ctx.beginPath();
-  ctx.moveTo(-r - 4, 0);
-  ctx.lineTo(-r - 12, -5);
-  ctx.lineTo(-r - 10, 0);
-  ctx.lineTo(-r - 12, 5);
-  ctx.closePath();
-  ctx.fill();
-
-  // eye
+  // عين سوداء
   ctx.fillStyle = "#000";
   ctx.beginPath();
-  ctx.arc(3, -2, 2, 0, Math.PI*2);
+  ctx.arc(x + 3, y - 3, 2.5, 0, Math.PI * 2);
   ctx.fill();
 
-  // beak
-  ctx.fillStyle = "#e67e22";
+  // منقار برتقالي
+  ctx.fillStyle = "#fb923c";
   ctx.beginPath();
-  ctx.moveTo(r + 4, -1);
-  ctx.quadraticCurveTo(r + 10, 0, r + 4, 2);
+  ctx.moveTo(x + r + 2, y);
+  ctx.lineTo(x + r + 8, y - 2);
+  ctx.lineTo(x + r + 8, y + 2);
+  ctx.closePath();
   ctx.fill();
-
-  ctx.restore();
 }
 
-// ===== DRAW PIPES – كلاسيكية =====
+// ===== DRAW PIPES =====
 function drawPipes() {
   pipes.forEach(p => {
     const bodyW = 40;
@@ -202,17 +212,18 @@ function drawPipes() {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // sky gradient
+  // تدرج السماء
   const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
   gradient.addColorStop(0, "#7dd3fc");
   gradient.addColorStop(1, "#bae6fd");
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  drawPipes();
-  drawBird();
+  drawClouds();       // غيوم
+  drawPipes();        // أنابيب
+  drawBird();         // الطائر (كلاسيكي)
 
-  // score
+  // النتيجة
   ctx.fillStyle = "#fff";
   ctx.font = "bold 18px 'Inter'";
   ctx.shadowColor = "#000";
@@ -230,7 +241,7 @@ function endGame() {
 // ===== LOOP =====
 function loop(time) {
   if (!lastTime) lastTime = time;
-  const delta = (time - lastTime) / 16.67;
+  const delta = Math.min((time - lastTime) / 16.67, 2); // تحديد الحد الأقصى
   lastTime = time;
 
   update(delta);
