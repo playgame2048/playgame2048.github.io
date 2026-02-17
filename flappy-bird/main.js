@@ -240,26 +240,48 @@ function drawBird() {
   const y = bird.y;
   const r = bird.size;
 
-  // جسم الطائر (دائرة صفراء)
+  const angle = Math.max(Math.min(bird.velocity / 8, 0.5), -0.4);
+
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
+
+  // body
+  ctx.fillStyle = "#fde68a";
+  ctx.beginPath();
+  ctx.ellipse(0, 0, r + 4, r + 2.5, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // wing
   ctx.fillStyle = "#fbbf24";
   ctx.beginPath();
-  ctx.arc(x, y, r + 2, 0, Math.PI * 2);
+  ctx.ellipse(-5, 2, r - 1.5, r - 3, Math.sin(Date.now()/120)*0.4, 0, Math.PI*2);
   ctx.fill();
 
-  // عين سوداء
-  ctx.fillStyle = "#000";
+  // tail
+  ctx.fillStyle = "#f59e0b";
   ctx.beginPath();
-  ctx.arc(x + 3, y - 3, 2.5, 0, Math.PI * 2);
-  ctx.fill();
-
-  // منقار برتقالي
-  ctx.fillStyle = "#fb923c";
-  ctx.beginPath();
-  ctx.moveTo(x + r + 2, y);
-  ctx.lineTo(x + r + 8, y - 2);
-  ctx.lineTo(x + r + 8, y + 2);
+  ctx.moveTo(-r - 4, 0);
+  ctx.lineTo(-r - 12, -5);
+  ctx.lineTo(-r - 10, 0);
+  ctx.lineTo(-r - 12, 5);
   ctx.closePath();
   ctx.fill();
+
+  // eye
+  ctx.fillStyle = "#000";
+  ctx.beginPath();
+  ctx.arc(3, -2, 2, 0, Math.PI*2);
+  ctx.fill();
+
+  // beak
+  ctx.fillStyle = "#fb923c";
+  ctx.beginPath();
+  ctx.moveTo(r + 4, -1);
+  ctx.quadraticCurveTo(r + 10, 0, r + 4, 2);
+  ctx.fill();
+
+  ctx.restore();
 }
 
 // ===== DRAW PIPES =====
