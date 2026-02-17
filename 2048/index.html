@@ -12,7 +12,7 @@
   
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>2048 – مركزية ومرتبة</title>
+  <title>2048 – صف موحد</title>
   <style>
     * {
       margin: 0;
@@ -64,7 +64,7 @@
       border-color: var(--border-dark);
     }
 
-    /* ===== العنوان في الوسط ===== */
+    /* العنوان في الوسط */
     .game-header {
       text-align: center;
       margin-bottom: 15px;
@@ -80,13 +80,14 @@
       display: inline-block;
     }
 
-    /* ===== صف النتيجة وزر Dark ===== */
-    .score-row {
+    /* ===== الصف الموحد (Score, Restart, Dark) ===== */
+    .action-row {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 20px;
-      margin-bottom: 12px;
+      gap: 15px;
+      margin-bottom: 20px;  /* المسافة تحت الصف */
+      flex-wrap: wrap;       /* للموبايل */
     }
 
     .score-box {
@@ -116,7 +117,7 @@
       color: #fff;
     }
 
-    /* ===== أزرار ===== */
+    /* الأزرار */
     .btn {
       border: none;
       padding: 10px 24px;
@@ -129,6 +130,7 @@
       cursor: pointer;
       transition: 0.06s;
       border: 1px solid rgba(255,255,255,0.2);
+      white-space: nowrap;   /* منع الكسر */
     }
 
     .btn:hover {
@@ -141,18 +143,11 @@
       box-shadow: 0 5px 0 #1f2a36;
     }
 
-    /* ===== صف Restart (مركز) ===== */
-    .restart-row {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;  /* زيادة المسافة تحت الزر */
-    }
-
-    /* ===== اللوحة – نزول لتحت ===== */
+    /* ===== اللوحة ===== */
     .board-wrapper {
       display: flex;
       justify-content: center;
-      margin-top: 20px;      /* نزول اللوحة */
+      margin-top: 10px;      /* نزول خفيف بعد الصف */
       margin-bottom: 15px;
     }
 
@@ -293,13 +288,28 @@
       color: #64748b;
     }
 
-    @media (max-width: 450px) {
+    @media (max-width: 500px) {
+      .action-row {
+        gap: 10px;
+      }
+      .btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+      }
+      .score-box {
+        padding: 5px 15px;
+        min-width: 90px;
+      }
+      .score-value {
+        font-size: 1.6rem;
+      }
       #board-container {
         width: 320px;
         height: 320px;
       }
-      .game-title { font-size: 2.2rem; }
-      .score-value { font-size: 1.6rem; }
+      .game-title {
+        font-size: 2.2rem;
+      }
     }
   </style>
 </head>
@@ -310,14 +320,17 @@
       <h1 class="game-title">2048</h1>
     </div>
 
- <!-- Combined row -->
-<div class="action-row">
-  <div class="score-box">...</div>
-  <button onclick="smartRestart()" class="btn">⟳ Restart</button>
-  <button onclick="toggleDarkMode()" class="btn dark-btn">🌙 Dark</button>
-</div>
+    <!-- الصف الموحد: Score + Restart + Dark -->
+    <div class="action-row">
+      <div class="score-box">
+        <div class="score-label">Score</div>
+        <div id="score" class="score-value">0</div>
+      </div>
+      <button onclick="smartRestart()" class="btn">⟳ Restart</button>
+      <button onclick="toggleDarkMode()" class="btn dark-btn">🌙 Dark</button>
+    </div>
 
-    <!-- اللوحة (نزلت لتحت بفضل margin-top) -->
+    <!-- اللوحة -->
     <div class="board-wrapper">
       <div id="board-container">
         <div id="grid"></div>
