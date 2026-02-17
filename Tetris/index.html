@@ -12,10 +12,10 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🧩 Tetris Classic – Block Puzzle</title>
+  <title>🧩 Tetris – compact & classic</title>
 
   <style>
-    /* ========== GLOBAL – TETRIS CLASSIC INSPIRED, COMPACT ========== */
+    /* ========== RESET & GLOBAL ========== */
     * {
       margin: 0;
       padding: 0;
@@ -23,14 +23,15 @@
     }
 
     body {
-      --bg-light: #f0f3f8;
-      --bg-dark: #0a0e17;
-      --text-light: #1e293b;
+      --bg-light: #f2f5f9;
+      --bg-dark: #0a0f1a;
+      --text-light: #1e2b3a;
       --text-dark: #e2e8f0;
-      --card-light: rgba(255,255,255,0.85);
-      --card-dark: rgba(20,30,45,0.85);
-      --border-light: #e2e8f0;
-      --border-dark: #334155;
+      --card-light: rgba(255, 255, 255, 0.8);
+      --card-dark: rgba(20, 30, 45, 0.85);
+      --border-light: #e0e7ef;
+      --border-dark: #2d3a4f;
+
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg-light);
       color: var(--text-light);
@@ -38,7 +39,7 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 15px;
+      padding: 16px;
       transition: background 0.2s, color 0.2s;
     }
 
@@ -47,38 +48,39 @@
       color: var(--text-dark);
     }
 
-    /* ===== MAIN CONTAINER – أصغر وأكثر تركيزاً ===== */
-    .game-container {
-      max-width: 600px;   /* مصغر */
+    /* ===== MAIN CARD – perfectly centered, compact ===== */
+    .game-card {
+      max-width: 560px;
       width: 100%;
       background: var(--card-light);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--border-light);
-      border-radius: 32px;
-      padding: 20px 20px 25px;
-      box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1);
-      transition: 0.2s;
+      border-radius: 40px;
+      padding: 24px 22px 30px;
+      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.15);
+      transition: background 0.2s, border 0.2s;
     }
 
-    body.dark .game-container {
+    body.dark .game-card {
       background: var(--card-dark);
       border-color: var(--border-dark);
+      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
     }
 
-    /* ===== HEADER – Tetris vibe ===== */
-    header {
+    /* ===== HEADER – clean & bold ===== */
+    .game-header {
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .game-title {
-      font-size: 2.6rem;
+      font-size: 2.8rem;
       font-weight: 800;
       letter-spacing: 2px;
       color: #2563eb;
       text-shadow: 0 5px 0 #1e40af, 0 8px 15px rgba(37,99,235,0.3);
-      margin-bottom: 2px;
+      line-height: 1.1;
     }
 
     body.dark .game-title {
@@ -89,15 +91,15 @@
     .game-subtitle {
       font-size: 0.85rem;
       color: #64748b;
-      margin-bottom: 15px;
+      margin: 4px 0 14px;
     }
 
-    /* ===== BUTTONS – مضغوطة ===== */
-    .top-buttons {
+    /* ===== BUTTONS ROW ===== */
+    .button-row {
       display: flex;
       justify-content: center;
-      gap: 15px;
-      margin-bottom: 15px;
+      gap: 16px;
+      margin-bottom: 16px;
     }
 
     .btn {
@@ -106,7 +108,7 @@
       border-radius: 60px;
       font-size: 0.9rem;
       font-weight: 600;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
       cursor: pointer;
       background: #2563eb;
       color: white;
@@ -115,7 +117,7 @@
       border: 1px solid rgba(255,255,255,0.2);
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
     }
 
     .btn:hover {
@@ -130,19 +132,19 @@
 
     .dark-btn {
       background: #334155;
-      box-shadow: 0 5px 0 #1e293b;
+      box-shadow: 0 5px 0 #1f2a36;
     }
 
-    /* ===== SCORE – مطابق للكود الأصلي ===== */
-    .score-area {
+    /* ===== SCORE ===== */
+    .score-wrap {
       display: flex;
       justify-content: center;
-      margin-top: 5px;
+      margin-bottom: 10px;
     }
 
     #score {
       background: #e2e8f0;
-      padding: 8px 30px;
+      padding: 8px 28px;
       border-radius: 60px;
       font-size: 1.4rem;
       font-weight: 700;
@@ -155,21 +157,20 @@
       color: #60a5fa;
     }
 
-    /* ===== CANVAS – حجم ثابت ===== */
+    /* ===== FIXED‑SIZE CANVAS – perfectly centered ===== */
     .canvas-wrapper {
       display: flex;
       justify-content: center;
-      margin: 8px 0 5px;
+      margin: 10px 0 8px;
     }
 
     canvas {
+      width: 210px;        /* fixed pixel size – exactly what you asked for */
+      height: 280px;
+      display: block;
       background: #cbd5e1;
       border-radius: 14px;
       box-shadow: inset 0 0 0 2px rgba(0,0,0,0.05), 0 10px 20px rgba(0,0,0,0.2);
-      width: 100%;
-      height: auto;
-      aspect-ratio: 3 / 4;
-      display: block;
       image-rendering: crisp-edges;
     }
 
@@ -178,12 +179,12 @@
       box-shadow: inset 0 0 0 2px rgba(255,255,255,0.05), 0 10px 20px rgba(0,0,0,0.5);
     }
 
-    /* ===== CONTROLS – متجاوبة ===== */
-    .control-row {
+    /* ===== CONTROL HINTS & MOBILE BUTTONS ===== */
+    .control-panel {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 10px 0 5px;
+      margin: 10px 0 8px;
       flex-wrap: wrap;
       gap: 10px;
     }
@@ -199,13 +200,13 @@
 
     .mobile-controls {
       display: flex;
-      gap: 10px;
+      gap: 8px;
     }
 
     .mobile-btn {
-      width: 48px;
-      height: 48px;
-      border-radius: 30px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
       border: none;
       background: #2563eb;
       color: white;
@@ -224,33 +225,39 @@
       box-shadow: 0 0 0 #1e40af;
     }
 
-    @media (min-width: 769px) {
-      .mobile-controls { display: none; }
+    @media (min-width: 600px) {
+      .mobile-controls {
+        display: none;
+      }
     }
 
-    @media (max-width: 768px) {
-      .key-hint { display: none; }
-      .control-row { justify-content: center; }
+    @media (max-width: 599px) {
+      .key-hint {
+        display: none;
+      }
+      .control-panel {
+        justify-content: center;
+      }
     }
 
     /* ===== AD CONTAINER ===== */
-    .ad-container {
-      margin: 20px auto 10px;
-      max-width: 600px;
-      border-radius: 14px;
+    .ad-space {
+      margin: 18px 0 12px;
+      max-width: 100%;
+      border-radius: 12px;
       overflow: hidden;
       background: rgba(0,0,0,0.02);
       padding: 3px;
     }
 
-    /* ===== BLOG – كروت زجاجية ===== */
+    /* ===== BLOG SECTION – glass cards ===== */
     .blog {
-      margin-top: 25px;
+      margin-top: 20px;
       background: rgba(255,255,255,0.6);
       backdrop-filter: blur(8px);
       border: 1px solid var(--border-light);
       border-radius: 24px;
-      padding: 20px 22px;
+      padding: 20px;
       text-align: left;
     }
 
@@ -262,10 +269,10 @@
     .blog h2 {
       font-size: 1.5rem;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       color: var(--text-light);
       border-left: 6px solid #2563eb;
-      padding-left: 15px;
+      padding-left: 14px;
     }
 
     .blog p, .blog ul {
@@ -286,11 +293,11 @@
 
     .support-btn {
       display: inline-block;
-      margin-top: 15px;
+      margin-top: 16px;
       padding: 12px 28px;
       background: linear-gradient(145deg, #2563eb, #1d4ed8);
       color: white;
-      border-radius: 50px;
+      border-radius: 60px;
       text-decoration: none;
       font-weight: 600;
       border: 1px solid rgba(255,255,255,0.3);
@@ -303,7 +310,7 @@
       box-shadow: 0 9px 0 #0f2c5e;
     }
 
-    /* ===== GAME OVER – مطابق للكود الأصلي ===== */
+    /* ===== GAME OVER OVERLAY ===== */
     #gameOver {
       position: fixed;
       top: 0;
@@ -354,46 +361,37 @@
     footer {
       text-align: center;
       margin-top: 20px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #64748b;
     }
 
     body.dark footer {
       color: #94a3b8;
     }
-
-    /* ===== موبايل تصغير إضافي ===== */
-    @media (max-width: 500px) {
-      .game-container { padding: 15px; }
-      .game-title { font-size: 2.2rem; }
-      .top-buttons { flex-direction: column; align-items: center; }
-      .btn { width: 100%; justify-content: center; }
-      #score { font-size: 1.2rem; padding: 6px 20px; }
-      .blog { padding: 16px; }
-    }
   </style>
 </head>
 <body>
-  <div class="game-container">
-    <header>
+  <div class="game-card">
+    <div class="game-header">
       <h1 class="game-title">🧩 Tetris</h1>
-      <p class="game-subtitle">Classic block puzzle – simple to learn, hard to master</p>
-      
-      <div class="top-buttons">
-        <button onclick="restartGame()" class="btn restart-btn">⟳ New Game</button>
-        <button onclick="toggleDark()" class="btn dark-btn">🌙 Dark</button>
-      </div>
-
-      <div class="score-area">
-        <div id="score">Score: 0</div>
-      </div>
-    </header>
-
-    <div class="canvas-wrapper">
-      <canvas id="game" width="180" height="240"></canvas>
+      <p class="game-subtitle">Classic block puzzle – small but challenging</p>
     </div>
 
-    <div class="control-row">
+    <div class="button-row">
+      <button onclick="restartGame()" class="btn">⟳ New Game</button>
+      <button onclick="toggleDark()" class="btn dark-btn">🌙 Dark</button>
+    </div>
+
+    <div class="score-wrap">
+      <div id="score">Score: 0</div>
+    </div>
+
+    <!-- fixed-size canvas wrapper -->
+    <div class="canvas-wrapper">
+      <canvas id="game" width="210" height="280"></canvas>
+    </div>
+
+    <div class="control-panel">
       <div class="key-hint">⬅️ ➡️ ⬇️ ⬆️</div>
       <div class="mobile-controls">
         <button onclick="rotate(event)" class="mobile-btn">↻</button>
@@ -403,11 +401,11 @@
       </div>
     </div>
 
-    <!-- Monetag Vignette Ad – تبقى كما هي -->
-    <div class="ad-container">
+    <!-- Monetag Ad – replace zone ID -->
+    <div class="ad-space">
       <script>
         (function(s){
-          s.dataset.zone='10534618';
+          s.dataset.zone='10534618';  // <-- YOUR ZONE ID
           s.src='https://gizokraijaw.net/vignette.min.js';
         })([document.documentElement, document.body].filter(Boolean)
           .pop()
@@ -415,47 +413,44 @@
       </script>
     </div>
 
-    <!-- Blog Section – نفس المحتوى -->
+    <!-- Blog / instructions -->
     <section class="blog">
       <h2>🎮 How to Play</h2>
-      <p>Block Puzzle is a classic block-dropping game. Your goal is to place blocks smartly and clear full rows to earn points.</p>
+      <p>Place falling blocks to clear full rows. Use arrow keys (or on‑screen buttons).</p>
       <ul>
-        <li>Move blocks left and right to position them</li>
-        <li>Rotate blocks to fit empty spaces</li>
-        <li>Complete full rows to clear them</li>
-        <li>The game ends when the grid is full</li>
+        <li>Move left / right</li>
+        <li>Rotate with up arrow</li>
+        <li>Drop faster with down arrow</li>
       </ul>
 
-      <h2>🏆 How to Win & Improve</h2>
-      <p>There is no final level. The challenge is to survive longer and reach a higher score.</p>
+      <h2>🏆 Tips</h2>
       <ul>
-        <li>Keep the grid as low as possible</li>
-        <li>Plan moves before dropping blocks</li>
-        <li>Use rotations wisely</li>
-        <li>Stay calm and avoid rushing</li>
+        <li>Keep your stack low</li>
+        <li>Plan ahead</li>
+        <li>Use the rotate wisely</li>
       </ul>
 
-      <h2>⛑️ Support the Game</h2>
-      <p>If you enjoy this game and would like to support future updates, you can help by making a small donation.</p>
+      <h2>⛑️ Support</h2>
+      <p>Enjoying the game? Support future updates ❤️</p>
       <a class="support-btn" href="https://ko-fi.com/help_tommy" target="_blank">❤️ Support Us</a>
     </section>
 
-    <footer>© 2026 Block Puzzle · Classic Tetris-style</footer>
+    <footer>© 2026 · compact Tetris</footer>
   </div>
 
-  <!-- Game Over – نفس التركيب الأصلي -->
+  <!-- Game Over overlay -->
   <div id="gameOver">
     <div>Game Over</div>
-    <button onclick="restartGame()">♻️ Restart</button>
+    <button onclick="restartGame()">♻️ Play Again</button>
   </div>
 
-  <!-- ========== كود JavaScript الأصلي – لا تغيير ========== -->
+  <!-- ========== ORIGINAL GAME SCRIPT (unchanged) ========== -->
   <script>
     const canvas = document.getElementById("game");
     const ctx = canvas.getContext("2d");
 
     const COLS = 15, ROWS = 20;
-    const SIZE = canvas.width / COLS;
+    const SIZE = canvas.width / COLS;  // now 210/15 = 14px – perfectly small!
 
     let grid, current, score = 0, gameOver = false;
     let restartClickedOnce = false;
@@ -463,7 +458,7 @@
     const scoreEl = document.getElementById("score");
     const overBox = document.getElementById("gameOver");
 
-    // 🔗 Monetag link (Restart first click)
+    // 🔗 YOUR AFFILIATE LINK (change it!)
     const AFFILIATE_LINK = "https://otieu.com/4/10534586";
 
     const SHAPES = [
