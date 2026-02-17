@@ -11,22 +11,23 @@
   </script>
 
   <meta charset="UTF-8" />
-  <title>🦖 Dino Game – Chrome Style</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>🦖 Chrome Dino Game – offline runner</title>
   <style>
+    /* RESET & GLOBAL */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     body {
-      --bg-light: #f8fafc;
+      --bg-light: #f0f2f5;
       --bg-dark: #0a0f1a;
       --text-light: #1e293b;
       --text-dark: #e2e8f0;
-      --card-light: rgba(255, 255, 255, 0.85);
+      --card-light: rgba(255, 255, 255, 0.8);
       --card-dark: rgba(20, 30, 45, 0.85);
       --border-light: #e2e8f0;
       --border-dark: #2d3a4f;
@@ -46,7 +47,7 @@
       color: var(--text-dark);
     }
 
-    /* الحاوية الرئيسية – زجاجية */
+    /* MAIN CARD – GLASS */
     .game-card {
       max-width: 800px;
       width: 100%;
@@ -66,7 +67,7 @@
       box-shadow: 0 20px 35px -10px rgba(0,0,0,0.5);
     }
 
-    /* العنوان */
+    /* TITLE */
     .game-title {
       font-size: 3.2rem;
       font-weight: 800;
@@ -93,7 +94,7 @@
       color: #94a3b8;
     }
 
-    /* صف الأزرار */
+    /* BUTTON ROW */
     .button-row {
       display: flex;
       justify-content: center;
@@ -128,14 +129,13 @@
 
     .dark-btn {
       background: #334155;
-      color: white;
       box-shadow: 0 6px 0 #1e293b;
     }
     .dark-btn:hover {
       box-shadow: 0 10px 0 #1e293b;
     }
 
-    /* غلاف الكانفاس */
+    /* CANVAS WRAPPER */
     .canvas-wrapper {
       position: relative;
       display: flex;
@@ -159,7 +159,7 @@
       box-shadow: 0 0 30px rgba(255,255,255,0.1);
     }
 
-    /* Overlays */
+    /* OVERLAYS (start & game over) */
     .overlay {
       position: absolute;
       top: 0;
@@ -193,7 +193,7 @@
       border-color: #334155;
     }
 
-    /* مساحة الإعلان */
+    /* AD SPACE */
     .ad-space {
       margin: 0 auto 15px;
       max-width: 700px;
@@ -203,7 +203,7 @@
       padding: 3px;
     }
 
-    /* المدونة – زجاجية */
+    /* BLOG SECTION – glass */
     .blog {
       margin-top: 25px;
       background: rgba(255,255,255,0.6);
@@ -291,6 +291,7 @@
       color: #94a3b8;
     }
 
+    /* mobile fine‑tune */
     @media (max-width: 500px) {
       .game-card { padding: 18px; }
       .game-title { font-size: 2.4rem; }
@@ -299,11 +300,11 @@
   </style>
 </head>
 <body>
-  <!-- إعلان Monetag (ضَع رقم منطقتك) -->
+  <!-- Monetag Ad – replace the zone id with your own -->
   <div class="ad-space">
     <script>
       (function(s){
-        s.dataset.zone='10599415';   // <-- ضع رقم منطقتك هنا
+        s.dataset.zone='10599415';   // ← change this to your zone id
         s.src='https://nap5k.com/tag.min.js';
       })([document.documentElement, document.body].filter(Boolean)
         .pop()
@@ -312,250 +313,250 @@
   </div>
 
   <div class="game-card">
-    <h1 class="game-title">🦖 DINO RUN</h1>
-    <p class="game-subtitle">classic chrome runner</p>
+    <h1 class="game-title">🦖 CHROME DINO</h1>
+    <p class="game-subtitle">the classic offline runner</p>
 
-    <!-- صف الأزرار -->
+    <!-- action buttons -->
     <div class="button-row">
       <button id="darkToggle" class="btn dark-btn">🌙 Dark</button>
       <button id="restartBtn" class="btn">⟳ Restart</button>
     </div>
 
-    <!-- لوحة اللعب -->
+    <!-- game canvas + overlays -->
     <div class="canvas-wrapper">
-      <canvas id="game" width="700" height="320"></canvas>
+      <canvas id="gameCanvas" width="700" height="320"></canvas>
       <div id="startScreen" class="overlay">
-        <div class="overlay-box">Click or press Space to start</div>
+        <div class="overlay-box">click or press space</div>
       </div>
-      <div id="gameOver" class="overlay">
+      <div id="gameOverlay" class="overlay">
         <div class="overlay-box">
           GAME OVER<br>
-          <span style="font-size: 1rem;">Tap Restart</span>
+          <span style="font-size:1rem;">tap Restart</span>
         </div>
       </div>
     </div>
 
-    <!-- Blog / تعليمات -->
+    <!-- blog / instruction area -->
     <section class="blog">
-      <h2>🦖 How to Play</h2>
-      <p>Press Space or click to jump. Avoid cacti on ground and birds in the sky. Score increases over time.</p>
-      <h3>🎯 Tips</h3>
+      <h2>🦖 How to play</h2>
+      <p>Press space / click to jump. Avoid cacti on the ground and pterodactyls in the air. Score increases with time, speed rises gradually.</p>
+      <h3>🎯 tips</h3>
       <ul>
-        <li>Time your jumps carefully.</li>
-        <li>Birds fly at medium height – jump over them.</li>
-        <li>Each 100 points gives a bonus beep!</li>
+        <li>time your jumps – don't spam</li>
+        <li>birds fly at two heights (jump over them)</li>
+        <li>every 100 points you'll hear a beep!</li>
       </ul>
-      <button id="supportBtn" class="support-btn">❤️ Support Us</button>
+      <button id="supportBtn" class="support-btn">❤️ Support</button>
     </section>
 
-    <footer>© 2026 · dino chrome style</footer>
+    <footer>© 2026 · google dino tribute</footer>
   </div>
 
   <script>
     (function() {
-      const canvas = document.getElementById('game');
+      // ----- DOM elements -----
+      const canvas = document.getElementById('gameCanvas');
       const ctx = canvas.getContext('2d');
       const startScreen = document.getElementById('startScreen');
-      const gameOverScreen = document.getElementById('gameOver');
+      const gameOverlay = document.getElementById('gameOverlay');
       const restartBtn = document.getElementById('restartBtn');
       const darkToggle = document.getElementById('darkToggle');
       const supportBtn = document.getElementById('supportBtn');
 
-      let running = false;
-      let gameOver = false;
-      let frames = 0;
-      let gameSpeed = 3;
-      let nextCactus = 0;       // الوقت حتى ظهور الصبار التالي
-      let nextBird = 0;         // الوقت حتى ظهور الطائر التالي
-      let firstRestart = true;  // أول نقرة على Restart تذهب للرابط التابع
-      let score = 0;
-      let highScore = localStorage.getItem('dinoHighScore') || 0;
-      let lastMilestone = 0;    // لصوت كل 100 نقطة
+      // ----- game constants -----
+      const GROUND_Y = 240;               // where the ground line sits
+      const DINO_WIDTH = 28;
+      const DINO_HEIGHT = 28;
+      const DINO_X = 50;
 
-      // الديناصور
+      // ----- dino object -----
       const dino = {
-        x: 50,
-        y: 200,
-        w: 28,
-        h: 28,
+        x: DINO_X,
+        y: GROUND_Y,
+        width: DINO_WIDTH,
+        height: DINO_HEIGHT,
         vy: 0,
         gravity: 0.6,
         jumpPower: -12,
-        onGround: true
+        grounded: true
       };
 
-      // مصفوفات العناصر
-      let obstacles = [];   // الصبار
-      let birds = [];       // الطيور
+      // ----- arrays for obstacles and clouds -----
+      let obstacles = [];      // { x, y, width, height, type }
       let clouds = [];
 
-      // تهيئة الغيوم
-      function initClouds() {
-        clouds = [];
-        for (let i = 0; i < 4; i++) {
-          clouds.push({
-            x: Math.random() * canvas.width,
-            y: 30 + Math.random() * 80,
-            width: 50 + Math.random() * 40,
-            speed: 0.2 + Math.random() * 0.3,
-            opacity: 0.3 + Math.random() * 0.2
-          });
-        }
-      }
-      initClouds();
+      // ----- game state -----
+      let running = false;
+      let gameOver = false;
+      let score = 0;
+      let highScore = localStorage.getItem('dinoHigh') ? parseInt(localStorage.getItem('dinoHigh')) : 0;
+      let frames = 0;
+      let speed = 4;            // base speed
+      let nextCactus = 0;       // frame when next cactus appears
+      let nextBird = 0;         // frame when next bird may appear
+      let firstRestart = true;  // first click on restart goes to affiliate link
+      const AFFILIATE_LINK = 'https://omg10.com/4/10595848'; // ← change to your link
 
-      // إضافة صبار
-      function addCactus() {
+      // ----- helper: spawn a cloud -----
+      function spawnCloud() {
+        clouds.push({
+          x: canvas.width + Math.random() * 100,
+          y: 30 + Math.random() * 80,
+          width: 50 + Math.random() * 40,
+          speed: 0.2 + Math.random() * 0.3,
+          opacity: 0.3 + Math.random() * 0.2
+        });
+      }
+
+      // initial clouds
+      for (let i = 0; i < 4; i++) spawnCloud();
+
+      // ----- spawn a cactus -----
+      function spawnCactus() {
         obstacles.push({
           x: canvas.width,
-          y: 200,
-          w: 20,
-          h: 40,
+          y: GROUND_Y,
+          width: 20,
+          height: 40,
           type: 'cactus'
         });
       }
 
-      // إضافة طائر (يظهر على ارتفاعين مختلفين)
-      function addBird() {
-        const height = Math.random() > 0.5 ? 150 : 180;
-        birds.push({
+      // ----- spawn a bird (pterodactyl) -----
+      function spawnBird() {
+        // two possible flight heights
+        const y = Math.random() > 0.5 ? GROUND_Y - 60 : GROUND_Y - 30;
+        obstacles.push({
           x: canvas.width,
-          y: height,
-          w: 30,
-          h: 20,
+          y: y,
+          width: 30,
+          height: 20,
           type: 'bird'
         });
       }
 
-      // تحديث اللعبة
+      // ----- reset game -----
+      function reset() {
+        obstacles = [];
+        clouds = [];
+        for (let i = 0; i < 4; i++) spawnCloud();
+        dino.y = GROUND_Y;
+        dino.vy = 0;
+        dino.grounded = true;
+        score = 0;
+        frames = 0;
+        nextCactus = 0;
+        nextBird = 0;
+        speed = 4;
+        gameOver = false;
+        running = true;
+        gameOverlay.style.display = 'none';
+        startScreen.style.display = 'none';
+      }
+
+      // ----- game over -----
+      function endGame() {
+        running = false;
+        gameOver = true;
+        gameOverlay.style.display = 'flex';
+        if (Math.floor(score) > highScore) {
+          highScore = Math.floor(score);
+          localStorage.setItem('dinoHigh', highScore);
+        }
+      }
+
+      // ----- update logic (called every frame) -----
       function update() {
         if (!running) return;
 
         frames++;
 
-        // جاذبية الديناصور
+        // dino physics
         dino.vy += dino.gravity;
         dino.y += dino.vy;
 
-        if (dino.y >= 200) {
-          dino.y = 200;
+        if (dino.y >= GROUND_Y) {
+          dino.y = GROUND_Y;
           dino.vy = 0;
-          dino.onGround = true;
+          dino.grounded = true;
         }
 
-        // زيادة النقاط تدريجياً
+        // score & speed
         score += 0.1;
-        const intScore = Math.floor(score);
-        if (intScore > 0 && intScore % 100 === 0 && intScore > lastMilestone) {
-          lastMilestone = intScore;
-          // إصدار صوت (beep) باستخدام Web Audio
+        if (Math.floor(score) % 100 === 0 && Math.floor(score) > 0) {
+          // play a short beep (web audio)
           try {
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            oscillator.frequency.value = 800;
-            gainNode.gain.value = 0.1;
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.1);
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = 800;
+            gain.gain.value = 0.1;
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
           } catch (e) {}
         }
+        // speed increases slowly
+        speed = 4 + Math.floor(score / 300);
 
-        // تحريك الصبار والتحقق من الاصطدام
-        obstacles.forEach(o => {
-          o.x -= gameSpeed;
+        // move obstacles
+        obstacles.forEach(obs => {
+          obs.x -= speed;
+
+          // collision detection
           if (
-            dino.x < o.x + o.w &&
-            dino.x + dino.w > o.x &&
-            dino.y < o.y + o.h &&
-            dino.y + dino.h > o.y
+            dino.x < obs.x + obs.width &&
+            dino.x + dino.width > obs.x &&
+            dino.y < obs.y + obs.height &&
+            dino.y + dino.height > obs.y
           ) {
             endGame();
           }
         });
-        obstacles = obstacles.filter(o => o.x + o.w > 0);
 
-        // تحريك الطيور والتحقق من الاصطدام
-        birds.forEach(b => {
-          b.x -= gameSpeed * 1.2; // الطيور أسرع قليلاً
-          if (
-            dino.x < b.x + b.w &&
-            dino.x + dino.w > b.x &&
-            dino.y < b.y + b.h &&
-            dino.y + dino.h > b.y
-          ) {
-            endGame();
-          }
-        });
-        birds = birds.filter(b => b.x + b.w > 0);
+        // remove off‑screen obstacles
+        obstacles = obstacles.filter(obs => obs.x + obs.width > 0);
 
-        // تحريك الغيوم
+        // move clouds
         clouds.forEach(c => {
           c.x -= c.speed;
           if (c.x + c.width < 0) {
+            // recycle cloud
             c.x = canvas.width + Math.random() * 100;
             c.y = 30 + Math.random() * 80;
           }
         });
 
-        // توليد صبار جديد
+        // spawn cactus
         if (frames > nextCactus) {
-          addCactus();
-          // تأخير عشوائي بين 50 و 120 إطار
-          let randomDelay = 50 + Math.floor(Math.random() * 70);
-          nextCactus = frames + randomDelay;
+          spawnCactus();
+          let delay = 40 + Math.floor(Math.random() * 60);
+          nextCactus = frames + delay;
         }
 
-        // توليد طائر جديد (باحتمال 30% كل 80-140 إطار)
+        // spawn bird (less frequent)
         if (frames > nextBird) {
           if (Math.random() < 0.3) {
-            addBird();
+            spawnBird();
           }
-          let birdDelay = 80 + Math.floor(Math.random() * 60);
+          let birdDelay = 70 + Math.floor(Math.random() * 70);
           nextBird = frames + birdDelay;
         }
       }
 
-      // إنهاء اللعبة
-      function endGame() {
-        running = false;
-        gameOver = true;
-        gameOverScreen.style.display = 'flex';
-        if (Math.floor(score) > highScore) {
-          highScore = Math.floor(score);
-          localStorage.setItem('dinoHighScore', highScore);
-        }
-      }
-
-      // إعادة تعيين اللعبة
-      function resetGame() {
-        obstacles = [];
-        birds = [];
-        dino.y = 200;
-        dino.vy = 0;
-        dino.onGround = true;
-        score = 0;
-        lastMilestone = 0;
-        frames = 0;
-        nextCactus = 0;
-        nextBird = 0;
-        gameOver = false;
-        running = true;
-        gameOverScreen.style.display = 'none';
-        startScreen.style.display = 'none';
-        initClouds(); // إعادة تعيين الغيوم
-      }
-
-      // رسم كل شيء
+      // ----- drawing -----
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // خلفية السماء (فاتحة)
-        ctx.fillStyle = '#f1f5f9';
+        // sky gradient
+        const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        grad.addColorStop(0, '#f1f5f9');
+        grad.addColorStop(1, '#e2e8f0');
+        ctx.fillStyle = grad;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // رسم الغيوم
+        // clouds
         clouds.forEach(c => {
           ctx.fillStyle = `rgba(255,255,255,${c.opacity})`;
           ctx.beginPath();
@@ -565,103 +566,106 @@
           ctx.fill();
         });
 
-        // خط الأرض
+        // ground line
         ctx.strokeStyle = '#475569';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(0, 240);
-        ctx.lineTo(canvas.width, 240);
+        ctx.moveTo(0, GROUND_Y);
+        ctx.lineTo(canvas.width, GROUND_Y);
         ctx.stroke();
 
-        // رسم الصبار
-        obstacles.forEach(o => {
-          ctx.fillStyle = '#22c55e';
-          ctx.fillRect(o.x, o.y, 12, 40);
-          ctx.fillRect(o.x - 6, o.y + 10, 6, 16);
-          ctx.fillRect(o.x + 12, o.y + 16, 6, 14);
+        // obstacles (cacti & birds)
+        obstacles.forEach(obs => {
+          if (obs.type === 'cactus') {
+            ctx.fillStyle = '#22c55e';
+            ctx.fillRect(obs.x, obs.y - obs.height, 12, obs.height);
+            ctx.fillRect(obs.x - 6, obs.y - obs.height + 10, 6, 16);
+            ctx.fillRect(obs.x + 12, obs.y - obs.height + 16, 6, 14);
+          } else { // bird
+            ctx.fillStyle = '#020617';
+            ctx.beginPath();
+            ctx.moveTo(obs.x, obs.y + 10);
+            ctx.quadraticCurveTo(obs.x + 15, obs.y - 5, obs.x + 30, obs.y + 10);
+            ctx.quadraticCurveTo(obs.x + 15, obs.y + 5, obs.x, obs.y + 10);
+            ctx.fill();
+          }
         });
 
-        // رسم الطيور (غربان بسيطة)
-        birds.forEach(b => {
-          ctx.fillStyle = '#020617';
-          ctx.beginPath();
-          ctx.moveTo(b.x, b.y + 10);
-          ctx.quadraticCurveTo(b.x + 15, b.y - 5, b.x + 30, b.y + 10);
-          ctx.quadraticCurveTo(b.x + 15, b.y + 5, b.x, b.y + 10);
-          ctx.fill();
-        });
-
-        // رسم الديناصور (نسخة كروم)
+        // dino (chrome style)
         ctx.fillStyle = document.body.classList.contains('dark') ? '#fff' : '#020617';
-        ctx.fillRect(dino.x, dino.y + 10, 28, 20); // جسم
-        ctx.fillRect(dino.x + 18, dino.y, 18, 18); // رأس
+        ctx.fillRect(dino.x, dino.y - dino.height + 10, 28, 20); // body
+        ctx.fillRect(dino.x + 18, dino.y - dino.height, 18, 18); // head
         ctx.fillStyle = '#f1f5f9';
-        ctx.fillRect(dino.x + 30, dino.y + 6, 3, 3); // عين
+        ctx.fillRect(dino.x + 30, dino.y - dino.height + 6, 3, 3); // eye
         ctx.fillStyle = document.body.classList.contains('dark') ? '#fff' : '#020617';
-        ctx.fillRect(dino.x + 6, dino.y + 30, 6, 10); // ساق خلفية
-        ctx.fillRect(dino.x + 16, dino.y + 30, 6, 10); // ساق أمامية
-        ctx.fillRect(dino.x - 8, dino.y + 16, 8, 6); // ذيل
+        ctx.fillRect(dino.x + 6, dino.y - 10, 6, 10); // leg back
+        ctx.fillRect(dino.x + 16, dino.y - 10, 6, 10); // leg front
+        ctx.fillRect(dino.x - 8, dino.y - 12, 8, 6); // tail
 
-        // النتيجة
+        // score and high score
         ctx.fillStyle = document.body.classList.contains('dark') ? '#fff' : '#020617';
         ctx.font = 'bold 20px "Segoe UI", Roboto, sans-serif';
         ctx.textAlign = 'right';
         ctx.fillText('Score: ' + Math.floor(score), canvas.width - 20, 30);
-        ctx.fillText('High: ' + Math.floor(highScore), canvas.width - 20, 55);
+        ctx.fillText('High: ' + highScore, canvas.width - 20, 55);
       }
 
-      // حلقة اللعبة
-      function loop() {
-        if (running) {
-          update();
-        }
+      // ----- game loop -----
+      function gameLoop() {
+        if (running) update();
         draw();
-        requestAnimationFrame(loop);
+        requestAnimationFrame(gameLoop);
       }
-      loop();
+      gameLoop();
 
-      // التحكم بالقفز (نقرة أو مفتاح)
-      function handleJump() {
+      // ----- jump handler -----
+      function jump() {
         if (!running && !gameOver) {
-          resetGame();
+          reset();
         } else if (gameOver) {
-          resetGame();
-        } else if (dino.onGround) {
+          reset();
+        } else if (dino.grounded) {
           dino.vy = dino.jumpPower;
-          dino.onGround = false;
+          dino.grounded = false;
         }
       }
 
+      // keyboard
       document.addEventListener('keydown', (e) => {
         if (e.code === 'Space' || e.code === 'ArrowUp') {
           e.preventDefault();
-          handleJump();
+          jump();
         }
       });
 
-      document.addEventListener('click', handleJump);
+      // click/tap anywhere on canvas to jump
+      canvas.addEventListener('click', jump);
+      canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        jump();
+      });
 
-      // زر إعادة التشغيل الذكي: أول نقرة تذهب للرابط التابع
-      restartBtn.onclick = () => {
+      // restart button: first click affiliate, then normal restart
+      restartBtn.addEventListener('click', () => {
         if (firstRestart) {
           firstRestart = false;
-          window.location.href = 'https://omg10.com/4/10595848'; // <-- ضع رابطك التابع هنا
+          window.location.href = AFFILIATE_LINK;
         } else {
-          resetGame();
+          reset();
         }
-      };
+      });
 
-      // زر الوضع الليلي
-      darkToggle.onclick = () => {
+      // dark mode toggle
+      darkToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark');
-      };
+      });
 
-      // زر الدعم
-      supportBtn.onclick = () => {
+      // support button (opens ko‑fi)
+      supportBtn.addEventListener('click', () => {
         window.open('https://ko-fi.com/help_tommy', '_blank');
-      };
+      });
 
-      // إظهار شاشة البداية
+      // initial start screen visible
       startScreen.style.display = 'flex';
     })();
   </script>
