@@ -12,8 +12,9 @@ let lastTime = 0;
 let gameStarted = false;
 let frames = 0;
 
-// مصفوفة الغيوم (تتحرك ببطء)
+// مصفوفات الخلفية
 let clouds = [];
+let buildings = [];
 
 const restartLink = "https://otieu.com/4/10557461"; // <-- غيّره لرابطك
 
@@ -37,9 +38,21 @@ function init() {
   for (let i = 0; i < 4; i++) {
     clouds.push({
       x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height * 0.3 + 20,
+      y: Math.random() * canvas.height * 0.4 + 20,
       width: 60 + Math.random() * 40,
       speed: 0.1 + Math.random() * 0.2
+    });
+  }
+
+  // إنشاء مبانٍ ثابتة في الخلفية (appartments)
+  buildings = [];
+  const buildingCount = 8;
+  for (let i = 0; i < buildingCount; i++) {
+    buildings.push({
+      x: i * (canvas.width / buildingCount) + 10,
+      width: 35 + Math.random() * 20,
+      height: 80 + Math.random() * 100,
+      color: `hsl(0, 0%, ${20 + Math.random() * 30}%)` // درجات رمادي
     });
   }
 
@@ -121,7 +134,7 @@ function update(delta) {
       endGame();
     }
 
-    // score (when pipe passes bird)
+    // score
     if (!p.passed && p.x + pipeWidth < bird.x) {
       p.passed = true;
       score++;
@@ -137,7 +150,31 @@ function update(delta) {
     c.x -= c.speed * delta;
     if (c.x + c.width < 0) {
       c.x = canvas.width + Math.random() * 100;
-      c.y = Math.random() * canvas.height * 0.3 + 20;
+      c.y = Math.random() * canvas.height * 0.4 + 20;
+    }
+  });
+}
+
+// ===== DRAW BUILDINGS =====
+function drawBuildings() {
+  buildings.forEach(b => {
+    // لون المبنى (رمادي مع اختلاف طفيف)
+    ctx.fillStyle = b.color;
+    ctx.fillRect(b.x, canvas.height - b.height, b.width, b.height);
+
+    // نوافذ صغيرة
+    ctx.fillStyle = "#f1f5f9";
+    const windowSize = 8;
+    const rows = Math.floor(b.height / 20);
+    for (let r = 0; r < rows; r++) {
+      for (let w = 0; w < 2; w++) {
+        ctx.fillRect(
+          b.x + 5 + w * 15,
+          canvas.height - b.height + 10 + r * 18,
+          windowSize,
+          windowSize
+        );
+      }
     }
   });
 }
@@ -145,7 +182,7 @@ function update(delta) {
 // ===== DRAW CLOUDS =====
 function drawClouds() {
   clouds.forEach(c => {
-    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    ctx.fillStyle = "rgba(255,255,255,0.5)";
     ctx.beginPath();
     ctx.arc(c.x, c.y, c.width * 0.3, 0, Math.PI * 2);
     ctx.arc(c.x + c.width * 0.3, c.y - 5, c.width * 0.25, 0, Math.PI * 2);
@@ -219,9 +256,10 @@ function draw() {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  drawClouds();       // غيوم
-  drawPipes();        // أنابيب
-  drawBird();         // الطائر (كلاسيكي)
+  drawBuildings();   // المبانى في الخلفية
+  drawClouds();      // الغيوم
+  drawPipes();       // الأنابيب (في المقدمة)
+  drawBird();        // الطائر (في المقدمة)
 
   // النتيجة
   ctx.fillStyle = "#fff";
@@ -241,7 +279,7 @@ function endGame() {
 // ===== LOOP =====
 function loop(time) {
   if (!lastTime) lastTime = time;
-  const delta = Math.min((time - lastTime) / 16.67, 2); // تحديد الحد الأقصى
+  const delta = Math.min((time - lastTime) / 16.67, 2);
   lastTime = time;
 
   update(delta);
