@@ -303,7 +303,7 @@
   <div class="ad-space">
     <script>
       (function(s){
-        s.dataset.zone='10599415';   // <-- غيّره إلى رقم منطقتك
+        s.dataset.zone='10599415';   // <-- ضع رقم منطقتك هنا
         s.src='https://nap5k.com/tag.min.js';
       })([document.documentElement, document.body].filter(Boolean)
         .pop()
@@ -365,12 +365,12 @@
       let gameOver = false;
       let frames = 0;
       let gameSpeed = 3;
-      let nextObstacle = 0;
-      let nextBird = 0;
-      let firstRestart = true;
+      let nextCactus = 0;       // الوقت حتى ظهور الصبار التالي
+      let nextBird = 0;         // الوقت حتى ظهور الطائر التالي
+      let firstRestart = true;  // أول نقرة على Restart تذهب للرابط التابع
       let score = 0;
       let highScore = localStorage.getItem('dinoHighScore') || 0;
-      let lastMilestone = 0;
+      let lastMilestone = 0;    // لصوت كل 100 نقطة
 
       // الديناصور
       const dino = {
@@ -384,8 +384,9 @@
         onGround: true
       };
 
-      let obstacles = [];    // الصبار
-      let birds = [];        // الطيور
+      // مصفوفات العناصر
+      let obstacles = [];   // الصبار
+      let birds = [];       // الطيور
       let clouds = [];
 
       // تهيئة الغيوم
@@ -414,7 +415,7 @@
         });
       }
 
-      // إضافة طائر (على ارتفاعين مختلفين)
+      // إضافة طائر (يظهر على ارتفاعين مختلفين)
       function addBird() {
         const height = Math.random() > 0.5 ? 150 : 180;
         birds.push({
@@ -442,12 +443,12 @@
           dino.onGround = true;
         }
 
-        // زيادة النقاط
+        // زيادة النقاط تدريجياً
         score += 0.1;
         const intScore = Math.floor(score);
         if (intScore > 0 && intScore % 100 === 0 && intScore > lastMilestone) {
           lastMilestone = intScore;
-          // صوت بسيط باستخدام Web Audio API
+          // إصدار صوت (beep) باستخدام Web Audio
           try {
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const oscillator = audioCtx.createOscillator();
@@ -461,7 +462,7 @@
           } catch (e) {}
         }
 
-        // تحريك الصبار
+        // تحريك الصبار والتحقق من الاصطدام
         obstacles.forEach(o => {
           o.x -= gameSpeed;
           if (
@@ -475,9 +476,9 @@
         });
         obstacles = obstacles.filter(o => o.x + o.w > 0);
 
-        // تحريك الطيور
+        // تحريك الطيور والتحقق من الاصطدام
         birds.forEach(b => {
-          b.x -= gameSpeed * 1.2; // أسرع قليلاً
+          b.x -= gameSpeed * 1.2; // الطيور أسرع قليلاً
           if (
             dino.x < b.x + b.w &&
             dino.x + dino.w > b.x &&
@@ -498,14 +499,15 @@
           }
         });
 
-        // توليد صبار
-        if (frames > nextObstacle) {
+        // توليد صبار جديد
+        if (frames > nextCactus) {
           addCactus();
+          // تأخير عشوائي بين 50 و 120 إطار
           let randomDelay = 50 + Math.floor(Math.random() * 70);
-          nextObstacle = frames + randomDelay;
+          nextCactus = frames + randomDelay;
         }
 
-        // توليد طيور (أقل تكراراً)
+        // توليد طائر جديد (باحتمال 30% كل 80-140 إطار)
         if (frames > nextBird) {
           if (Math.random() < 0.3) {
             addBird();
@@ -515,6 +517,7 @@
         }
       }
 
+      // إنهاء اللعبة
       function endGame() {
         running = false;
         gameOver = true;
@@ -525,6 +528,7 @@
         }
       }
 
+      // إعادة تعيين اللعبة
       function resetGame() {
         obstacles = [];
         birds = [];
@@ -534,13 +538,13 @@
         score = 0;
         lastMilestone = 0;
         frames = 0;
-        nextObstacle = 0;
+        nextCactus = 0;
         nextBird = 0;
         gameOver = false;
         running = true;
         gameOverScreen.style.display = 'none';
         startScreen.style.display = 'none';
-        initClouds();
+        initClouds(); // إعادة تعيين الغيوم
       }
 
       // رسم كل شيء
@@ -587,7 +591,7 @@
           ctx.fill();
         });
 
-        // رسم الديناصور (على غرار كروم)
+        // رسم الديناصور (نسخة كروم)
         ctx.fillStyle = document.body.classList.contains('dark') ? '#fff' : '#020617';
         ctx.fillRect(dino.x, dino.y + 10, 28, 20); // جسم
         ctx.fillRect(dino.x + 18, dino.y, 18, 18); // رأس
@@ -616,7 +620,7 @@
       }
       loop();
 
-      // التحكم بالقفز
+      // التحكم بالقفز (نقرة أو مفتاح)
       function handleJump() {
         if (!running && !gameOver) {
           resetGame();
@@ -637,11 +641,11 @@
 
       document.addEventListener('click', handleJump);
 
-      // زر إعادة التشغيل الذكي (أول نقرة → رابط تابع)
+      // زر إعادة التشغيل الذكي: أول نقرة تذهب للرابط التابع
       restartBtn.onclick = () => {
         if (firstRestart) {
           firstRestart = false;
-          window.location.href = 'https://omg10.com/4/10595848'; // <-- ضَع رابطك التابع هنا
+          window.location.href = 'https://omg10.com/4/10595848'; // <-- ضع رابطك التابع هنا
         } else {
           resetGame();
         }
