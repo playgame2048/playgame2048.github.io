@@ -12,7 +12,7 @@
   
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>2048 – Restart و Dark متجاورين (معكوسين)</title>
+  <title>2048 – أزرار أقرب للـ Score</title>
   <style>
     * {
       margin: 0;
@@ -79,7 +79,7 @@
       display: inline-block;
     }
 
-    /* ===== الصف الموحد: Restart و Dark متجاورين على اليسار، Score على اليمين ===== */
+    /* ===== الصف الموحد ===== */
     .action-row {
       display: flex;
       justify-content: space-between;
@@ -92,7 +92,8 @@
     .left-group {
       display: flex;
       align-items: center;
-      gap: 8px;          /* المسافة بين Restart و Dark */
+      gap: 8px;
+      margin-left: 20px;    /* إزاحة إلى اليمين – عدّل القيمة حسب الرغبة */
     }
 
     .score-box {
@@ -296,6 +297,7 @@
         justify-content: center;
       }
       .left-group {
+        margin-left: 0;      /* على الموبايل نلغي الإزاحة */
         width: 100%;
         justify-content: center;
       }
@@ -326,7 +328,7 @@
       <h1 class="game-title">2048</h1>
     </div>
 
-    <!-- الصف الموحد: Restart و Dark متجاورين (Restart على اليسار، Dark على اليمين) -->
+    <!-- الصف الموحد: الأزرار على اليسار مع إزاحة إلى اليمين -->
     <div class="action-row">
       <div class="left-group">
         <button onclick="smartRestart()" class="btn">⟳ Restart</button>
