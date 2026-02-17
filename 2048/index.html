@@ -12,9 +12,8 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>🦖 Chrome Dino Game – offline runner</title>
+  <title>🦖 Chrome Dino — exact replica</title>
   <style>
-    /* RESET & GLOBAL */
     * {
       margin: 0;
       padding: 0;
@@ -47,7 +46,7 @@
       color: var(--text-dark);
     }
 
-    /* MAIN CARD – GLASS */
+    /* MAIN CARD – glass */
     .game-card {
       max-width: 800px;
       width: 100%;
@@ -300,11 +299,11 @@
   </style>
 </head>
 <body>
-  <!-- Monetag Ad – replace the zone id with your own -->
+  <!-- Monetag Ad – replace zone id -->
   <div class="ad-space">
     <script>
       (function(s){
-        s.dataset.zone='10599415';   // ← change this to your zone id
+        s.dataset.zone='10599415';   // ← change to your zone id
         s.src='https://nap5k.com/tag.min.js';
       })([document.documentElement, document.body].filter(Boolean)
         .pop()
@@ -314,7 +313,7 @@
 
   <div class="game-card">
     <h1 class="game-title">🦖 CHROME DINO</h1>
-    <p class="game-subtitle">the classic offline runner</p>
+    <p class="game-subtitle">the exact offline runner</p>
 
     <!-- action buttons -->
     <div class="button-row">
@@ -326,7 +325,7 @@
     <div class="canvas-wrapper">
       <canvas id="gameCanvas" width="700" height="320"></canvas>
       <div id="startScreen" class="overlay">
-        <div class="overlay-box">click or press space</div>
+        <div class="overlay-box">press space or tap</div>
       </div>
       <div id="gameOverlay" class="overlay">
         <div class="overlay-box">
@@ -364,7 +363,7 @@
       const supportBtn = document.getElementById('supportBtn');
 
       // ----- game constants -----
-      const GROUND_Y = 240;               // where the ground line sits
+      const GROUND_Y = 240;               // y‑coordinate of the ground line
       const DINO_WIDTH = 28;
       const DINO_HEIGHT = 28;
       const DINO_X = 50;
@@ -422,9 +421,8 @@
         });
       }
 
-      // ----- spawn a bird (pterodactyl) -----
+      // ----- spawn a bird (pterodactyl) at two possible heights -----
       function spawnBird() {
-        // two possible flight heights
         const y = Math.random() > 0.5 ? GROUND_Y - 60 : GROUND_Y - 30;
         obstacles.push({
           x: canvas.width,
@@ -483,7 +481,7 @@
 
         // score & speed
         score += 0.1;
-        if (Math.floor(score) % 100 === 0 && Math.floor(score) > 0) {
+        if (Math.floor(score) % 100 === 0 && Math.floor(score) > 0 && !gameOver) {
           // play a short beep (web audio)
           try {
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -549,7 +547,7 @@
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // sky gradient
+        // sky gradient (like chrome's)
         const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
         grad.addColorStop(0, '#f1f5f9');
         grad.addColorStop(1, '#e2e8f0');
