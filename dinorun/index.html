@@ -12,11 +12,8 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>🦖 Dino Game – Chrome Style</title>
-
-  <!-- Google Fonts -->
+  <title>🦖 Chrome Dino — classic runner</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
   <style>
     * {
       margin: 0;
@@ -50,7 +47,7 @@
       color: var(--text-dark);
     }
 
-    /* MAIN CARD – glassmorphism */
+    /* MAIN CARD – glassmorphism, perfectly centered */
     .game-card {
       max-width: 800px;
       width: 100%;
@@ -62,6 +59,7 @@
       padding: 24px 22px 30px;
       box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
       transition: background 0.2s, border 0.2s;
+      margin: 0 auto; /* already centered by body flex, but safe */
     }
 
     body.dark .game-card {
@@ -70,7 +68,6 @@
       box-shadow: 0 20px 35px -10px rgba(0,0,0,0.5);
     }
 
-    /* TITLE */
     .game-title {
       font-size: 3.2rem;
       font-weight: 800;
@@ -97,7 +94,6 @@
       color: #94a3b8;
     }
 
-    /* BUTTON ROW */
     .button-row {
       display: flex;
       justify-content: center;
@@ -138,7 +134,7 @@
       box-shadow: 0 10px 0 #1e293b;
     }
 
-    /* CANVAS WRAPPER */
+    /* Canvas wrapper – centers the canvas horizontally */
     .canvas-wrapper {
       position: relative;
       display: flex;
@@ -162,7 +158,6 @@
       box-shadow: 0 0 30px rgba(255,255,255,0.1);
     }
 
-    /* OVERLAYS (start & game over) */
     .overlay {
       position: absolute;
       top: 0;
@@ -206,7 +201,7 @@
       padding: 3px;
     }
 
-    /* BLOG SECTION – glass card */
+    /* BLOG SECTION – glass card, left-aligned text but container centered */
     .blog {
       margin-top: 25px;
       background: rgba(255,255,255,0.6);
@@ -214,7 +209,7 @@
       border: 1px solid var(--border-light);
       border-radius: 28px;
       padding: 22px;
-      text-align: left;
+      text-align: left; /* text stays left, card itself centered */
     }
 
     body.dark .blog {
@@ -294,7 +289,6 @@
       color: #94a3b8;
     }
 
-    /* mobile fine‑tune */
     @media (max-width: 500px) {
       .game-card { padding: 18px; }
       .game-title { font-size: 2.4rem; }
@@ -319,13 +313,11 @@
     <h1 class="game-title">🦖 CHROME DINO</h1>
     <p class="game-subtitle">the classic offline runner</p>
 
-    <!-- action buttons -->
     <div class="button-row">
       <button id="darkToggle" class="btn dark-btn">🌙 Dark</button>
       <button id="restartBtn" class="btn">⟳ Restart</button>
     </div>
 
-    <!-- game canvas + overlays -->
     <div class="canvas-wrapper">
       <canvas id="game" width="700" height="320"></canvas>
       <div id="startScreen" class="overlay">
@@ -339,7 +331,6 @@
       </div>
     </div>
 
-    <!-- blog / instruction area -->
     <section class="blog">
       <h2>🦖 How to play</h2>
       <p>Press space / click to jump. Avoid cacti on the ground. Score increases with time, speed rises gradually.</p>
@@ -388,10 +379,6 @@
 
       let obstacles = [];
 
-      /* =========================
-         OBSTACLES
-      ========================= */
-
       function addObstacle() {
         obstacles.push({
           x: canvas.width,
@@ -406,7 +393,6 @@
 
         frames++;
 
-        // Gravity
         dino.vy += dino.gravity;
         dino.y += dino.vy;
 
@@ -416,11 +402,9 @@
           dino.onGround = true;
         }
 
-        // Obstacles movement
         obstacles.forEach(o => {
           o.x -= gameSpeed;
 
-          // Collision
           if (
             dino.x < o.x + o.w &&
             dino.x + dino.w > o.x &&
@@ -438,20 +422,16 @@
           }
         });
 
-        // Remove offscreen
         obstacles = obstacles.filter(o => o.x + o.w > 0);
 
-        // Spawn obstacles
         if (frames > nextSpawn) {
           addObstacle();
           let randomDelay = Math.floor(Math.random() * 100) + (80 - gameSpeed * 5);
           nextSpawn = frames + randomDelay;
         }
 
-        // Score
         score += 0.1;
 
-        // Beep every 100 points
         if (Math.floor(score) % 100 === 0 && Math.floor(score) > 0 && !gameOver) {
           try {
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -467,10 +447,6 @@
         }
       }
 
-      /* =========================
-         RESET
-      ========================= */
-
       function resetGame() {
         obstacles = [];
         dino.y = 200;
@@ -485,13 +461,9 @@
         startScreen.style.display = "none";
       }
 
-      /* =========================
-         DRAW
-      ========================= */
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Ground line
         ctx.strokeStyle = "#475569";
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -499,18 +471,16 @@
         ctx.lineTo(canvas.width, 240);
         ctx.stroke();
 
-        // Dino
         ctx.fillStyle = document.body.classList.contains('dark') ? '#fff' : '#020617';
-        ctx.fillRect(dino.x, dino.y + 10, 28, 20); // body
-        ctx.fillRect(dino.x + 18, dino.y, 18, 18); // head
+        ctx.fillRect(dino.x, dino.y + 10, 28, 20);
+        ctx.fillRect(dino.x + 18, dino.y, 18, 18);
         ctx.fillStyle = "#f1f5f9";
-        ctx.fillRect(dino.x + 30, dino.y + 6, 3, 3); // eye
+        ctx.fillRect(dino.x + 30, dino.y + 6, 3, 3);
         ctx.fillStyle = document.body.classList.contains('dark') ? '#fff' : '#020617';
-        ctx.fillRect(dino.x + 6, dino.y + 30, 6, 10); // leg1
-        ctx.fillRect(dino.x + 16, dino.y + 30, 6, 10); // leg2
-        ctx.fillRect(dino.x - 8, dino.y + 16, 8, 6); // tail
+        ctx.fillRect(dino.x + 6, dino.y + 30, 6, 10);
+        ctx.fillRect(dino.x + 16, dino.y + 30, 6, 10);
+        ctx.fillRect(dino.x - 8, dino.y + 16, 8, 6);
 
-        // Cacti
         obstacles.forEach(o => {
           ctx.fillStyle = "#22c55e";
           ctx.fillRect(o.x, o.y, 12, 40);
@@ -518,7 +488,6 @@
           ctx.fillRect(o.x + 12, o.y + 16, 6, 14);
         });
 
-        // Score
         ctx.fillStyle = document.body.classList.contains('dark') ? '#fff' : '#020617';
         ctx.font = "bold 20px 'Inter', Arial, sans-serif";
         ctx.textAlign = "right";
@@ -526,23 +495,12 @@
         ctx.fillText("High: " + Math.floor(highScore), canvas.width - 20, 55);
       }
 
-      /* =========================
-         LOOP
-      ========================= */
-
       function loop() {
-        if (running) {
-          update();
-        }
+        if (running) update();
         draw();
         requestAnimationFrame(loop);
       }
-
       loop();
-
-      /* =========================
-         CONTROLS
-      ========================= */
 
       document.addEventListener("keydown", (e) => {
         if (e.code === "Space" || e.code === "ArrowUp") e.preventDefault();
@@ -588,7 +546,6 @@
         window.open("https://ko-fi.com/help_tommy", "_blank");
       };
 
-      // initial start screen visible
       startScreen.style.display = "flex";
     })();
   </script>
