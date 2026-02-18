@@ -402,80 +402,109 @@ function drawScene() {
   ctx.globalAlpha = 1.0;
   ctx.shadowBlur = 0;
 
-  // ---- draw Dino (detailed) ----
-  const dinoBaseY = dinoY; // ground position
+// ---- draw Dino (realistic T-Rex style) ----
+const dinoX = DINO_X;
+const dinoBaseY = dinoY; // ground position
 
-  // body (rounded rectangle)
-  ctx.fillStyle = document.body.classList.contains('light-mode') ? '#2d3e50' : '#e5e7eb';
-  ctx.shadowColor = '#f5c542b0';
-  ctx.shadowBlur = 25;
+// ===== الجسم الرئيسي (منحني) =====
+ctx.fillStyle = document.body.classList.contains('light-mode') ? '#2d3e50' : '#e5e7eb';
+ctx.shadowColor = '#f5c542b0';
+ctx.shadowBlur = 25;
+
+// الجسم (بيضاوي مائل)
+ctx.beginPath();
+ctx.ellipse(dinoX + 14, dinoBaseY + 14, 12, 16, 0, 0, Math.PI * 2);
+ctx.fill();
+
+// ===== الرأس (كبير مع خطم) =====
+ctx.fillStyle = document.body.classList.contains('light-mode') ? '#1f2b36' : '#d1d5db';
+ctx.beginPath();
+ctx.ellipse(dinoX + 26, dinoBaseY + 6, 8, 10, 0.1, 0, Math.PI * 2);
+ctx.fill();
+
+// الفك السفلي
+ctx.fillStyle = document.body.classList.contains('light-mode') ? '#151f2a' : '#b0b8c5';
+ctx.beginPath();
+ctx.ellipse(dinoX + 28, dinoBaseY + 12, 6, 5, 0.05, 0, Math.PI * 2);
+ctx.fill();
+
+// العين (كبيرة مع بريق)
+ctx.fillStyle = '#0a0c10';
+ctx.beginPath();
+ctx.arc(dinoX + 23, dinoBaseY + 4, 3.5, 0, Math.PI * 2);
+ctx.fill();
+ctx.fillStyle = 'white';
+ctx.beginPath();
+ctx.arc(dinoX + 22, dinoBaseY + 3, 1.5, 0, Math.PI * 2);
+ctx.fill();
+// بؤبؤ
+ctx.fillStyle = '#000';
+ctx.beginPath();
+ctx.arc(dinoX + 22.5, dinoBaseY + 3.5, 0.8, 0, Math.PI * 2);
+ctx.fill();
+
+// ===== الأيدي الصغيرة (الأذرع) =====
+ctx.fillStyle = document.body.classList.contains('light-mode') ? '#2d3e50' : '#e5e7eb';
+ctx.shadowBlur = 15;
+// الذراع اليسرى (الأقرب للمشاهد)
+ctx.beginPath();
+ctx.roundRect(dinoX + 8, dinoBaseY + 16, 4, 8, 2);
+ctx.fill();
+// الذراع اليمنى (الأبعد)
+ctx.beginPath();
+ctx.roundRect(dinoX + 18, dinoBaseY + 15, 4, 7, 2);
+ctx.fill();
+
+// ===== الرجلين =====
+ctx.fillStyle = document.body.classList.contains('light-mode') ? '#1f2b36' : '#b0b8c5';
+// الرجل الخلفية
+ctx.beginPath();
+ctx.roundRect(dinoX + 6, dinoBaseY + 24, 7, 12, 4);
+ctx.fill();
+ctx.beginPath();
+ctx.roundRect(dinoX + 18, dinoBaseY + 24, 7, 12, 4);
+ctx.fill();
+// الرجل الأمامية (أصغر)
+ctx.fillStyle = document.body.classList.contains('light-mode') ? '#2d3e50' : '#d1d5db';
+ctx.beginPath();
+ctx.roundRect(dinoX + 10, dinoBaseY + 28, 5, 8, 3);
+ctx.fill();
+ctx.beginPath();
+ctx.roundRect(dinoX + 22, dinoBaseY + 28, 5, 8, 3);
+ctx.fill();
+
+// ===== الذيل الطويل =====
+ctx.fillStyle = document.body.classList.contains('light-mode') ? '#2d3e50' : '#e5e7eb';
+ctx.beginPath();
+ctx.moveTo(dinoX - 8, dinoBaseY + 20);
+ctx.quadraticCurveTo(dinoX - 25, dinoBaseY + 28, dinoX - 20, dinoBaseY + 10);
+ctx.lineTo(dinoX - 4, dinoBaseY + 18);
+ctx.fill();
+
+// ===== أشواك الظهر (صف من المثلثات) =====
+ctx.fillStyle = '#f5c542';
+ctx.shadowColor = '#f5c542';
+ctx.shadowBlur = 20;
+for (let i = 0; i < 4; i++) {
+  const spikeX = dinoX + 2 + i * 7;
   ctx.beginPath();
-  ctx.roundRect(DINO_X, dinoBaseY, DINO_WIDTH, DINO_HEIGHT, 10);
+  ctx.moveTo(spikeX, dinoBaseY - 2);
+  ctx.lineTo(spikeX + 5, dinoBaseY - 10);
+  ctx.lineTo(spikeX - 5, dinoBaseY - 10);
   ctx.fill();
+}
 
-  // belly (lighter area)
-  ctx.fillStyle = document.body.classList.contains('light-mode') ? '#4a5f73' : '#f0f4fa';
-  ctx.shadowBlur = 10;
-  ctx.beginPath();
-  ctx.roundRect(DINO_X + 4, dinoBaseY + 8, DINO_WIDTH - 8, DINO_HEIGHT - 12, 5);
-  ctx.fill();
+// ===== خط الفم (ابتسامة خفيفة) =====
+ctx.strokeStyle = '#f5c542';
+ctx.lineWidth = 1.5;
+ctx.shadowBlur = 8;
+ctx.beginPath();
+ctx.moveTo(dinoX + 20, dinoBaseY + 8);
+ctx.quadraticCurveTo(dinoX + 24, dinoBaseY + 10, dinoX + 28, dinoBaseY + 8);
+ctx.stroke();
 
-  // legs (two front, two back)
-  ctx.fillStyle = document.body.classList.contains('light-mode') ? '#1f2b36' : '#b0b8c5';
-  ctx.shadowBlur = 15;
-  // back leg
-  ctx.fillRect(DINO_X + 4, dinoBaseY + DINO_HEIGHT - 4, 6, 10);
-  ctx.fillRect(DINO_X + DINO_WIDTH - 10, dinoBaseY + DINO_HEIGHT - 4, 6, 10);
-  // front leg (smaller)
-  ctx.fillRect(DINO_X + 6, dinoBaseY + DINO_HEIGHT - 2, 4, 8);
-  ctx.fillRect(DINO_X + DINO_WIDTH - 10, dinoBaseY + DINO_HEIGHT - 2, 4, 8);
-
-  // tail (curved)
-  ctx.fillStyle = document.body.classList.contains('light-mode') ? '#2d3e50' : '#e5e7eb';
-  ctx.beginPath();
-  ctx.moveTo(DINO_X - 6, dinoBaseY + DINO_HEIGHT - 10);
-  ctx.quadraticCurveTo(DINO_X - 20, dinoBaseY + DINO_HEIGHT - 20, DINO_X - 14, dinoBaseY + DINO_HEIGHT - 2);
-  ctx.lineTo(DINO_X, dinoBaseY + DINO_HEIGHT - 6);
-  ctx.fill();
-
-  // spikes on back (three spikes)
-  ctx.fillStyle = '#f5c542';
-  ctx.shadowColor = '#f5c542';
-  ctx.shadowBlur = 20;
-  for (let i = 0; i < 3; i++) {
-    const spikeX = DINO_X + 5 + i * 8;
-    ctx.beginPath();
-    ctx.moveTo(spikeX, dinoBaseY - 2);
-    ctx.lineTo(spikeX + 5, dinoBaseY - 10);
-    ctx.lineTo(spikeX - 5, dinoBaseY - 10);
-    ctx.fill();
-  }
-
-  // eye with highlight
-  ctx.shadowBlur = 0;
-  ctx.fillStyle = '#0a0c10';
-  ctx.beginPath();
-  ctx.arc(DINO_X + DINO_WIDTH - 8, dinoBaseY + 8, 4, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = 'white';
-  ctx.beginPath();
-  ctx.arc(DINO_X + DINO_WIDTH - 9, dinoBaseY + 6, 1.8, 0, Math.PI * 2);
-  ctx.fill();
-  // pupil
-  ctx.fillStyle = '#000';
-  ctx.beginPath();
-  ctx.arc(DINO_X + DINO_WIDTH - 8.5, dinoBaseY + 7, 1, 0, Math.PI * 2);
-  ctx.fill();
-
-  // eyebrow (for character)
-  ctx.strokeStyle = '#f5c542';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(DINO_X + DINO_WIDTH - 14, dinoBaseY + 2);
-  ctx.lineTo(DINO_X + DINO_WIDTH - 8, dinoBaseY - 1);
-  ctx.stroke();
-
-  ctx.shadowBlur = 0;
+// إعادة تعيين الظل
+ctx.shadowBlur = 0;
 }
   // helper canvas roundRect
   CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
