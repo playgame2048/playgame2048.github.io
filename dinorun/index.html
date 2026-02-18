@@ -360,18 +360,20 @@
         const MIN_OBSTACLE_HEIGHT = 20;
         const MAX_OBSTACLE_HEIGHT = 40;
 
-        // Spawn timer (replaces frameCount modulo to avoid float issues)
-        let spawnTimer = 0;          // frames until next spawn
-        let baseSpawnDelay = 80;     // initial delay (frames)
-        const MIN_SPAWN_DELAY = 35;
+        // Spawn timer (reliable integer countdown)
+        let spawnTimer = 0;
+        // NEW BALANCED VALUES: more spacing, slower speed gain
+        const INITIAL_SPAWN_DELAY = 110;       // was 80
+        const MIN_SPAWN_DELAY = 45;            // was 35
+        let baseSpawnDelay = INITIAL_SPAWN_DELAY;
 
-        let currentSpeed = 5;
         const BASE_SPEED = 5;
-        const MAX_SPEED = 15;
+        const MAX_SPEED = 12;                   // was 15
+        const SPEED_INCREMENT = 0.1;             // was 0.2
+        let currentSpeed = BASE_SPEED;
 
-        // first gameover flag for direct link (awel mra nbrk)
+        // first gameover flag for direct link
         let firstGameoverOccurred = false;
-        // NEW DIRECT LINK (user provided)
         const DIRECT_LINK = "https://omg10.com/4/10595848";
 
         // --------- helper ----------
@@ -389,11 +391,12 @@
             gameOver = false;
             score = 0;
             currentSpeed = BASE_SPEED;
+            baseSpawnDelay = INITIAL_SPAWN_DELAY;   // reset spawn delay
             obstacles = [];
             dino.y = 210;
             dino.vy = 0;
             dino.grounded = true;
-            spawnTimer = baseSpawnDelay;   // start with full timer
+            spawnTimer = baseSpawnDelay;            // start with full delay
             updateScoreDisplay();
         }
 
@@ -408,8 +411,8 @@
                 passed: false
             });
 
-            // gradually make spawns more frequent (but keep integer)
-            baseSpawnDelay = Math.max(MIN_SPAWN_DELAY, Math.floor(baseSpawnDelay * 0.97));
+            // gradually make spawns more frequent, but less aggressively
+            baseSpawnDelay = Math.max(MIN_SPAWN_DELAY, Math.floor(baseSpawnDelay * 0.98)); // was 0.97, now 0.98 = slower reduction
         }
 
         // collision
@@ -467,7 +470,6 @@
             for (let obs of obstacles) {
                 if (checkCollision(obs)) {
                     gameOver = true;
-                    // first gameover leads to direct link (only once)
                     if (!firstGameoverOccurred) {
                         firstGameoverOccurred = true;
                         window.open(DIRECT_LINK, '_blank');
@@ -476,14 +478,13 @@
                 }
             }
 
-            // ---- spawn timer (reliable integer countdown) ----
+            // ---- spawn timer (countdown) ----
             if (spawnTimer <= 0) {
                 spawnObstacle();
-                // reset timer with current base delay (ensures integer)
-                spawnTimer = baseSpawnDelay;
+                spawnTimer = baseSpawnDelay;               // reset with current (slower) delay
                 // increase speed slightly with each spawn, but cap it
                 if (currentSpeed < MAX_SPEED) {
-                    currentSpeed += 0.2;
+                    currentSpeed += SPEED_INCREMENT;
                 }
             } else {
                 spawnTimer--;
@@ -500,7 +501,7 @@
             ctx.fillStyle = '#3f3f3f';
             ctx.fillRect(0, 244, canvas.width, 10);
 
-            // dino (stylized square with eye)
+            // dino
             ctx.fillStyle = '#e0e0e0';
             ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
             // eye
@@ -513,11 +514,11 @@
             ctx.arc(dino.x + 24, dino.y + 8, 1.5, 0, 2 * Math.PI);
             ctx.fill();
 
-            // obstacles (cacti style)
+            // obstacles
             for (let obs of obstacles) {
                 ctx.fillStyle = '#6b8c5c';
                 ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
-                // little spikes
+                // spikes
                 ctx.fillStyle = '#4d6e3f';
                 ctx.fillRect(obs.x + 4, obs.y - 5, 5, 5);
                 ctx.fillRect(obs.x + 12, obs.y - 8, 5, 8);
@@ -560,7 +561,6 @@
             }
         }
 
-        // keyboard: space OR arrow up
         window.addEventListener('keydown', (e) => {
             if (e.code === 'Space' || e.key === 'ArrowUp') {
                 e.preventDefault();
@@ -568,34 +568,28 @@
             }
         });
 
-        // click/tap on canvas jumps
         canvas.addEventListener('click', (e) => {
             e.preventDefault();
             jump();
         });
 
-        // restart button
         restartBtn.addEventListener('click', () => {
             resetGame();
         });
 
-        // support button with NEW LINK (ko-fi)
         supportBtn.addEventListener('click', () => {
             window.open('https://ko-fi.com/help_tommy', '_blank');
         });
 
-        // disable page scroll with arrows/space
         window.addEventListener('keydown', (e) => {
             if (e.code === 'Space' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 e.preventDefault();
             }
         }, { passive: false });
 
-        // high score from storage
         highScoreSpan.innerText = String(highScore).padStart(4, '0');
-        resetGame(); // initial reset to set consistent state
+        resetGame();
 
-        // start game
         gameLoop();
     })();
 </script>
