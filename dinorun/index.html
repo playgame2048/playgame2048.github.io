@@ -35,10 +35,10 @@
       background: var(--bg-light);
       color: var(--text-light);
       display: flex;
-      justify-content: center;
-      align-items: center;
+      justify-content: center;      /* توسيط أفقي */
+      align-items: center;          /* توسيط عمودي */
       min-height: 100vh;
-      padding: 0px;
+      padding: 16px;
       transition: background 0.2s, color 0.2s;
     }
 
@@ -47,12 +47,10 @@
       color: var(--text-dark);
     }
 
-    /* MAIN CARD – glassmorphism, perfectly centered */
+    /* الحاوية الرئيسية – متمركزة */
     .game-card {
       max-width: 800px;
       width: 100%;
-      margin-left: auto;
-      margin-right: auto;
       background: var(--card-light);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -61,7 +59,7 @@
       padding: 24px 22px 30px;
       box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
       transition: background 0.2s, border 0.2s;
-      margin: 0 auto; /* already centered by body flex, but safe */
+      margin: 0 auto;                /* توسيط إضافي */
     }
 
     body.dark .game-card {
@@ -98,7 +96,7 @@
 
     .button-row {
       display: flex;
-      justify-content: center;
+      justify-content: center;       /* توسيط الأزرار */
       gap: 20px;
       margin-bottom: 20px;
     }
@@ -136,11 +134,11 @@
       box-shadow: 0 10px 0 #1e293b;
     }
 
-    /* Canvas wrapper – centers the canvas horizontally */
+    /* غلاف الكانفاس – لتوسيط الكانفاس */
     .canvas-wrapper {
       position: relative;
       display: flex;
-      justify-content: center;
+      justify-content: center;       /* توسيط الكانفاس أفقيًا */
       margin: 10px 0 15px;
     }
 
@@ -193,9 +191,9 @@
       border-color: #334155;
     }
 
-    /* AD SPACE */
+    /* AD SPACE – متمركزة */
     .ad-space {
-      margin: 0 auto 15px;
+      margin: 0 auto 15px;           /* توسيط أفقي */
       max-width: 700px;
       border-radius: 16px;
       overflow: hidden;
@@ -203,18 +201,18 @@
       padding: 3px;
     }
 
-    /* BLOG SECTION – glass card, left-aligned text but container centered */
+    /* BLOG – المربع نفسه متمركز، النص داخل يسار */
     .blog {
       margin-top: 25px;
-      background: rgba(255,255,255,0.6);
-      margin-left: auto;
+      margin-left: auto;              /* توسيط المربع */
       margin-right: auto;
       width: 100%;
+      background: rgba(255,255,255,0.6);
       backdrop-filter: blur(8px);
       border: 1px solid var(--border-light);
       border-radius: 28px;
       padding: 22px;
-      text-align: left; /* text stays left, card itself centered */
+      text-align: left;               /* النص يبقى يسار، المربع في الوسط */
     }
 
     body.dark .blog {
