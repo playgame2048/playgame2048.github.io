@@ -1,4 +1,4 @@
-/* style.css - modern, dark-first design with smooth transitions */
+/* style.css - modern, dark-first design with premium transitions & glows */
 * {
   margin: 0;
   padding: 0;
@@ -13,7 +13,7 @@ body {
   align-items: center;
   background-color: #0f1217;
   color: #eef2f5;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.3s ease, color 0.2s ease;
   padding: 1.5rem;
 }
 
@@ -24,7 +24,7 @@ body.light-mode {
 }
 body.light-mode .canvas-container canvas {
   background: #d9e0eb;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
 body.light-mode .blog-card {
   background: #ffffff;
@@ -32,9 +32,10 @@ body.light-mode .blog-card {
   color: #1e293b;
 }
 body.light-mode .score-panel {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
   color: #0b1e2e;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255,255,240,0.3);
 }
 body.light-mode .gameover-card {
   background: rgba(255, 255, 255, 0.95);
@@ -57,7 +58,7 @@ body.light-mode .support-btn:hover {
   gap: 1.5rem;
 }
 
-/* score panel */
+/* score panel with glow */
 .score-panel {
   display: flex;
   align-items: center;
@@ -67,8 +68,11 @@ body.light-mode .support-btn:hover {
   padding: 0.9rem 1.8rem;
   border-radius: 80px;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-  transition: background 0.2s;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(245, 197, 66, 0.2);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+.score-panel:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 20px #f5c54240;
 }
 .score-container {
   display: flex;
@@ -87,6 +91,10 @@ body.light-mode .support-btn:hover {
   font-weight: 700;
   line-height: 1;
   font-feature-settings: "tnum";
+  transition: text-shadow 0.2s;
+}
+.score-value.highlight {
+  text-shadow: 0 0 12px #f5c542;
 }
 .icon-btn {
   background: rgba(255,255,255,0.05);
@@ -99,34 +107,39 @@ body.light-mode .support-btn:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   color: inherit;
   border: 1px solid rgba(255,255,255,0.1);
 }
 .icon-btn:hover {
   background: rgba(255,255,255,0.15);
-  transform: scale(1.05);
+  transform: scale(1.05) rotate(5deg);
+  box-shadow: 0 0 15px #f5c542;
 }
 
-/* canvas container */
+/* canvas container with glow */
 .canvas-container {
   position: relative;
   width: 100%;
   border-radius: 32px;
   overflow: hidden;
-  box-shadow: 0 25px 40px -8px rgba(0, 0, 0, 0.6);
-  background: #10131c; /* behind canvas */
-  aspect-ratio: 800/300; /* responsive */
+  box-shadow: 0 25px 40px -8px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(245,197,66,0.1), 0 0 30px rgba(245,197,66,0.2);
+  background: #10131c;
+  aspect-ratio: 800/300;
+  transition: box-shadow 0.3s;
+}
+.canvas-container:hover {
+  box-shadow: 0 25px 45px -8px black, 0 0 0 1px rgba(245,197,66,0.3), 0 0 40px #f5c54240;
 }
 #gameCanvas {
   display: block;
   width: 100%;
   height: 100%;
   background: #1c212e; /* dark ground */
-  image-rendering: crisp-edges; /* keep dino sharp */
+  image-rendering: crisp-edges;
   cursor: pointer;
 }
-/* overlay */
+/* overlay with smooth fade */
 .game-overlay {
   position: absolute;
   top: 0;
@@ -134,24 +147,32 @@ body.light-mode .support-btn:hover {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease, backdrop-filter 0.3s;
   border-radius: 32px;
 }
 .hidden {
-  display: none;
+  opacity: 0;
+  pointer-events: none;
+  backdrop-filter: blur(0px);
 }
 .gameover-card {
   background: rgba(18, 25, 40, 0.95);
   padding: 1.8rem 2.8rem;
   border-radius: 48px;
   text-align: center;
-  box-shadow: 0 25px 40px rgba(0,0,0,0.7);
-  border: 1px solid rgba(255,215,0,0.2);
+  box-shadow: 0 25px 40px rgba(0,0,0,0.8), 0 0 40px #f5c54240;
+  border: 1px solid rgba(255,215,0,0.3);
   animation: fadePop 0.2s ease;
+  transform: scale(1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.gameover-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 30px 50px black, 0 0 60px #f5c54260;
 }
 @keyframes fadePop {
   0% { transform: scale(0.9); opacity: 0; }
@@ -161,6 +182,7 @@ body.light-mode .support-btn:hover {
   font-size: 3.8rem;
   display: block;
   margin-bottom: 0.3rem;
+  filter: drop-shadow(0 4px 6px #f5c54280);
 }
 .gameover-card h2 {
   font-size: 2rem;
@@ -168,7 +190,7 @@ body.light-mode .support-btn:hover {
   letter-spacing: 2px;
   margin-bottom: 1.2rem;
   color: #f5c542;
-  text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 10px #f5c542, 0 0 20px #ffb347;
 }
 .restart-btn {
   background: #f5c542;
@@ -179,17 +201,17 @@ body.light-mode .support-btn:hover {
   padding: 0.8rem 2rem;
   border-radius: 60px;
   cursor: pointer;
-  box-shadow: 0 6px 0 #9e7c30, 0 10px 20px rgba(0,0,0,0.4);
-  transition: all 0.08s linear;
+  box-shadow: 0 6px 0 #9e7c30, 0 10px 20px rgba(0,0,0,0.4), 0 0 15px #f5c542;
+  transition: all 0.08s linear, box-shadow 0.2s;
   text-transform: uppercase;
   letter-spacing: 1.5px;
 }
 .restart-btn:active {
   transform: translateY(6px);
-  box-shadow: 0 2px 0 #9e7c30, 0 10px 18px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 0 #9e7c30, 0 10px 18px rgba(0,0,0,0.4), 0 0 25px #f5c542;
 }
 
-/* blog section */
+/* blog section with glassmorphism */
 .blog-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -197,15 +219,18 @@ body.light-mode .support-btn:hover {
   margin-top: 1rem;
 }
 .blog-card {
-  background: #1e2533;
+  background: rgba(30, 37, 51, 0.8);
+  backdrop-filter: blur(4px);
   padding: 1.6rem 1.4rem;
   border-radius: 28px;
   border: 1px solid rgba(255,255,255,0.03);
-  box-shadow: 0 12px 28px -8px #04060b;
-  transition: transform 0.2s;
+  box-shadow: 0 12px 28px -8px #04060b, 0 0 0 1px rgba(245,197,66,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s, background 0.2s;
 }
 .blog-card:hover {
   transform: translateY(-4px);
+  background: rgba(35, 45, 60, 0.9);
+  box-shadow: 0 18px 30px -8px black, 0 0 15px #f5c54240;
 }
 .blog-card h3 {
   font-size: 1.3rem;
@@ -215,6 +240,7 @@ body.light-mode .support-btn:hover {
   align-items: center;
   gap: 0.5rem;
   color: #bdd3ff;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
 .blog-card p {
   font-size: 0.95rem;
@@ -230,6 +256,7 @@ kbd {
   font-weight: 600;
   border: 1px solid #3e4a5f;
   color: #f5c542;
+  box-shadow: 0 2px 0 #0f131c;
 }
 .support-btn {
   display: inline-block;
@@ -241,14 +268,15 @@ kbd {
   text-decoration: none;
   font-size: 0.9rem;
   letter-spacing: 0.3px;
-  transition: background 0.2s, transform 0.1s;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4), 0 0 15px #f5c542;
 }
 .support-btn:hover {
   background: #ffd966;
   transform: scale(1.02);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.5), 0 0 25px #f5c542;
 }
 
 /* mobile fine-tuning */
