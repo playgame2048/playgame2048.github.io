@@ -35,8 +35,8 @@
       background: var(--bg-light);
       color: var(--text-light);
       display: flex;
-      justify-content: center;      /* توسيط أفقي */
-      align-items: center;          /* توسيط عمودي */
+      justify-content: center;
+      align-items: center;
       min-height: 100vh;
       padding: 16px;
       transition: background 0.2s, color 0.2s;
@@ -47,7 +47,6 @@
       color: var(--text-dark);
     }
 
-    /* الحاوية الرئيسية – متمركزة */
     .game-card {
       max-width: 800px;
       width: 100%;
@@ -59,7 +58,7 @@
       padding: 24px 22px 30px;
       box-shadow: 0 20px 35px -10px rgba(0,0,0,0.1);
       transition: background 0.2s, border 0.2s;
-      margin: 0 auto;                /* توسيط إضافي */
+      margin: 0 auto;
     }
 
     body.dark .game-card {
@@ -96,7 +95,7 @@
 
     .button-row {
       display: flex;
-      justify-content: center;       /* توسيط الأزرار */
+      justify-content: center;
       gap: 20px;
       margin-bottom: 20px;
     }
@@ -134,11 +133,10 @@
       box-shadow: 0 10px 0 #1e293b;
     }
 
-    /* غلاف الكانفاس – لتوسيط الكانفاس */
     .canvas-wrapper {
       position: relative;
       display: flex;
-      justify-content: center;       /* توسيط الكانفاس أفقيًا */
+      justify-content: center;
       margin: 10px 0 15px;
     }
 
@@ -191,9 +189,8 @@
       border-color: #334155;
     }
 
-    /* AD SPACE – متمركزة */
     .ad-space {
-      margin: 0 auto 15px;           /* توسيط أفقي */
+      margin: 0 auto 15px;
       max-width: 700px;
       border-radius: 16px;
       overflow: hidden;
@@ -201,10 +198,9 @@
       padding: 3px;
     }
 
-    /* BLOG – المربع نفسه متمركز، النص داخل يسار */
     .blog {
       margin-top: 25px;
-      margin-left: auto;              /* توسيط المربع */
+      margin-left: auto;
       margin-right: auto;
       width: 100%;
       background: rgba(255,255,255,0.6);
@@ -212,7 +208,7 @@
       border: 1px solid var(--border-light);
       border-radius: 28px;
       padding: 22px;
-      text-align: left;               /* النص يبقى يسار، المربع في الوسط */
+      text-align: left;
     }
 
     body.dark .blog {
@@ -360,6 +356,7 @@
       const darkToggle = document.getElementById("darkToggle");
       const supportBtn = document.getElementById("supportBtn");
 
+      // ---------- Game state ----------
       let running = false;
       let gameOver = false;
       let frames = 0;
@@ -368,6 +365,7 @@
       let firstRestart = true;
       let score = 0;
       let highScore = localStorage.getItem("dinoHighScore") || 0;
+      let lastMilestone = 0;
 
       const dino = {
         x: 50,
@@ -381,7 +379,24 @@
       };
 
       let obstacles = [];
+      let clouds = [];
 
+      // ---------- Clouds ----------
+      function initClouds() {
+        clouds = [];
+        for (let i = 0; i < 4; i++) {
+          clouds.push({
+            x: Math.random() * canvas.width,
+            y: 30 + Math.random() * 80,
+            width: 50 + Math.random() * 40,
+            speed: 0.2 + Math.random() * 0.3,
+            opacity: 0.3 + Math.random() * 0.2
+          });
+        }
+      }
+      initClouds();
+
+      // ---------- Obstacles ----------
       function addObstacle() {
         obstacles.push({
           x: canvas.width,
@@ -391,11 +406,13 @@
         });
       }
 
+      // ---------- Update ----------
       function update() {
         if (!running) return;
 
         frames++;
 
+        // Dino physics
         dino.vy += dino.gravity;
         dino.y += dino.vy;
 
@@ -405,6 +422,7 @@
           dino.onGround = true;
         }
 
+        // Move obstacles and check collision
         obstacles.forEach(o => {
           o.x -= gameSpeed;
 
@@ -427,15 +445,28 @@
 
         obstacles = obstacles.filter(o => o.x + o.w > 0);
 
+        // Spawn new obstacles
         if (frames > nextSpawn) {
           addObstacle();
-          let randomDelay = Math.floor(Math.random() * 100) + (80 - gameSpeed * 5);
+          let randomDelay = 40 + Math.floor(Math.random() * 60);
           nextSpawn = frames + randomDelay;
         }
 
-        score += 0.1;
+        // Move clouds
+        clouds.forEach(c => {
+          c.x -= c.speed;
+          if (c.x + c.width < 0) {
+            c.x = canvas.width + Math.random() * 100;
+            c.y = 30 + Math.random() * 80;
+          }
+        });
 
-        if (Math.floor(score) % 100 === 0 && Math.floor(score) > 0 && !gameOver) {
+        // Score
+        score += 0.1;
+        const intScore = Math.floor(score);
+        if (intScore > 0 && intScore % 100 === 0 && intScore > lastMilestone) {
+          lastMilestone = intScore;
+          // Beep sound
           try {
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const osc = audioCtx.createOscillator();
@@ -448,25 +479,51 @@
             osc.stop(audioCtx.currentTime + 0.1);
           } catch (e) {}
         }
+
+        // Gradually increase speed
+        gameSpeed = 3 + Math.floor(score / 300);
       }
 
+      // ---------- Reset ----------
       function resetGame() {
         obstacles = [];
         dino.y = 200;
         dino.vy = 0;
         dino.onGround = true;
         score = 0;
+        lastMilestone = 0;
         frames = 0;
         nextSpawn = 0;
+        gameSpeed = 3;
         gameOver = false;
         running = true;
         gameOverScreen.style.display = "none";
         startScreen.style.display = "none";
+        initClouds();
       }
 
+      // ---------- Draw ----------
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        // Sky gradient
+        const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        grad.addColorStop(0, "#f1f5f9");
+        grad.addColorStop(1, "#e2e8f0");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Clouds
+        clouds.forEach(c => {
+          ctx.fillStyle = `rgba(255,255,255,${c.opacity})`;
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, c.width * 0.3, 0, Math.PI * 2);
+          ctx.arc(c.x + c.width * 0.3, c.y - 5, c.width * 0.25, 0, Math.PI * 2);
+          ctx.arc(c.x + c.width * 0.6, c.y, c.width * 0.3, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Ground line
         ctx.strokeStyle = "#475569";
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -474,16 +531,18 @@
         ctx.lineTo(canvas.width, 240);
         ctx.stroke();
 
+        // Dino (chrome style)
         ctx.fillStyle = document.body.classList.contains('dark') ? '#fff' : '#020617';
-        ctx.fillRect(dino.x, dino.y + 10, 28, 20);
-        ctx.fillRect(dino.x + 18, dino.y, 18, 18);
+        ctx.fillRect(dino.x, dino.y + 10, 28, 20); // body
+        ctx.fillRect(dino.x + 18, dino.y, 18, 18); // head
         ctx.fillStyle = "#f1f5f9";
-        ctx.fillRect(dino.x + 30, dino.y + 6, 3, 3);
+        ctx.fillRect(dino.x + 30, dino.y + 6, 3, 3); // eye
         ctx.fillStyle = document.body.classList.contains('dark') ? '#fff' : '#020617';
-        ctx.fillRect(dino.x + 6, dino.y + 30, 6, 10);
-        ctx.fillRect(dino.x + 16, dino.y + 30, 6, 10);
-        ctx.fillRect(dino.x - 8, dino.y + 16, 8, 6);
+        ctx.fillRect(dino.x + 6, dino.y + 30, 6, 10); // leg1
+        ctx.fillRect(dino.x + 16, dino.y + 30, 6, 10); // leg2
+        ctx.fillRect(dino.x - 8, dino.y + 16, 8, 6); // tail
 
+        // Obstacles (cacti)
         obstacles.forEach(o => {
           ctx.fillStyle = "#22c55e";
           ctx.fillRect(o.x, o.y, 12, 40);
@@ -491,6 +550,7 @@
           ctx.fillRect(o.x + 12, o.y + 16, 6, 14);
         });
 
+        // Score
         ctx.fillStyle = document.body.classList.contains('dark') ? '#fff' : '#020617';
         ctx.font = "bold 20px 'Inter', Arial, sans-serif";
         ctx.textAlign = "right";
@@ -498,6 +558,7 @@
         ctx.fillText("High: " + Math.floor(highScore), canvas.width - 20, 55);
       }
 
+      // ---------- Game loop ----------
       function loop() {
         if (running) update();
         draw();
@@ -505,32 +566,33 @@
       }
       loop();
 
+      // ---------- Controls ----------
+      function jump() {
+        if (!running && !gameOver) {
+          startScreen.style.display = "none";
+          resetGame();
+        } else if (gameOver) {
+          resetGame();
+        } else if (dino.onGround) {
+          dino.vy = dino.jumpPower;
+          dino.onGround = false;
+        }
+      }
+
       document.addEventListener("keydown", (e) => {
-        if (e.code === "Space" || e.code === "ArrowUp") e.preventDefault();
-
-        if (!running && !gameOver) {
-          startScreen.style.display = "none";
-          resetGame();
-        } else if (gameOver) {
-          resetGame();
-        } else if (dino.onGround) {
-          dino.vy = dino.jumpPower;
-          dino.onGround = false;
+        if (e.code === "Space" || e.code === "ArrowUp") {
+          e.preventDefault();
+          jump();
         }
       });
 
-      document.addEventListener("click", () => {
-        if (!running && !gameOver) {
-          startScreen.style.display = "none";
-          resetGame();
-        } else if (gameOver) {
-          resetGame();
-        } else if (dino.onGround) {
-          dino.vy = dino.jumpPower;
-          dino.onGround = false;
-        }
+      canvas.addEventListener("click", jump);
+      canvas.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        jump();
       });
 
+      // ---------- Buttons ----------
       restartBtn.onclick = () => {
         if (firstRestart) {
           firstRestart = false;
@@ -549,6 +611,7 @@
         window.open("https://ko-fi.com/help_tommy", "_blank");
       };
 
+      // ---------- Start ----------
       startScreen.style.display = "flex";
     })();
   </script>
