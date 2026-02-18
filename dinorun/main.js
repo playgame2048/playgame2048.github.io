@@ -1,4 +1,4 @@
-// script.js – production ready, clean, commented
+// script.js – production ready, clean, with particles, background animation, and premium effects
 (() => {
   // ----- DOM elements -----
   const canvas = document.getElementById('gameCanvas');
@@ -34,9 +34,22 @@
   let dinoY = GROUND_Y - DINO_HEIGHT;  // ground position
   let dinoVY = 0;
   let isOnGround = true;
+  let wasOnGround = true; // for particle emission on landing
 
   // obstacles
   let obstacles = [];
+
+  // particles
+  let particles = [];
+  const MAX_PARTICLES = 30;
+
+  // background clouds (animated)
+  let clouds = [
+    { x: 200, y: 60, size: 30, speed: 0.02 },
+    { x: 500, y: 40, size: 45, speed: 0.03 },
+    { x: 700, y: 80, size: 25, speed: 0.015 },
+    { x: 100, y: 120, size: 40, speed: 0.025 }
+  ];
 
   // timing (delta loop)
   let lastTimestamp = 0;
@@ -53,11 +66,14 @@
     highScoreSpan.textContent = highScore;
   } catch (e) { /* ignore */ }
 
-  // ----- helper: update high score in storage -----
+  // ----- helper: update high score in storage with glow animation -----
   function updateHighScore(value) {
     if (value > highScore) {
       highScore = value;
       highScoreSpan.textContent = highScore;
+      // add highlight class for premium feedback
+      highScoreSpan.classList.add('highlight');
+      setTimeout(() => highScoreSpan.classList.remove('highlight'), 300);
       try { localStorage.setItem('dinoHighScore', highScore); } catch (e) {}
     }
   }
@@ -102,12 +118,54 @@
     } catch (e) {}
   }
 
+  // ----- particle system (dust on landing) -----
+  function emitLandingParticles(x, y) {
+    for (let i = 0; i < 6; i++) {
+      if (particles.length >= MAX_PARTICLES) {
+        // remove oldest particle
+        particles.shift();
+      }
+      particles.push({
+        x: x + DINO_WIDTH/2 + (Math.random() - 0.5) * 15,
+        y: GROUND_Y - 4,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: -Math.random() * 0.1 - 0.05,
+        life: 0.8 + Math.random() * 0.4,
+        color: document.body.classList.contains('light-mode') ? '#8b6e4b' : '#d4a373'
+      });
+    }
+  }
+
+  // ----- update particles (delta ms) -----
+  function updateParticles(delta) {
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx * delta;
+      p.y += p.vy * delta;
+      p.vy += 0.0001 * delta; // very slight gravity
+      p.life -= 0.0005 * delta;
+      if (p.life <= 0 || p.y > GROUND_Y + 10) {
+        particles.splice(i, 1);
+      }
+    }
+  }
+
+  // ----- update clouds (background animation) -----
+  function updateClouds(delta) {
+    clouds.forEach(cloud => {
+      cloud.x -= cloud.speed * delta;
+      if (cloud.x + cloud.size < 0) {
+        cloud.x = canvas.width + cloud.size;
+        cloud.y = 30 + Math.random() * 100;
+      }
+    });
+  }
+
   // ----- restart logic (including special first‑click link) -----
   function restartGame() {
     // special first‑click link (only once)
     try {
       if (!localStorage.getItem('firstRestartDone')) {
-        // open a fun, relevant wiki page about dinosaurs
         window.open('https://en.wikipedia.org/wiki/Dinosaur', '_blank');
         localStorage.setItem('firstRestartDone', 'true');
       }
@@ -122,9 +180,11 @@
     dinoY = GROUND_Y - DINO_HEIGHT;
     dinoVY = 0;
     isOnGround = true;
+    wasOnGround = true;
 
     // reset world
     obstacles = [];
+    particles = [];
     score = 0;
     speed = BASE_SPEED;
     obstacleTimer = 0;
@@ -133,7 +193,7 @@
     // update displays
     scoreSpan.textContent = '0';
 
-    // ensure audio context is running (user interaction will resume if needed)
+    // ensure audio context is running
     if (audioCtx && audioCtx.state === 'suspended') {
       audioCtx.resume().catch(() => {});
     }
@@ -146,7 +206,7 @@
     gameOver = true;
     gameOverlay.classList.remove('hidden');
     playGameOverSound();
-    updateHighScore(score);
+    updateHighScore(Math.floor(score));
   }
 
   // ----- collision detection (AABB) -----
@@ -178,7 +238,7 @@
   function updateGame(delta) {
     if (!gameActive) return;
 
-    // clamp delta to avoid huge jumps (tab inactive)
+    // clamp delta to avoid huge jumps
     delta = Math.min(delta, 50);
 
     // 1. dino physics
@@ -194,6 +254,12 @@
       isOnGround = false;
     }
 
+    // landing detection for particles
+    if (isOnGround && !wasOnGround) {
+      emitLandingParticles(DINO_X, GROUND_Y);
+    }
+    wasOnGround = isOnGround;
+
     // 2. move obstacles & remove off-screen
     for (let i = obstacles.length - 1; i >= 0; i--) {
       obstacles[i].x -= speed * delta;
@@ -201,6 +267,7 @@
         obstacles.splice(i, 1);
         // small score bonus for passing obstacle
         score += 15;
+        // optional: emit particle when obstacle passes? (keep minimal)
       }
     }
 
@@ -212,30 +279,39 @@
         x: canvas.width,
         h: obsH
       });
-      // random gap between 900ms and 1900ms
       nextSpawnTime = 800 + Math.random() * 1100;
-      obstacleTimer -= nextSpawnTime; // subtract to keep irregular spawns
+      obstacleTimer -= nextSpawnTime;
     }
 
-    // 4. increase speed gradually based on score
+    // 4. increase speed based on score
     speed = BASE_SPEED + Math.min(MAX_SPEED - BASE_SPEED, (score / 800) * 0.25);
     if (speed > MAX_SPEED) speed = MAX_SPEED;
 
     // 5. update score (time survived)
     score += delta * 0.1;
-    scoreSpan.textContent = Math.floor(score);
+    const intScore = Math.floor(score);
+    scoreSpan.textContent = intScore;
+    // highlight score on each hundred
+    if (intScore % 100 === 0 && intScore > 0) {
+      scoreSpan.classList.add('highlight');
+      setTimeout(() => scoreSpan.classList.remove('highlight'), 200);
+    }
 
     // 6. collision detection
     if (checkCollision()) {
       setGameOver();
     }
+
+    // 7. update particles & clouds (always for background)
+    updateParticles(delta);
+    updateClouds(delta);
   }
 
-  // ----- drawing routines (modern, smooth) -----
+  // ----- drawing routines (modern, smooth, with glow) -----
   function drawScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // sky gradient (dark mode friendly, changes slightly with light mode later)
+    // sky gradient with subtle animated touch (based on light mode)
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
     if (document.body.classList.contains('light-mode')) {
       gradient.addColorStop(0, '#cbd5e1');
@@ -247,36 +323,63 @@
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // ground line with shadow
+    // draw clouds (soft circles with glow)
+    clouds.forEach(cloud => {
+      ctx.shadowColor = '#f5c54230';
+      ctx.shadowBlur = 20;
+      ctx.globalAlpha = 0.35;
+      ctx.fillStyle = document.body.classList.contains('light-mode') ? '#e2e8f0' : '#b0c4de';
+      ctx.beginPath();
+      ctx.arc(cloud.x, cloud.y, cloud.size * 0.7, 0, Math.PI * 2);
+      ctx.arc(cloud.x + cloud.size * 0.5, cloud.y - cloud.size * 0.2, cloud.size * 0.5, 0, Math.PI * 2);
+      ctx.arc(cloud.x - cloud.size * 0.3, cloud.y - cloud.size * 0.1, cloud.size * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1.0;
+
+    // ground with glow
     ctx.beginPath();
     ctx.moveTo(0, GROUND_Y);
     ctx.lineTo(canvas.width, GROUND_Y);
     ctx.strokeStyle = document.body.classList.contains('light-mode') ? '#334155' : '#f5c542';
     ctx.lineWidth = 4;
-    ctx.shadowColor = '#f5c54240';
-    ctx.shadowBlur = 10;
+    ctx.shadowColor = '#f5c54280';
+    ctx.shadowBlur = 15;
     ctx.stroke();
     ctx.shadowBlur = 0;
 
-    // draw obstacles (modern 3D-ish blocks)
+    // draw obstacles with glow
     obstacles.forEach(obs => {
       const x = obs.x;
       const y = GROUND_Y - obs.h;
       // main block
       ctx.fillStyle = document.body.classList.contains('light-mode') ? '#5f3b1c' : '#cf9f6e';
-      ctx.shadowColor = '#00000060';
-      ctx.shadowBlur = 12;
+      ctx.shadowColor = '#f5c54260';
+      ctx.shadowBlur = 20;
       ctx.fillRect(x, y, OBS_WIDTH, obs.h);
       // highlight
       ctx.fillStyle = document.body.classList.contains('light-mode') ? '#b77b46' : '#f5cba0';
-      ctx.shadowBlur = 4;
+      ctx.shadowBlur = 10;
       ctx.fillRect(x + 2, y - 2, OBS_WIDTH - 4, 6);
-      ctx.shadowBlur = 0;
     });
 
-    // draw dino (custom stylized)
-    ctx.shadowBlur = 16;
-    ctx.shadowColor = '#f5c54260';
+    // draw particles
+    particles.forEach(p => {
+      ctx.globalAlpha = p.life;
+      ctx.fillStyle = p.color;
+      ctx.shadowColor = '#f5c542';
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1.0;
+    ctx.shadowBlur = 0;
+
+    // draw dino with glow
+    ctx.shadowBlur = 25;
+    ctx.shadowColor = '#f5c542b0';
     // body
     ctx.fillStyle = document.body.classList.contains('light-mode') ? '#2d3e50' : '#e5e7eb';
     ctx.beginPath();
@@ -284,6 +387,7 @@
     ctx.fill();
     // eye
     ctx.fillStyle = '#0a0c10';
+    ctx.shadowBlur = 0; // no shadow on small eye
     ctx.beginPath();
     ctx.arc(DINO_X + DINO_WIDTH - 8, dinoY + 8, 4, 0, 2 * Math.PI);
     ctx.fill();
@@ -293,6 +397,8 @@
     ctx.fill();
     // spikes
     ctx.fillStyle = '#f5c542';
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = '#f5c542';
     ctx.beginPath();
     ctx.moveTo(DINO_X + 2, dinoY - 4);
     ctx.lineTo(DINO_X + 10, dinoY - 12);
@@ -340,11 +446,10 @@
   function handleJump(e) {
     if (e.type === 'keydown') {
       if (e.code !== 'Space') return;
-      e.preventDefault();      // prevent page scroll
+      e.preventDefault();
     }
     if (!gameActive || gameOver) return;
 
-    // try to resume audio context (user interaction)
     if (audioCtx && audioCtx.state === 'suspended') {
       audioCtx.resume().then(() => playJumpSound()).catch(() => {});
     } else {
@@ -357,34 +462,26 @@
     }
   }
 
-  // keyboard
   window.addEventListener('keydown', handleJump);
-  // touch / click on canvas
   canvas.addEventListener('touchstart', (e) => { e.preventDefault(); handleJump(e); });
   canvas.addEventListener('mousedown', handleJump);
 
-  // restart buttons (main overlay)
   restartMain.addEventListener('click', () => {
     restartGame();
   });
 
-  // also if user clicks "restart" via hidden? but we only have one restart button inside game.
-  // we also might want restart on canvas double tap? but fine.
-
-  // dark mode toggle
   darkToggle.addEventListener('click', () => {
     document.body.classList.toggle('light-mode');
     const isLight = document.body.classList.contains('light-mode');
     darkToggle.textContent = isLight ? '☀️' : '🌙';
+    // update particle colors if needed (optional)
   });
 
-  // support button (simple alert to simulate support, but keeps design)
   supportBtn.addEventListener('click', (e) => {
     e.preventDefault();
     alert('✨ thanks for supporting! (this is a demo, but your click matters.)');
   });
 
-  // initialise audio on first user interaction anywhere
   document.addEventListener('click', function initAudioOnFirst() {
     initAudio();
     document.removeEventListener('click', initAudioOnFirst);
@@ -392,6 +489,4 @@
 
   // start game loop
   requestAnimationFrame(gameLoop);
-
-  // expose restart for debugging / additional restart (but we have button already)
 })();
