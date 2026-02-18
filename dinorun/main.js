@@ -188,7 +188,7 @@
     score = 0;
     speed = BASE_SPEED;
     obstacleTimer = 0;
-    nextSpawnTime = 1200 + Math.random() * 700;
+    nextSpawnTime = 2000 + Math.random() * 1500; // من 2 إلى 3.5 ثانية
 
     // update displays
     scoreSpan.textContent = '0';
@@ -279,7 +279,7 @@
         x: canvas.width,
         h: obsH
       });
-      nextSpawnTime = 800 + Math.random() * 1100;
+      nextSpawnTime = 1500 + Math.random() * 2000; // من 1.5 إلى 3.5 ثانية
       obstacleTimer -= nextSpawnTime;
     }
 
