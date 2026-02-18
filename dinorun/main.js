@@ -307,106 +307,176 @@
     updateClouds(delta);
   }
 
-  // ----- drawing routines (modern, smooth, with glow) -----
-  function drawScene() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+// ----- drawing routines (professional, detailed) -----
+function drawScene() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // sky gradient with subtle animated touch (based on light mode)
-    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    if (document.body.classList.contains('light-mode')) {
-      gradient.addColorStop(0, '#cbd5e1');
-      gradient.addColorStop(0.7, '#94a3b8');
-    } else {
-      gradient.addColorStop(0, '#1e2a3a');
-      gradient.addColorStop(0.7, '#0f172a');
-    }
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // sky gradient
+  const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  if (document.body.classList.contains('light-mode')) {
+    gradient.addColorStop(0, '#cbd5e1');
+    gradient.addColorStop(0.7, '#94a3b8');
+  } else {
+    gradient.addColorStop(0, '#1e2a3a');
+    gradient.addColorStop(0.7, '#0f172a');
+  }
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // draw clouds (soft circles with glow)
-    clouds.forEach(cloud => {
-      ctx.shadowColor = '#f5c54230';
-      ctx.shadowBlur = 20;
-      ctx.globalAlpha = 0.35;
-      ctx.fillStyle = document.body.classList.contains('light-mode') ? '#e2e8f0' : '#b0c4de';
-      ctx.beginPath();
-      ctx.arc(cloud.x, cloud.y, cloud.size * 0.7, 0, Math.PI * 2);
-      ctx.arc(cloud.x + cloud.size * 0.5, cloud.y - cloud.size * 0.2, cloud.size * 0.5, 0, Math.PI * 2);
-      ctx.arc(cloud.x - cloud.size * 0.3, cloud.y - cloud.size * 0.1, cloud.size * 0.5, 0, Math.PI * 2);
-      ctx.fill();
-    });
-    ctx.shadowBlur = 0;
-    ctx.globalAlpha = 1.0;
-
-    // ground with glow
-    ctx.beginPath();
-    ctx.moveTo(0, GROUND_Y);
-    ctx.lineTo(canvas.width, GROUND_Y);
-    ctx.strokeStyle = document.body.classList.contains('light-mode') ? '#334155' : '#f5c542';
-    ctx.lineWidth = 4;
-    ctx.shadowColor = '#f5c54280';
-    ctx.shadowBlur = 15;
-    ctx.stroke();
-    ctx.shadowBlur = 0;
-
-    // draw obstacles with glow
-    obstacles.forEach(obs => {
-      const x = obs.x;
-      const y = GROUND_Y - obs.h;
-      // main block
-      ctx.fillStyle = document.body.classList.contains('light-mode') ? '#5f3b1c' : '#cf9f6e';
-      ctx.shadowColor = '#f5c54260';
-      ctx.shadowBlur = 20;
-      ctx.fillRect(x, y, OBS_WIDTH, obs.h);
-      // highlight
-      ctx.fillStyle = document.body.classList.contains('light-mode') ? '#b77b46' : '#f5cba0';
-      ctx.shadowBlur = 10;
-      ctx.fillRect(x + 2, y - 2, OBS_WIDTH - 4, 6);
-    });
-
-    // draw particles
-    particles.forEach(p => {
-      ctx.globalAlpha = p.life;
-      ctx.fillStyle = p.color;
-      ctx.shadowColor = '#f5c542';
-      ctx.shadowBlur = 8;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-      ctx.fill();
-    });
-    ctx.globalAlpha = 1.0;
-    ctx.shadowBlur = 0;
-
-    // draw dino with glow
-    ctx.shadowBlur = 25;
-    ctx.shadowColor = '#f5c542b0';
-    // body
-    ctx.fillStyle = document.body.classList.contains('light-mode') ? '#2d3e50' : '#e5e7eb';
-    ctx.beginPath();
-    ctx.roundRect(DINO_X, dinoY, DINO_WIDTH, DINO_HEIGHT, 8);
-    ctx.fill();
-    // eye
-    ctx.fillStyle = '#0a0c10';
-    ctx.shadowBlur = 0; // no shadow on small eye
-    ctx.beginPath();
-    ctx.arc(DINO_X + DINO_WIDTH - 8, dinoY + 8, 4, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.fillStyle = 'white';
-    ctx.beginPath();
-    ctx.arc(DINO_X + DINO_WIDTH - 9, dinoY + 6, 1.8, 0, 2 * Math.PI);
-    ctx.fill();
-    // spikes
-    ctx.fillStyle = '#f5c542';
+  // draw clouds (same as before)
+  clouds.forEach(cloud => {
+    ctx.shadowColor = '#f5c54230';
     ctx.shadowBlur = 20;
-    ctx.shadowColor = '#f5c542';
+    ctx.globalAlpha = 0.35;
+    ctx.fillStyle = document.body.classList.contains('light-mode') ? '#e2e8f0' : '#b0c4de';
     ctx.beginPath();
-    ctx.moveTo(DINO_X + 2, dinoY - 4);
-    ctx.lineTo(DINO_X + 10, dinoY - 12);
-    ctx.lineTo(DINO_X + 18, dinoY - 4);
+    ctx.arc(cloud.x, cloud.y, cloud.size * 0.7, 0, Math.PI * 2);
+    ctx.arc(cloud.x + cloud.size * 0.5, cloud.y - cloud.size * 0.2, cloud.size * 0.5, 0, Math.PI * 2);
+    ctx.arc(cloud.x - cloud.size * 0.3, cloud.y - cloud.size * 0.1, cloud.size * 0.5, 0, Math.PI * 2);
     ctx.fill();
-    ctx.shadowBlur = 0;
+  });
+  ctx.shadowBlur = 0;
+  ctx.globalAlpha = 1.0;
+
+  // ground line with glow
+  ctx.beginPath();
+  ctx.moveTo(0, GROUND_Y);
+  ctx.lineTo(canvas.width, GROUND_Y);
+  ctx.strokeStyle = document.body.classList.contains('light-mode') ? '#334155' : '#f5c542';
+  ctx.lineWidth = 4;
+  ctx.shadowColor = '#f5c54280';
+  ctx.shadowBlur = 15;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // draw obstacles (detailed cacti)
+  obstacles.forEach(obs => {
+    const x = obs.x;
+    const y = GROUND_Y - obs.h;
+    const w = OBS_WIDTH;
+    const h = obs.h;
+
+    // main body with gradient
+    const gradient = ctx.createLinearGradient(x, y, x + w, y + h);
+    gradient.addColorStop(0, '#2f5a3a');
+    gradient.addColorStop(0.6, '#1d3b24');
+    ctx.fillStyle = gradient;
+    ctx.shadowColor = '#00000060';
+    ctx.shadowBlur = 15;
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, 4);
+    ctx.fill();
+
+    // arms (small branches)
+    ctx.fillStyle = '#2f5a3a';
+    ctx.shadowBlur = 10;
+    // left arm
+    ctx.beginPath();
+    ctx.roundRect(x - 5, y + h * 0.4, 5, 8, 2);
+    ctx.fill();
+    // right arm
+    ctx.beginPath();
+    ctx.roundRect(x + w, y + h * 0.6, 5, 8, 2);
+    ctx.fill();
+    // top spike
+    ctx.beginPath();
+    ctx.roundRect(x + w/2 - 2, y - 8, 4, 10, 2);
+    ctx.fill();
+
+    // highlights
+    ctx.fillStyle = '#3f8b4f';
+    ctx.shadowBlur = 5;
+    ctx.fillRect(x + 2, y + 2, 3, h - 6);
+  });
+
+  // draw particles (dust)
+  particles.forEach(p => {
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.shadowColor = '#f5c542';
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1.0;
+  ctx.shadowBlur = 0;
+
+  // ---- draw Dino (detailed) ----
+  const dinoBaseY = dinoY; // ground position
+
+  // body (rounded rectangle)
+  ctx.fillStyle = document.body.classList.contains('light-mode') ? '#2d3e50' : '#e5e7eb';
+  ctx.shadowColor = '#f5c542b0';
+  ctx.shadowBlur = 25;
+  ctx.beginPath();
+  ctx.roundRect(DINO_X, dinoBaseY, DINO_WIDTH, DINO_HEIGHT, 10);
+  ctx.fill();
+
+  // belly (lighter area)
+  ctx.fillStyle = document.body.classList.contains('light-mode') ? '#4a5f73' : '#f0f4fa';
+  ctx.shadowBlur = 10;
+  ctx.beginPath();
+  ctx.roundRect(DINO_X + 4, dinoBaseY + 8, DINO_WIDTH - 8, DINO_HEIGHT - 12, 5);
+  ctx.fill();
+
+  // legs (two front, two back)
+  ctx.fillStyle = document.body.classList.contains('light-mode') ? '#1f2b36' : '#b0b8c5';
+  ctx.shadowBlur = 15;
+  // back leg
+  ctx.fillRect(DINO_X + 4, dinoBaseY + DINO_HEIGHT - 4, 6, 10);
+  ctx.fillRect(DINO_X + DINO_WIDTH - 10, dinoBaseY + DINO_HEIGHT - 4, 6, 10);
+  // front leg (smaller)
+  ctx.fillRect(DINO_X + 6, dinoBaseY + DINO_HEIGHT - 2, 4, 8);
+  ctx.fillRect(DINO_X + DINO_WIDTH - 10, dinoBaseY + DINO_HEIGHT - 2, 4, 8);
+
+  // tail (curved)
+  ctx.fillStyle = document.body.classList.contains('light-mode') ? '#2d3e50' : '#e5e7eb';
+  ctx.beginPath();
+  ctx.moveTo(DINO_X - 6, dinoBaseY + DINO_HEIGHT - 10);
+  ctx.quadraticCurveTo(DINO_X - 20, dinoBaseY + DINO_HEIGHT - 20, DINO_X - 14, dinoBaseY + DINO_HEIGHT - 2);
+  ctx.lineTo(DINO_X, dinoBaseY + DINO_HEIGHT - 6);
+  ctx.fill();
+
+  // spikes on back (three spikes)
+  ctx.fillStyle = '#f5c542';
+  ctx.shadowColor = '#f5c542';
+  ctx.shadowBlur = 20;
+  for (let i = 0; i < 3; i++) {
+    const spikeX = DINO_X + 5 + i * 8;
+    ctx.beginPath();
+    ctx.moveTo(spikeX, dinoBaseY - 2);
+    ctx.lineTo(spikeX + 5, dinoBaseY - 10);
+    ctx.lineTo(spikeX - 5, dinoBaseY - 10);
+    ctx.fill();
   }
 
+  // eye with highlight
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = '#0a0c10';
+  ctx.beginPath();
+  ctx.arc(DINO_X + DINO_WIDTH - 8, dinoBaseY + 8, 4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.beginPath();
+  ctx.arc(DINO_X + DINO_WIDTH - 9, dinoBaseY + 6, 1.8, 0, Math.PI * 2);
+  ctx.fill();
+  // pupil
+  ctx.fillStyle = '#000';
+  ctx.beginPath();
+  ctx.arc(DINO_X + DINO_WIDTH - 8.5, dinoBaseY + 7, 1, 0, Math.PI * 2);
+  ctx.fill();
+
+  // eyebrow (for character)
+  ctx.strokeStyle = '#f5c542';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(DINO_X + DINO_WIDTH - 14, dinoBaseY + 2);
+  ctx.lineTo(DINO_X + DINO_WIDTH - 8, dinoBaseY - 1);
+  ctx.stroke();
+
+  ctx.shadowBlur = 0;
+}
   // helper canvas roundRect
   CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
     if (w < 2 * r) r = w / 2;
