@@ -288,7 +288,7 @@
     if (speed > MAX_SPEED) speed = MAX_SPEED;
 
     // 5. update score (time survived)
-    score += delta * 0.1;
+    score += delta * 0.01;
     const intScore = Math.floor(score);
     scoreSpan.textContent = intScore;
     // highlight score on each hundred
