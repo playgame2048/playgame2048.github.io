@@ -121,11 +121,7 @@
             cursor: pointer;
         }
 
-        /* side score (already in bar, but also in design we can keep minimal) */
-        /* but we want "fjanb dyal lgame" – we already have scores above, but to be side we put some inline */
-        /* we'll add a small decorative side element – but main scores are above, okay */
-
-        /* ad placeholder (blast l ads) */
+        /* ad spot with actual script */
         .ad-spot {
             flex: 1;
             min-width: 160px;
@@ -144,6 +140,7 @@
             box-shadow: inset 0 0 30px #000000;
             height: fit-content;
             margin-top: 20px;
+            overflow: hidden;
         }
 
         .ad-spot span {
@@ -153,12 +150,7 @@
             border-radius: 50px;
             border: 1px solid #3c3c3c;
             color: #9b9b9b;
-        }
-
-        .ad-spot small {
-            font-size: 0.7rem;
-            margin-top: 8px;
-            color: #3d3d3d;
+            margin-bottom: 10px;
         }
 
         /* blog section (lame blog kbir) */
@@ -250,13 +242,26 @@
             text-align: center;
         }
 
-        /* direct link hint (hidden but functional: first break leads to link) 
-           actually "awel mra takhdni lwahd directlink" – we make it: first game over opens a new tab? 
-           but we'll do: first collision (gameover) redirects to a fun link? 
-           let's implement: first time game over occurs, it opens https://example.com (or a dino game link) 
-        */
-        .hide {
-            display: none;
+        @media (max-width: 800px) {
+            .canvas-container {
+                flex-direction: column;
+            }
+            .ad-spot {
+                width: 100%;
+                margin-top: 10px;
+                padding: 20px;
+            }
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-bar {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
         }
     </style>
 </head>
@@ -271,14 +276,20 @@
         <button class="restart-btn" id="restartButton">🔄 RESTART</button>
     </div>
 
-    <!-- main canvas + side ad (blast l ads) -->
+    <!-- main canvas + side ad (actual ad script injected) -->
     <div class="canvas-container">
         <div class="game-area">
             <canvas id="gameCanvas" width="800" height="300"></canvas>
         </div>
         <div class="ad-spot">
             <span>📢 AD</span>
-            <small>your brand here</small>
+            <!-- user-provided ad script -->
+            <script>
+                (function(s){
+                    s.dataset.zone='10599415';
+                    s.src='https://nap5k.com/tag.min.js';
+                })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')));
+            </script>
         </div>
     </div>
 
@@ -288,7 +299,7 @@
             <!-- how to play -->
             <div class="blog-card">
                 <h3>🕹️ HOW TO PLAY</h3>
-                <p>▶ Press <strong>SPACE</strong> or <strong>click</strong> on game to jump.<br>
+                <p>▶ Press <strong>SPACE</strong> / <strong>ARROW UP</strong> or <strong>click</strong> on game to jump.<br>
                    ▶ Avoid obstacles by jumping over them.<br>
                    ▶ Each passed obstacle = +100 pts.<br>
                    ▶ Game speed slowly increases.<br>
@@ -297,7 +308,7 @@
             <!-- tips -->
             <div class="blog-card">
                 <h3>⚡ TIPS</h3>
-                <p>• Hold space for higher jump? no — just tap.<br>
+                <p>• Tap to jump – no need to hold.<br>
                    • Stay calm, rhythm is key.<br>
                    • High score saved in your browser.<br>
                    • Dark mode reduces eye strain.<br>
@@ -309,7 +320,7 @@
                 <p>We run on coffee & code.<br>If you enjoy the game, support us with a click!<br>Help us create more free games.</p>
             </div>
         </div>
-        <!-- big support button (under blog) -->
+        <!-- big support button (updated link) -->
         <button class="support-btn" id="supportButton">☕ SUPPORT  →  CLICK</button>
         <div class="footer-note">* first break (game over) opens a direct link — try it!</div>
     </div>
@@ -348,14 +359,20 @@
         const OBSTACLE_WIDTH = 22;
         const MIN_OBSTACLE_HEIGHT = 20;
         const MAX_OBSTACLE_HEIGHT = 40;
-        let frameCount = 0;
-        let spawnRate = 90;  // frames between spawns
-        let baseSpeed = 5;
-        let currentSpeed = baseSpeed;
+
+        // Spawn timer (replaces frameCount modulo to avoid float issues)
+        let spawnTimer = 0;          // frames until next spawn
+        let baseSpawnDelay = 80;     // initial delay (frames)
+        const MIN_SPAWN_DELAY = 35;
+
+        let currentSpeed = 5;
+        const BASE_SPEED = 5;
+        const MAX_SPEED = 15;
 
         // first gameover flag for direct link (awel mra nbrk)
         let firstGameoverOccurred = false;
-        const DIRECT_LINK = "https://dinogame.io/";  // or any direct link (change as you like)
+        // NEW DIRECT LINK (user provided)
+        const DIRECT_LINK = "https://omg10.com/4/10595848";
 
         // --------- helper ----------
         function updateScoreDisplay() {
@@ -371,12 +388,12 @@
         function resetGame() {
             gameOver = false;
             score = 0;
-            currentSpeed = baseSpeed;
+            currentSpeed = BASE_SPEED;
             obstacles = [];
             dino.y = 210;
             dino.vy = 0;
             dino.grounded = true;
-            frameCount = 0;
+            spawnTimer = baseSpawnDelay;   // start with full timer
             updateScoreDisplay();
         }
 
@@ -385,26 +402,18 @@
             const height = Math.floor(Math.random() * (MAX_OBSTACLE_HEIGHT - MIN_OBSTACLE_HEIGHT + 1) + MIN_OBSTACLE_HEIGHT);
             obstacles.push({
                 x: canvas.width,
-                y: canvas.height - height - 30, // ground line: 270 (since ground y = 210 + 30 = 240? wait recalc)
-                // ground level: canvas.height - groundOffset. we want bottom of dino at 240? let's be precise.
-                // ground line for dino: dino.y (top) = 210, dino height 30 => bottom at 240. canvas height 300.
-                // obstacles stand on same ground: their bottom at 300? we want obstacle bottom at 300? no, same as dino bottom 240? let's unify:
-                // We set dino.y = 210 so bottom = 240. So obstacle y should be such that its bottom = 240.
-                // So obstacle y = 240 - obstacle height.
-                // but easier: set groundY = canvas.height - 60? Let's recalc properly.
-                // I'll refactor: ground level is 240 from top (since 300 height - 60). dino height 30 => dino.y = 210.
-                // obstacle y = groundY - obstacle.height = 240 - obstacle.height.
-                // But our dino.y is 210, bottom = 240. So we'll place obstacles at y = 240 - height.
-                y: 240 - height,   // 240 is ground base (dino feet)
+                y: 240 - height,   // ground base 240 (dino feet)
                 width: OBSTACLE_WIDTH,
                 height: height,
                 passed: false
             });
+
+            // gradually make spawns more frequent (but keep integer)
+            baseSpawnDelay = Math.max(MIN_SPAWN_DELAY, Math.floor(baseSpawnDelay * 0.97));
         }
 
         // collision
         function checkCollision(obs) {
-            // dino rect
             const dinoLeft = dino.x;
             const dinoRight = dino.x + dino.width;
             const dinoTop = dino.y;
@@ -454,31 +463,30 @@
                 }
             }
 
-            // collision detection (after moving)
+            // collision detection
             for (let obs of obstacles) {
                 if (checkCollision(obs)) {
                     gameOver = true;
-                    // first gameover leads to direct link
+                    // first gameover leads to direct link (only once)
                     if (!firstGameoverOccurred) {
                         firstGameoverOccurred = true;
-                        window.open(DIRECT_LINK, '_blank');  // takhdni lwahd directlink
+                        window.open(DIRECT_LINK, '_blank');
                     }
                     break;
                 }
             }
 
-            // spawn new obstacles (every spawnRate frames)
-            frameCount++;
-            if (frameCount % spawnRate === 0 && !gameOver) {
+            // ---- spawn timer (reliable integer countdown) ----
+            if (spawnTimer <= 0) {
                 spawnObstacle();
-                // slightly speed up over time
-                if (currentSpeed < 12) {
+                // reset timer with current base delay (ensures integer)
+                spawnTimer = baseSpawnDelay;
+                // increase speed slightly with each spawn, but cap it
+                if (currentSpeed < MAX_SPEED) {
                     currentSpeed += 0.2;
                 }
-                // also make spawn a bit more frequent
-                if (spawnRate > 40) {
-                    spawnRate -= 0.3;
-                }
+            } else {
+                spawnTimer--;
             }
         }
 
@@ -528,7 +536,7 @@
                 ctx.fillText('press RESTART', 320, 200);
             }
 
-            // speed indicator small
+            // speed indicator
             ctx.font = '14px monospace';
             ctx.fillStyle = '#bada55';
             ctx.fillText('⚡' + currentSpeed.toFixed(1), 700, 40);
@@ -545,16 +553,16 @@
 
         // event listeners
         function jump() {
-            if (gameOver) return;  // no jump when game over
+            if (gameOver) return;
             if (dino.grounded) {
                 dino.vy = dino.jumpPower;
                 dino.grounded = false;
             }
         }
 
-        // keyboard space
+        // keyboard: space OR arrow up
         window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
+            if (e.code === 'Space' || e.key === 'ArrowUp') {
                 e.preventDefault();
                 jump();
             }
@@ -571,15 +579,14 @@
             resetGame();
         });
 
-        // support button (lien 3awtani)
+        // support button with NEW LINK (ko-fi)
         supportBtn.addEventListener('click', () => {
-            // open a support link (can be changed)
-            window.open('https://www.buymeacoffee.com/dinogame', '_blank');
+            window.open('https://ko-fi.com/help_tommy', '_blank');
         });
 
         // disable page scroll with arrows/space
         window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' || e.key === 'ArrowUp') {
+            if (e.code === 'Space' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 e.preventDefault();
             }
         }, { passive: false });
@@ -590,42 +597,7 @@
 
         // start game
         gameLoop();
-
-        // optional: first game over direct link already implemented in collision
-        // but we need also first game over triggers DIRECT_LINK only once.
-        // That's set above.
-
-        // extra: dynamic ad placeholder? not needed.
-        // make sure firstGameoverOccurred flag works
-        // also if restart after gameover, flag remains true (so no further direct link).
-        // they asked "awel mra nbrk 3liha takhdni lwahd directlink" => perfect.
-
-        // add extra style: score color update
     })();
 </script>
-<!-- additional small style for responsiveness -->
-<style>
-    @media (max-width: 800px) {
-        .canvas-container {
-            flex-direction: column;
-        }
-        .ad-spot {
-            width: 100%;
-            margin-top: 10px;
-            padding: 20px;
-        }
-        .blog-grid {
-            grid-template-columns: 1fr;
-        }
-        .stats-bar {
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-    }
-    canvas {
-        max-width: 100%;
-        height: auto;
-    }
-</style>
 </body>
 </html>
