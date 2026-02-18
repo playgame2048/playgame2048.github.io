@@ -515,7 +515,7 @@ function drawScene() {
   // ----- event listeners -----
   function handleJump(e) {
     if (e.type === 'keydown') {
-      if (e.code !== 'Space') return;
+     if (e.code !== 'Space' && e.code !== 'ArrowUp') return;
       e.preventDefault();
     }
     if (!gameActive || gameOver) return;
