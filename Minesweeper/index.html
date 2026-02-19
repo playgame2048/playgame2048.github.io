@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minesweeper · modern edition</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode">
+  <main class="game-container">
+    <!-- top bar: timer, mines, score, high score, theme toggle, restart -->
+    <div class="top-bar">
+      <div class="stats">
+        <div class="stat-item"><span class="stat-label">⏱️</span><span id="timer">000</span></div>
+        <div class="stat-item"><span class="stat-label">💣</span><span id="mine-count">010</span></div>
+        <div class="stat-item"><span class="stat-label">🏆</span><span id="score">0000</span></div>
+        <div class="stat-item"><span class="stat-label">⭐</span><span id="high-score">0000</span></div>
+      </div>
+      <div class="controls">
+        <select id="difficulty" class="difficulty-select">
+          <option value="easy">🌱 Easy (8x8)</option>
+          <option value="medium" selected>🍂 Medium (12x12)</option>
+          <option value="hard">🔥 Hard (16x16)</option>
+        </select>
+        <button id="restart-btn" class="icon-btn" aria-label="Restart">↻</button>
+        <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+
+    <!-- ad placeholder (non‑intrusive) -->
+    <div class="ad-spot">
+      <span>📢 advertisement</span>
+      <small>your brand could be here</small>
+    </div>
+
+    <!-- game board container with canvas overlay for particles -->
+    <div class="board-wrapper">
+      <div id="board" class="board"></div>
+      <canvas id="particle-canvas" class="particle-canvas"></canvas>
+    </div>
+
+    <!-- blog / extra section -->
+    <div class="blog-section">
+      <div class="blog-card">
+        <h3>🕹️ How to play</h3>
+        <p>Left click to reveal a cell. Right click (or tap & hold on mobile) to place a flag. Numbers show adjacent mines. Reveal all safe cells to win!</p>
+      </div>
+      <div class="blog-card">
+        <h3>💡 Tips & strategy</h3>
+        <p>Start by clicking corners. Use flags to mark mines. If a number has the same number of adjacent flags, you can safely reveal the rest. Stay focused!</p>
+      </div>
+      <div class="blog-card">
+        <h3>❤️ Support us</h3>
+        <p>Enjoying the game? Help us create more free, modern classics. Every coffee fuels development ☕</p>
+        <button id="support-btn" class="support-btn">☕ Buy me a coffee</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
