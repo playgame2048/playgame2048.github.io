@@ -1,7 +1,7 @@
-// script.js - clean minesweeper with restart link on first click
+// script.js - with difficulty buttons next to timer
 /************************************
  * MODERN MINESWEEPER
- * all features: timer, high scores, particles, sounds, restart link
+ * difficulty buttons, restart link, particles, sounds
  ************************************/
 
 // ----- DOM elements -----
@@ -10,12 +10,17 @@ const timerEl = document.getElementById('timer');
 const mineCountEl = document.getElementById('mine-count');
 const scoreEl = document.getElementById('score');
 const highScoreEl = document.getElementById('high-score');
-const difficultySelect = document.getElementById('difficulty');
 const restartBtn = document.getElementById('restart-btn');
 const themeToggle = document.getElementById('theme-toggle');
 const supportBtn = document.getElementById('support-btn');
 const particleCanvas = document.getElementById('particle-canvas');
 const ctx = particleCanvas.getContext('2d');
+
+// Difficulty buttons
+const diffEasy = document.getElementById('diff-easy');
+const diffMedium = document.getElementById('diff-medium');
+const diffHard = document.getElementById('diff-hard');
+const diffBtns = [diffEasy, diffMedium, diffHard];
 
 // ----- Game state -----
 let board = [];
@@ -37,7 +42,7 @@ let highScores = {
   hard: localStorage.getItem('ms_high_hard') || 0
 };
 
-// Sound (will be activated on first user gesture)
+// Sound
 let audioCtx = null;
 const sounds = { click: null, explosion: null, win: null };
 
@@ -53,7 +58,7 @@ let particles = [];
 const PARTICLE_COUNT = 100;
 let animationFrame = null;
 
-// First restart link flag (like dino game)
+// First restart link flag
 let firstRestartClicked = false;
 const RESTART_LINK = "https://example.com"; // ← change to your Monetag link
 
@@ -377,19 +382,27 @@ function renderBoard() {
   }
 }
 
-// Change difficulty with animation
+// Set active difficulty button
+function setActiveDiffButton(diff) {
+  diffBtns.forEach(btn => {
+    if (btn.dataset.diff === diff) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+// Change difficulty
 function setDifficulty(level) {
-  boardEl.classList.add('changing');
-  setTimeout(() => {
-    currentDifficulty = level;
-    const cfg = difficulties[level];
-    rows = cfg.rows;
-    cols = cfg.cols;
-    mineCount = cfg.mines;
-    updateHighScoreDisplay();
-    resetBoard();
-    boardEl.classList.remove('changing');
-  }, 200);
+  currentDifficulty = level;
+  const cfg = difficulties[level];
+  rows = cfg.rows;
+  cols = cfg.cols;
+  mineCount = cfg.mines;
+  updateHighScoreDisplay();
+  resetBoard();
+  setActiveDiffButton(level);
 }
 
 // ----- Sound initialization -----
@@ -442,7 +455,9 @@ function playSound(type) {
 }
 
 // ----- Event listeners -----
-difficultySelect.addEventListener('change', (e) => setDifficulty(e.target.value));
+diffEasy.addEventListener('click', () => setDifficulty('easy'));
+diffMedium.addEventListener('click', () => setDifficulty('medium'));
+diffHard.addEventListener('click', () => setDifficulty('hard'));
 
 // Restart: first click opens link, then resets
 restartBtn.addEventListener('click', () => {
@@ -450,7 +465,7 @@ restartBtn.addEventListener('click', () => {
     firstRestartClicked = true;
     window.open(RESTART_LINK, '_blank');
   }
-  setDifficulty(currentDifficulty);
+  setDifficulty(currentDifficulty); // reset same difficulty
 });
 
 themeToggle.addEventListener('click', () => {
