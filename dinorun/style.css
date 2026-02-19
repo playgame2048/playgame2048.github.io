@@ -302,3 +302,34 @@ kbd {
   font-size: 1.8rem;
   /* باقي الأنماط كاينة فـ .icon-btn */
 }
+
+.ad-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5rem 0;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.05);
+  min-height: 100px; /* ارتفاع مؤقت */
+}
+
+#ad-slot {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* للشاشات الصغيرة (الجوال) */
+@media (max-width: 750px) {
+  .ad-container {
+    flex-direction: column;
+  }
+  /* إذا كان الإعلان 728x90، يمكن يتصغر */
+  ins.adsbygoogle {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
