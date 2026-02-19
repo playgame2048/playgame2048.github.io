@@ -61,30 +61,6 @@ body.light-mode {
   transition: box-shadow 0.3s;
 }
 
-/* professional title */
-.game-title {
-  text-align: center;
-  font-size: 2.5rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  margin-bottom: 1rem;
-  text-shadow: 0 5px 15px rgba(0, 160, 255, 0.3);
-  background: linear-gradient(135deg, #b0e0ff, #ffffff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.light-mode .game-title span {
-  color: #2c3e50;
-  -webkit-text-fill-color: #2c3e50;
-}
-.game-title span {
-  font-size: 1.2rem;
-  font-weight: 400;
-  opacity: 0.8;
-  -webkit-text-fill-color: #aaa;
-}
-
 /* top bar */
 .top-bar {
   display: flex;
@@ -214,7 +190,7 @@ body.light-mode {
   box-shadow: 0 0 20px #4a90e2;
 }
 
-/* ad spot (Monetag placeholder) */
+/* ad placeholder */
 .ad-spot {
   background: rgba(30, 40, 55, 0.4);
   backdrop-filter: blur(8px);
