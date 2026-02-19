@@ -8,7 +8,10 @@
 </head>
 <body class="dark-mode">
   <main class="game-container">
-    <!-- top bar: left controls (restart, theme), stats, difficulty -->
+    <!-- professional title -->
+    <h1 class="game-title">💣 MINESWEEPER <span>· modern edition</span></h1>
+
+    <!-- top bar: left controls, stats, right difficulty -->
     <div class="top-bar">
       <div class="left-controls">
         <button id="restart-btn" class="icon-btn" aria-label="Restart">↻</button>
@@ -29,19 +32,19 @@
       </div>
     </div>
 
-    <!-- ad placeholder (non‑intrusive) -->
+    <!-- ad spot for Monetag (replace with your code) -->
     <div class="ad-spot">
       <span>📢 advertisement</span>
-      <small>your brand could be here</small>
+      <small>your Monetag code goes here</small>
     </div>
 
-    <!-- game board container with canvas overlay for particles -->
+    <!-- game board with particle canvas -->
     <div class="board-wrapper">
       <div id="board" class="board"></div>
       <canvas id="particle-canvas" class="particle-canvas"></canvas>
     </div>
 
-    <!-- blog / extra section -->
+    <!-- blog section -->
     <div class="blog-section">
       <div class="blog-card">
         <h3>🕹️ How to play</h3>
@@ -59,6 +62,6 @@
     </div>
   </main>
 
-  <script src="main.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
