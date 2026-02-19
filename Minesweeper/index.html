@@ -8,8 +8,15 @@
 </head>
 <body class="dark-mode">
   <main class="game-container">
-    <!-- top bar: timer, mines, score, high score, theme toggle, restart -->
+    <!-- professional title -->
+    <h1 class="game-title">💣 MINESWEEPER <span>· modern edition</span></h1>
+
+    <!-- top bar: left controls (restart, theme), stats, difficulty -->
     <div class="top-bar">
+      <div class="left-controls">
+        <button id="restart-btn" class="icon-btn" aria-label="Restart">↻</button>
+        <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">🌙</button>
+      </div>
       <div class="stats">
         <div class="stat-item"><span class="stat-label">⏱️</span><span id="timer">000</span></div>
         <div class="stat-item"><span class="stat-label">💣</span><span id="mine-count">010</span></div>
@@ -22,15 +29,14 @@
           <option value="medium" selected>🍂 Medium (12x12)</option>
           <option value="hard">🔥 Hard (16x16)</option>
         </select>
-        <button id="restart-btn" class="icon-btn" aria-label="Restart">↻</button>
-        <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">🌙</button>
       </div>
     </div>
 
-    <!-- ad placeholder (non‑intrusive) -->
+    <!-- ad spot for Monetag (insert your code here) -->
     <div class="ad-spot">
+      <!-- Replace with your Monetag ad script -->
       <span>📢 advertisement</span>
-      <small>your brand could be here</small>
+      <small>your Monetag code goes here</small>
     </div>
 
     <!-- game board container with canvas overlay for particles -->
@@ -57,6 +63,6 @@
     </div>
   </main>
 
-  <script src="main.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
