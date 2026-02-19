@@ -15,7 +15,7 @@
   const DINO_WIDTH = 28;
   const DINO_HEIGHT = 32;
   const DINO_X = 80;              // fixed left position
-  const BASE_SPEED = 0.18;        // px/ms -> 180px per second
+  const BASE_SPEED = 0.20;        // px/ms -> 180px per second
   const MAX_SPEED = 0.42;
   const GRAVITY = 0.0012;         // px/ms²
   const JUMP_FORCE = -0.5;        // upward velocity px/ms
@@ -288,7 +288,7 @@
     if (speed > MAX_SPEED) speed = MAX_SPEED;
 
     // 5. update score (time survived)
-    score += delta * 0.01;
+    score += delta * 0.017;
     const intScore = Math.floor(score);
     scoreSpan.textContent = intScore;
     // highlight score on each hundred
