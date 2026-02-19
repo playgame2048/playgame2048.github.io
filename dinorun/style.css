@@ -297,3 +297,8 @@ kbd {
     font-size: 1.5rem;
   }
 }
+
+#quickRestart {
+  font-size: 1.8rem;
+  /* باقي الأنماط كاينة فـ .icon-btn */
+}
