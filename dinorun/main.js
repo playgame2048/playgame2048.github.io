@@ -569,6 +569,10 @@ ctx.shadowBlur = 0;
     restartGame();
   });
 
+  document.getElementById('quickRestart').addEventListener('click', () => {
+  restartGame();
+});
+  
   darkToggle.addEventListener('click', () => {
     document.body.classList.toggle('light-mode');
     const isLight = document.body.classList.contains('light-mode');
