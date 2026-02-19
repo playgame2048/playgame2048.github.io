@@ -1,10 +1,10 @@
-// script.js - upgraded with particles, animations, and ad placeholder
+// script.js - clean minesweeper with restart link on first click
 /************************************
  * MODERN MINESWEEPER
- * pure JS, dark/light, sounds, high scores, timer, particle effects
+ * all features: timer, high scores, particles, sounds, restart link
  ************************************/
 
-// -------- state & config ----------
+// ----- DOM elements -----
 const boardEl = document.getElementById('board');
 const timerEl = document.getElementById('timer');
 const mineCountEl = document.getElementById('mine-count');
@@ -15,8 +15,9 @@ const restartBtn = document.getElementById('restart-btn');
 const themeToggle = document.getElementById('theme-toggle');
 const supportBtn = document.getElementById('support-btn');
 const particleCanvas = document.getElementById('particle-canvas');
-let ctx = particleCanvas.getContext('2d');
+const ctx = particleCanvas.getContext('2d');
 
+// ----- Game state -----
 let board = [];
 let rows, cols, mineCount;
 let gameActive = false;         // true after first click (board generated)
@@ -29,7 +30,6 @@ let timerSeconds = 0;
 let firstClick = true;          // board generation after first click
 let currentDifficulty = 'medium';
 
-// scores: score = revealedCells * 10 (simple)
 let score = 0;
 let highScores = {
   easy: localStorage.getItem('ms_high_easy') || 0,
@@ -37,31 +37,27 @@ let highScores = {
   hard: localStorage.getItem('ms_high_hard') || 0
 };
 
-// sound context (will be activated after first user gesture)
+// Sound (will be activated on first user gesture)
 let audioCtx = null;
-const sounds = {
-  click: null,
-  explosion: null,
-  win: null
-};
+const sounds = { click: null, explosion: null, win: null };
 
-// difficulty presets
+// Difficulty presets
 const difficulties = {
   easy: { rows: 8, cols: 8, mines: 10 },
   medium: { rows: 12, cols: 12, mines: 20 },
   hard: { rows: 16, cols: 16, mines: 40 }
 };
 
-// particle system
+// Particles
 let particles = [];
 const PARTICLE_COUNT = 100;
 let animationFrame = null;
 
-// first restart link flag (like in dino game)
+// First restart link flag (like dino game)
 let firstRestartClicked = false;
-const RESTART_LINK = "https://example.com"; // Replace with your Monetag or desired link
+const RESTART_LINK = "https://example.com"; // ← change to your Monetag link
 
-// ---------- helper functions ----------
+// ----- Helper functions -----
 function formatTime(sec) {
   return String(sec).padStart(3, '0').slice(0, 3);
 }
@@ -81,7 +77,6 @@ function updateHighScoreDisplay() {
   highScoreEl.textContent = String(hs).padStart(4, '0');
 }
 
-// save high score for current difficulty if beaten
 function checkHighScore() {
   if (score > highScores[currentDifficulty]) {
     highScores[currentDifficulty] = score;
@@ -90,7 +85,6 @@ function checkHighScore() {
   }
 }
 
-// stop timer
 function stopTimer() {
   if (timerInterval) {
     clearInterval(timerInterval);
@@ -98,7 +92,6 @@ function stopTimer() {
   }
 }
 
-// start timer (only if not already running and game active)
 function startTimer() {
   if (timerInterval || !gameActive || gameWon || gameOver) return;
   timerSeconds = 0;
@@ -113,14 +106,13 @@ function startTimer() {
   }, 1000);
 }
 
-// particle effect on win
+// Particle effects
 function spawnParticles() {
   particles = [];
   const w = particleCanvas.width, h = particleCanvas.height;
   for (let i = 0; i < PARTICLE_COUNT; i++) {
     particles.push({
-      x: w * 0.5,
-      y: h * 0.5,
+      x: w * 0.5, y: h * 0.5,
       vx: (Math.random() - 0.5) * 8,
       vy: (Math.random() - 0.8) * 10,
       size: Math.random() * 6 + 4,
@@ -158,7 +150,6 @@ function animateParticles() {
   }
 }
 
-// resize canvas to match board wrapper
 function resizeParticleCanvas() {
   const wrapper = document.querySelector('.board-wrapper');
   if (wrapper) {
@@ -168,7 +159,7 @@ function resizeParticleCanvas() {
 }
 window.addEventListener('resize', resizeParticleCanvas);
 
-// reset board (new empty grid)
+// Reset board
 function resetBoard() {
   gameActive = false;
   gameWon = false;
@@ -183,25 +174,20 @@ function resetBoard() {
   updateMineCounter();
   scoreEl.textContent = '0000';
 
-  // clear particles
   if (animationFrame) {
     cancelAnimationFrame(animationFrame);
     animationFrame = null;
     ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
   }
 
-  // create empty board
   board = Array(rows).fill().map(() => Array(cols).fill().map(() => ({
-    mine: false,
-    revealed: false,
-    flagged: false,
-    adjacent: 0
+    mine: false, revealed: false, flagged: false, adjacent: 0
   })));
 
   renderBoard();
 }
 
-// generate mines after first click (exclude first cell)
+// Generate mines after first click
 function generateMines(firstRow, firstCol) {
   let minesToPlace = mineCount;
   while (minesToPlace > 0) {
@@ -213,7 +199,6 @@ function generateMines(firstRow, firstCol) {
       minesToPlace--;
     }
   }
-  // calculate adjacent numbers
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       if (board[r][c].mine) continue;
@@ -230,7 +215,7 @@ function generateMines(firstRow, firstCol) {
   }
 }
 
-// flood fill reveal (zero expansion)
+// Reveal cell (flood fill)
 function revealCell(r, c) {
   if (r < 0 || r >= rows || c < 0 || c >= cols) return;
   const cell = board[r][c];
@@ -240,9 +225,7 @@ function revealCell(r, c) {
   revealedCount++;
   updateScore();
 
-  if (cell.mine) {
-    return;
-  }
+  if (cell.mine) return;
 
   if (cell.adjacent === 0) {
     for (let dr = -1; dr <= 1; dr++) {
@@ -254,7 +237,7 @@ function revealCell(r, c) {
   }
 }
 
-// check win condition
+// Check win
 function checkWin() {
   let correctRevealed = 0;
   for (let r = 0; r < rows; r++) {
@@ -269,11 +252,11 @@ function checkWin() {
     stopTimer();
     playSound('win');
     checkHighScore();
-    spawnParticles(); // 🎉 particle effect
+    spawnParticles();
   }
 }
 
-// left click handler
+// Left click
 function leftClick(r, c) {
   if (gameWon || gameOver) return;
   const cell = board[r][c];
@@ -309,7 +292,7 @@ function leftClick(r, c) {
   renderBoard();
 }
 
-// right click (flag)
+// Right click (flag)
 function rightClick(e, r, c) {
   e.preventDefault();
   if (gameWon || gameOver) return;
@@ -330,7 +313,7 @@ function rightClick(e, r, c) {
   renderBoard();
 }
 
-// render board from state
+// Render board
 function renderBoard() {
   boardEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
   boardEl.innerHTML = '';
@@ -346,8 +329,6 @@ function renderBoard() {
         } else if (cell.adjacent > 0) {
           cellDiv.textContent = cell.adjacent;
           cellDiv.setAttribute('data-value', cell.adjacent);
-        } else {
-          // empty revealed
         }
       } else if (cell.flagged) {
         cellDiv.classList.add('flagged');
@@ -356,7 +337,6 @@ function renderBoard() {
       cellDiv.dataset.row = r;
       cellDiv.dataset.col = c;
 
-      // event listeners
       cellDiv.addEventListener('click', (e) => {
         e.preventDefault();
         const row = parseInt(e.currentTarget.dataset.row);
@@ -371,7 +351,7 @@ function renderBoard() {
         rightClick(e, row, col);
       });
 
-      // mobile touch handling
+      // mobile touch
       let touchTimer;
       cellDiv.addEventListener('touchstart', (e) => {
         e.preventDefault();
@@ -397,9 +377,8 @@ function renderBoard() {
   }
 }
 
-// load difficulty with animation
+// Change difficulty with animation
 function setDifficulty(level) {
-  // add changing class for fade effect
   boardEl.classList.add('changing');
   setTimeout(() => {
     currentDifficulty = level;
@@ -413,127 +392,65 @@ function setDifficulty(level) {
   }, 200);
 }
 
-// ---------- sound init ----------
+// ----- Sound initialization -----
 function initAudio() {
   if (audioCtx) return;
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  sounds.click = (() => {
+  sounds.click = () => {
     const osc = audioCtx.createOscillator();
-    const gain = audioCtx = audioCtx.createGain();
-.createGain();
-    osc    osc.type = 'sine';
-    osc.type = 'sine';
-    osc.frequency.value = 800.frequency.value = 800;
-   ;
-    gain.gain.value = 0.1;
- gain.gain.value = 0.1;
-    osc    osc.connect(gain).connect(audioC.connect(gain).connect(audioCtx.destination);
-    osc.start();
-tx.destination);
-    osc.start();
-    osc.stop(audioCtx    osc.stop(audioCtx.currentTime + 0.currentTime + 0.05);
-  });
-  sounds.ex.05);
-  });
-  sounds.explosion = (() => {
-   plosion = (() => {
-    const osc = audio const oscCtx.createOscillator = audioCtx.createOscillator();
-    const gain = audio();
     const gain = audioCtx.createGain();
-Ctx.createGain();
-    osc.type = 'sawto    osc.type = 'soth';
-    osc.frequency.value = 150awtooth';
-    osc.frequency.value = 150;
-    gain.g;
-    gain.gain.value = ain.value = 0.0.2;
-    gain2;
-    gain.gain.gain.exponentialRampToValueAtTime.exponentialRampToValueAtTime(0.0001,(0.0001, audioCtx.current audioCtx.currentTime + 0Time + 0.2.2);
-    osc.connect(gain);
+    osc.type = 'sine';
+    osc.frequency.value = 800;
+    gain.gain.value = 0.1;
     osc.connect(gain).connect(audioCtx.destination);
-   ).connect(audioCtx.destination);
     osc.start();
-    osc.stop osc.start();
+    osc.stop(audioCtx.currentTime + 0.05);
+  };
+  sounds.explosion = () => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.value = 150;
+    gain.gain.value = 0.2;
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
     osc.stop(audioCtx.currentTime + 0.2);
-  });
-  sounds.win(audioCtx.currentTime + 0.2);
-  });
-  sounds.win = ( = (() => {
+  };
+  sounds.win = () => {
     const now = audioCtx.currentTime;
-    for (let i() => {
-    const now = audioCtx.currentTime;
-    for (let i =  = 0; i < 30; i < 3; i++) {
-      const osc = audioCtx.create; i++) {
+    for (let i = 0; i < 3; i++) {
       const osc = audioCtx.createOscillator();
-      constOscillator();
-      const gain = gain = audioCtx.createGain audioCtx.createGain();
-      osc.type();
+      const gain = audioCtx.createGain();
       osc.type = 'triangle';
-      osc.frequency = 'triangle';
-      osc.frequency.value = 600.value = 600 + i * 100;
-      gain + i * 100;
-      gain.gain.gain.value = 0.1.value = 0.1;
-     ;
-      gain.gain.ex gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-      osc.connectponentialRampToValueAtTime(0.001, now + 0.3);
-      osc.connect(gain(gain).connect(audioCtx).connect(audioCtx.destination);
-      osc.start(now + i.destination);
-      osc.start(now + i * 0. * 0.12);
-12);
-      osc.stop(now + 0      osc.stop(now + 0.3 + i * 0.12);
+      osc.frequency.value = 600 + i * 100;
+      gain.gain.value = 0.1;
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(now + i * 0.12);
+      osc.stop(now + 0.3 + i * 0.12);
     }
-.3 + i * 0.12);
-    }
-  });
+  };
 }
-
-function  });
- playSound(type) {
-  if (!}
 
 function playSound(type) {
   if (!audioCtx) {
     initAudio();
-    if (audioCtx.state === 'suspendedaudioCtx) {
-    initAudio();
-    if (audioCtx.state === 'suspended') {
-') {
-      audioCtx.resume      audioCtx.resume();
-    }
-  } else if (audioC();
-    }
-  } else if (audioCtx.statetx.state === 'suspended') {
- === 'suspended') {
-      audio      audioCtx.resume();
-  }
-  if (sounds[typeCtx.resume();
-  }
-  if (sounds[type]) sounds[type]) sounds[type]();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  } else if (audioCtx.state === 'suspended') audioCtx.resume();
+  if (sounds[type]) sounds[type]();
 }
 
-// ---------- event listeners ----------
-difficultySelect.addEventListener('change]();
-}
+// ----- Event listeners -----
+difficultySelect.addEventListener('change', (e) => setDifficulty(e.target.value));
 
-// ---------- event listeners ----------
-difficultySelect.addEventListener('change', (e) => {
-  setDifficulty(e.target.value);
-});
-
-// Restart button: first click opens a link (like in dino game),', (e) => {
-  setDifficulty(e.target.value);
-});
-
-// Restart button: first click opens a link (like in dino game), then res then resets
-restartBtn.addEventListener('click', () => {
-  if (!firstRestartClicked) {
-    firstRestartClicked = true;
-ets
+// Restart: first click opens link, then resets
 restartBtn.addEventListener('click', () => {
   if (!firstRestartClicked) {
     firstRestartClicked = true;
     window.open(RESTART_LINK, '_blank');
   }
-  setDifficulty(currentDifficulty); // reset same difficulty
+  setDifficulty(currentDifficulty);
 });
 
 themeToggle.addEventListener('click', () => {
@@ -546,8 +463,8 @@ supportBtn.addEventListener('click', () => {
   window.open('https://ko-fi.com/help_tommy', '_blank');
 });
 
-// enable audio on first user interaction
-document.body.addEventListener('click', function enableAudio() {
+// Enable audio on first user interaction
+document.body.addEventListener('click', () => {
   if (!audioCtx) {
     initAudio();
   }
@@ -556,46 +473,10 @@ document.body.addEventListener('click', function enableAudio() {
   }
 }, { once: true });
 
-//    window.open(RESTART_LINK, '_blank');
-  }
-  setDifficulty(currentDifficulty); // reset same difficulty
-});
-
-themeToggle.addEventListener('click', () => {
-  document.body.classList.toggle('dark-mode');
-  document.body.classList.toggle('light-mode');
-  themeToggle.textContent = document.body.classList.contains('dark-mode') ? '🌙' : '☀️';
-});
-
-supportBtn.addEventListener('click', () => {
-  window.open('https://ko-fi.com/help_tommy', '_blank');
-});
-
-// enable audio on first user interaction
-document.body.addEventListener('click', function enableAudio() {
-  if (!audioCtx) {
-    initAudio();
-  }
-  if (audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-}, { once: resize canvas on load and orientation change
+// Initialize
 window.addEventListener('load', () => {
   resizeParticleCanvas();
   setDifficulty('medium');
 });
 window.addEventListener('resize', resizeParticleCanvas);
-
-// initial setup
-updateHighScoreDisplay();
- true });
-
-// resize canvas on load and orientation change
-window.addEventListener('load', () => {
-  resizeParticleCanvas();
-  setDifficulty('medium');
-});
-window.addEventListener('resize', resizeParticleCanvas);
-
-// initial setup
 updateHighScoreDisplay();
