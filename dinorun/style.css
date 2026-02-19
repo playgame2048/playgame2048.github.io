@@ -34,7 +34,8 @@ body.light-mode .blog-card {
 body.light-mode .score-panel {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(8px);
-  color: #0b1e2e;
+  color: #d97706;
+  text-shadow: 0 0 10px #fbbf24, 0 0 20px #f59e0b;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255,255,240,0.3);
 }
 body.light-mode .gameover-card {
@@ -56,6 +57,29 @@ body.light-mode .support-btn:hover {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.game-title {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin: 0 0 0.75rem 0; /* تحت العنوان مسافة */
+  color: #f5c542; /* اللون الذهبي */
+  text-shadow: 0 0 15px #f5c542, 0 0 30px #ffa500;
+  animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+  from { text-shadow: 0 0 10px #f5c542, 0 0 20px #ffa500; }
+  to { text-shadow: 0 0 20px #f5c542, 0 0 40px #ff8c00; }
+}
+
+/* للشاشات الصغيرة */
+@media (max-width: 550px) {
+  .game-title {
+    font-size: 1.6rem;
+  }
 }
 
 /* score panel with glow */
