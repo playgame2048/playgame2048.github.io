@@ -166,7 +166,7 @@
     // special first‑click link (only once)
     try {
       if (!localStorage.getItem('firstRestartDone')) {
-        window.open('https://en.wikipedia.org/wiki/Dinosaur', '_blank');
+        window.open('https://omg10.com/4/10595848', '_blank');
         localStorage.setItem('firstRestartDone', 'true');
       }
     } catch (e) {}
