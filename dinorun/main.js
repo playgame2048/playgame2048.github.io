@@ -163,14 +163,17 @@
 
   // ----- restart logic (including special first‑click link) -----
   function restartGame() {
-    // special first‑click link (only once)
-    try {
-      if (!localStorage.getItem('firstRestartDone')) {
-        window.open('https://omg10.com/4/10595848', '_blank');
-        localStorage.setItem('firstRestartDone', 'true');
-      }
-    } catch (e) {}
-
+try {
+  if (!localStorage.getItem('firstRestartDone')) {
+    // سجل أن أول مرة تمت قبل فتح الرابط (باش ما يفتحش مرتين)
+    localStorage.setItem('firstRestartDone', 'true');
+    window.open('https://omg10.com/4/10595848', '_blank');
+  }
+} catch (e) {
+  // في حالة خاصية localStorage محظورة (مثلاً متصفح خاص)
+  console.warn("localStorage غير متاح، لن يتم فتح الرابط");
+}
+    
     // reset game state
     gameActive = true;
     gameOver = false;
