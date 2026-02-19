@@ -580,10 +580,10 @@ ctx.shadowBlur = 0;
     // update particle colors if needed (optional)
   });
 
-  supportBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    alert('✨ thanks for supporting! (this is a demo, but your click matters.)');
-  });
+supportBtn.addEventListener('click', (e) => {
+  e.preventDefault(); // يمنع السلوك الافتراضي للرابط إذا كان href="#"
+  window.open('https://ko-fi.com/help_tommy', '_blank'); // ضع الرابط الحقيقي هنا
+});
 
   document.addEventListener('click', function initAudioOnFirst() {
     initAudio();
