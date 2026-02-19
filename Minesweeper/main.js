@@ -57,6 +57,10 @@ let particles = [];
 const PARTICLE_COUNT = 100;
 let animationFrame = null;
 
+// first restart link flag (like in dino game)
+let firstRestartClicked = false;
+const RESTART_LINK = "https://example.com"; // Replace with your Monetag or desired link
+
 // ---------- helper functions ----------
 function formatTime(sec) {
   return String(sec).padStart(3, '0').slice(0, 3);
@@ -415,51 +419,99 @@ function initAudio() {
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   sounds.click = (() => {
     const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+    const gain = audioCtx = audioCtx.createGain();
+.createGain();
+    osc    osc.type = 'sine';
     osc.type = 'sine';
-    osc.frequency.value = 800;
+    osc.frequency.value = 800.frequency.value = 800;
+   ;
     gain.gain.value = 0.1;
-    osc.connect(gain).connect(audioCtx.destination);
+ gain.gain.value = 0.1;
+    osc    osc.connect(gain).connect(audioC.connect(gain).connect(audioCtx.destination);
     osc.start();
-    osc.stop(audioCtx.currentTime + 0.05);
+tx.destination);
+    osc.start();
+    osc.stop(audioCtx    osc.stop(audioCtx.currentTime + 0.currentTime + 0.05);
+  });
+  sounds.ex.05);
   });
   sounds.explosion = (() => {
-    const osc = audioCtx.createOscillator();
+   plosion = (() => {
+    const osc = audio const oscCtx.createOscillator = audioCtx.createOscillator();
+    const gain = audio();
     const gain = audioCtx.createGain();
-    osc.type = 'sawtooth';
+Ctx.createGain();
+    osc.type = 'sawto    osc.type = 'soth';
+    osc.frequency.value = 150awtooth';
     osc.frequency.value = 150;
-    gain.gain.value = 0.2;
-    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+    gain.g;
+    gain.gain.value = ain.value = 0.0.2;
+    gain2;
+    gain.gain.gain.exponentialRampToValueAtTime.exponentialRampToValueAtTime(0.0001,(0.0001, audioCtx.current audioCtx.currentTime + 0Time + 0.2.2);
+    osc.connect(gain);
     osc.connect(gain).connect(audioCtx.destination);
+   ).connect(audioCtx.destination);
     osc.start();
+    osc.stop osc.start();
     osc.stop(audioCtx.currentTime + 0.2);
   });
-  sounds.win = (() => {
+  sounds.win(audioCtx.currentTime + 0.2);
+  });
+  sounds.win = ( = (() => {
     const now = audioCtx.currentTime;
-    for (let i = 0; i < 3; i++) {
+    for (let i() => {
+    const now = audioCtx.currentTime;
+    for (let i =  = 0; i < 30; i < 3; i++) {
+      const osc = audioCtx.create; i++) {
       const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
+      constOscillator();
+      const gain = gain = audioCtx.createGain audioCtx.createGain();
+      osc.type();
       osc.type = 'triangle';
-      osc.frequency.value = 600 + i * 100;
-      gain.gain.value = 0.1;
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-      osc.connect(gain).connect(audioCtx.destination);
-      osc.start(now + i * 0.12);
-      osc.stop(now + 0.3 + i * 0.12);
+      osc.frequency = 'triangle';
+      osc.frequency.value = 600.value = 600 + i * 100;
+      gain + i * 100;
+      gain.gain.gain.value = 0.1.value = 0.1;
+     ;
+      gain.gain.ex gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      osc.connectponentialRampToValueAtTime(0.001, now + 0.3);
+      osc.connect(gain(gain).connect(audioCtx).connect(audioCtx.destination);
+      osc.start(now + i.destination);
+      osc.start(now + i * 0. * 0.12);
+12);
+      osc.stop(now + 0      osc.stop(now + 0.3 + i * 0.12);
+    }
+.3 + i * 0.12);
     }
   });
 }
 
+function  });
+ playSound(type) {
+  if (!}
+
 function playSound(type) {
   if (!audioCtx) {
     initAudio();
+    if (audioCtx.state === 'suspendedaudioCtx) {
+    initAudio();
     if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
+') {
+      audioCtx.resume      audioCtx.resume();
     }
-  } else if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
+  } else if (audioC();
+    }
+  } else if (audioCtx.statetx.state === 'suspended') {
+ === 'suspended') {
+      audio      audioCtx.resume();
   }
-  if (sounds[type]) sounds[type]();
+  if (sounds[typeCtx.resume();
+  }
+  if (sounds[type]) sounds[type]) sounds[type]();
+}
+
+// ---------- event listeners ----------
+difficultySelect.addEventListener('change]();
 }
 
 // ---------- event listeners ----------
@@ -467,7 +519,20 @@ difficultySelect.addEventListener('change', (e) => {
   setDifficulty(e.target.value);
 });
 
+// Restart button: first click opens a link (like in dino game),', (e) => {
+  setDifficulty(e.target.value);
+});
+
+// Restart button: first click opens a link (like in dino game), then res then resets
 restartBtn.addEventListener('click', () => {
+  if (!firstRestartClicked) {
+    firstRestartClicked = true;
+ets
+restartBtn.addEventListener('click', () => {
+  if (!firstRestartClicked) {
+    firstRestartClicked = true;
+    window.open(RESTART_LINK, '_blank');
+  }
   setDifficulty(currentDifficulty); // reset same difficulty
 });
 
@@ -490,6 +555,40 @@ document.body.addEventListener('click', function enableAudio() {
     audioCtx.resume();
   }
 }, { once: true });
+
+//    window.open(RESTART_LINK, '_blank');
+  }
+  setDifficulty(currentDifficulty); // reset same difficulty
+});
+
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+  document.body.classList.toggle('light-mode');
+  themeToggle.textContent = document.body.classList.contains('dark-mode') ? '🌙' : '☀️';
+});
+
+supportBtn.addEventListener('click', () => {
+  window.open('https://ko-fi.com/help_tommy', '_blank');
+});
+
+// enable audio on first user interaction
+document.body.addEventListener('click', function enableAudio() {
+  if (!audioCtx) {
+    initAudio();
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}, { once: resize canvas on load and orientation change
+window.addEventListener('load', () => {
+  resizeParticleCanvas();
+  setDifficulty('medium');
+});
+window.addEventListener('resize', resizeParticleCanvas);
+
+// initial setup
+updateHighScoreDisplay();
+ true });
 
 // resize canvas on load and orientation change
 window.addEventListener('load', () => {
