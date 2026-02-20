@@ -9,15 +9,12 @@
 <body class="dark-mode">
   <main class="game-container">
     <!-- professional title -->
-    <h1 class="game-title">💣 MINESWEEPER</h1>
+    <h1 class="game-title">💣 MINESWEEPER <span>· modern edition</span></h1>
 
-    <!-- top bar: left controls, stats + difficulty buttons, right empty for balance -->
-    <div class="top-bar">
-      <div class="left-controls">
-        <button id="restart-btn" class="icon-btn" aria-label="Restart">↻</button>
-        <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">🌙</button>
-      </div>
-      <div class="stats">
+    <!-- top bar: two rows -->
+    <div class="top-area">
+      <!-- Row 1: stats + difficulty buttons -->
+      <div class="stats-row">
         <div class="stat-item"><span class="stat-label">⏱️</span><span id="timer">000</span></div>
         <div class="difficulty-buttons">
           <button id="diff-easy" class="diff-btn" data-diff="easy">🌱 Easy</button>
@@ -28,8 +25,16 @@
         <div class="stat-item"><span class="stat-label">🏆</span><span id="score">0000</span></div>
         <div class="stat-item"><span class="stat-label">⭐</span><span id="high-score">0000</span></div>
       </div>
-      <!-- empty div to keep stats centered (flex space-between) -->
-      <div class="right-placeholder"></div>
+
+      <!-- Row 2: restart and dark mode buttons with text -->
+      <div class="action-row">
+        <button id="restart-btn" class="action-btn">
+          <span class="btn-icon">↻</span> Restart
+        </button>
+        <button id="theme-toggle" class="action-btn">
+          <span class="btn-icon">🌙</span> Dark mode
+        </button>
+      </div>
     </div>
 
     <!-- ad spot for Monetag (replace with your code) -->
@@ -62,6 +67,6 @@
     </div>
   </main>
 
-  <script src="main.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
