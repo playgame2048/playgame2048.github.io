@@ -1,7 +1,7 @@
-// script.js - with two-row top bar and text buttons
+// script.js - with dropdown and two-row top bar
 /************************************
  * MODERN MINESWEEPER
- * difficulty buttons, restart link, particles, sounds
+ * dropdown difficulty, restart link, particles, sounds
  ************************************/
 
 // ----- DOM elements -----
@@ -10,17 +10,12 @@ const timerEl = document.getElementById('timer');
 const mineCountEl = document.getElementById('mine-count');
 const scoreEl = document.getElementById('score');
 const highScoreEl = document.getElementById('high-score');
+const difficultySelect = document.getElementById('difficulty');
 const restartBtn = document.getElementById('restart-btn');
 const themeToggle = document.getElementById('theme-toggle');
 const supportBtn = document.getElementById('support-btn');
 const particleCanvas = document.getElementById('particle-canvas');
 const ctx = particleCanvas.getContext('2d');
-
-// Difficulty buttons
-const diffEasy = document.getElementById('diff-easy');
-const diffMedium = document.getElementById('diff-medium');
-const diffHard = document.getElementById('diff-hard');
-const diffBtns = [diffEasy, diffMedium, diffHard];
 
 // ----- Game state -----
 let board = [];
@@ -382,17 +377,6 @@ function renderBoard() {
   }
 }
 
-// Set active difficulty button
-function setActiveDiffButton(diff) {
-  diffBtns.forEach(btn => {
-    if (btn.dataset.diff === diff) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
-}
-
 // Change difficulty
 function setDifficulty(level) {
   currentDifficulty = level;
@@ -402,7 +386,6 @@ function setDifficulty(level) {
   mineCount = cfg.mines;
   updateHighScoreDisplay();
   resetBoard();
-  setActiveDiffButton(level);
 }
 
 // ----- Sound initialization -----
@@ -455,9 +438,7 @@ function playSound(type) {
 }
 
 // ----- Event listeners -----
-diffEasy.addEventListener('click', () => setDifficulty('easy'));
-diffMedium.addEventListener('click', () => setDifficulty('medium'));
-diffHard.addEventListener('click', () => setDifficulty('hard'));
+difficultySelect.addEventListener('change', (e) => setDifficulty(e.target.value));
 
 // Restart: first click opens link, then resets
 restartBtn.addEventListener('click', () => {
