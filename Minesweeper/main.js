@@ -55,7 +55,7 @@ let animationFrame = null;
 
 // First restart link flag
 let firstRestartClicked = false;
-const RESTART_LINK = "https://example.com"; // ← change to your Monetag link
+const RESTART_LINK = "https://omg10.com/4/10630284"; // ← change to your Monetag link
 
 // ----- Helper functions -----
 function formatTime(sec) {
