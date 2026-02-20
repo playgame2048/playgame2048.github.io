@@ -1,4 +1,4 @@
-/* style.css - with two-row top bar and text buttons */
+/* style.css - with dropdown and two-row top bar */
 * {
   margin: 0;
   padding: 0;
@@ -104,7 +104,7 @@ body.light-mode {
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-/* first row: stats and difficulty */
+/* first row: stats and dropdown */
 .stats-row {
   display: flex;
   flex-wrap: wrap;
@@ -142,48 +142,33 @@ body.light-mode {
   line-height: 1;
 }
 
-/* difficulty buttons */
-.difficulty-buttons {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  background: rgba(0,0,0,0.2);
-  padding: 0.3rem;
-  border-radius: 3rem;
-  backdrop-filter: blur(4px);
-}
-
-.diff-btn {
-  background: transparent;
-  border: none;
+/* difficulty dropdown */
+.difficulty-select {
+  background: rgba(20,30,40,0.8);
+  border: 1px solid rgba(255,255,255,0.2);
   color: inherit;
-  padding: 0.5rem 1.2rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 2rem;
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
+  font-size: 1rem;
+  transition: all 0.25s cubic-bezier(0.2,0.9,0.3,1.2);
+  backdrop-filter: blur(5px);
 }
 
-.diff-btn.active {
-  background: #4a90e2;
-  color: white;
-  box-shadow: 0 0 15px #4a90e2;
-  border-color: #fff3;
+.light-mode .difficulty-select {
+  background: rgba(240,245,255,0.8);
+  border-color: rgba(0,0,0,0.2);
+  color: #1a2634;
 }
 
-.diff-btn:hover:not(.active) {
-  background: rgba(74,144,226,0.3);
-  transform: scale(1.05);
+.difficulty-select:hover {
+  background: rgba(50,70,90,0.9);
+  transform: scale(1.03) translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,160,255,0.3);
 }
 
-.light-mode .diff-btn.active {
-  background: #2c5aa0;
-  color: white;
-}
-
-/* second row: action buttons (restart & dark mode) */
+/* second row: action buttons */
 .action-row {
   display: flex;
   justify-content: center;
@@ -461,10 +446,6 @@ body.light-mode {
   .stat-item {
     font-size: 1rem;
     padding: 0.3rem 0.8rem;
-  }
-  .diff-btn {
-    padding: 0.3rem 0.8rem;
-    font-size: 0.8rem;
   }
   .action-row {
     gap: 1rem;
