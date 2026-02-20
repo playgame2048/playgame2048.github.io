@@ -11,16 +11,16 @@
     <!-- professional title -->
     <h1 class="game-title">💣 MINESWEEPER <span>· modern edition</span></h1>
 
-    <!-- top bar: two rows -->
+    <!-- top area: two rows -->
     <div class="top-area">
-      <!-- Row 1: stats + difficulty buttons -->
+      <!-- Row 1: stats + difficulty dropdown -->
       <div class="stats-row">
         <div class="stat-item"><span class="stat-label">⏱️</span><span id="timer">000</span></div>
-        <div class="difficulty-buttons">
-          <button id="diff-easy" class="diff-btn" data-diff="easy">🌱 Easy</button>
-          <button id="diff-medium" class="diff-btn active" data-diff="medium">🍂 Medium</button>
-          <button id="diff-hard" class="diff-btn" data-diff="hard">🔥 Hard</button>
-        </div>
+        <select id="difficulty" class="difficulty-select">
+          <option value="easy">🌱 Easy (8x8)</option>
+          <option value="medium" selected>🍂 Medium (12x12)</option>
+          <option value="hard">🔥 Hard (16x16)</option>
+        </select>
         <div class="stat-item"><span class="stat-label">💣</span><span id="mine-count">010</span></div>
         <div class="stat-item"><span class="stat-label">🏆</span><span id="score">0000</span></div>
         <div class="stat-item"><span class="stat-label">⭐</span><span id="high-score">0000</span></div>
@@ -67,6 +67,6 @@
     </div>
   </main>
 
-  <script src="main.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
