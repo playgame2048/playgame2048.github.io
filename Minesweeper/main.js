@@ -1,4 +1,4 @@
-// script.js - with difficulty buttons next to timer
+// script.js - with two-row top bar and text buttons
 /************************************
  * MODERN MINESWEEPER
  * difficulty buttons, restart link, particles, sounds
@@ -471,7 +471,10 @@ restartBtn.addEventListener('click', () => {
 themeToggle.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
   document.body.classList.toggle('light-mode');
-  themeToggle.textContent = document.body.classList.contains('dark-mode') ? '🌙' : '☀️';
+  // update button text
+  themeToggle.innerHTML = document.body.classList.contains('dark-mode') 
+    ? '<span class="btn-icon">🌙</span> Dark mode' 
+    : '<span class="btn-icon">☀️</span> Light mode';
 });
 
 supportBtn.addEventListener('click', () => {
@@ -492,6 +495,8 @@ document.body.addEventListener('click', () => {
 window.addEventListener('load', () => {
   resizeParticleCanvas();
   setDifficulty('medium');
+  // set initial button text
+  themeToggle.innerHTML = '<span class="btn-icon">🌙</span> Dark mode';
 });
 window.addEventListener('resize', resizeParticleCanvas);
 updateHighScoreDisplay();
