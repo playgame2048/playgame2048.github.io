@@ -1,1 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>LUMINA BREAKOUT · modern Arkanoid</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="game-wrapper">
+      <div class="top-bar">
+        <div class="score">SCORE: <span id="score">0</span></div>
+        <div class="high-score">🏆 <span id="highScore">0</span></div>
+        <div class="lives">❤️ <span id="lives">3</span></div>
+        <div class="level">🌠 LVL <span id="level">1</span></div>
+        <button id="themeToggle" class="theme-toggle" aria-label="Switch dark/light mode">🌙</button>
+      </div>
+      <canvas id="gameCanvas" width="800" height="600"></canvas>
+      <div class="controls">
+        <button id="restartBtn">↻ Restart</button>
+      </div>
+    </div>
 
+    <div class="extra-content">
+      <div class="blog-section">
+        <h3>🎮 HOW TO PLAY</h3>
+        <p>Move the paddle with your mouse or finger. Bounce the ball, break all bricks, and advance. Catch falling power‑ups (⚡ expand, 🌀 multi‑ball, ⏳ slow motion).</p>
+      </div>
+      <div class="blog-section">
+        <h3>💡 TIPS & STRATEGY</h3>
+        <p>Hit bricks at an angle to control the ball. Keep it away from the bottom. Use slow‑mo to regain control – and never miss a power‑up!</p>
+      </div>
+      <div class="blog-section support">
+        <h3>🌟 SUPPORT US</h3>
+        <p>Enjoying the game? Help us keep building free experiments.</p>
+        <button id="supportBtn">☕ BUY US A COFFEE</button>
+      </div>
+    </div>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>
