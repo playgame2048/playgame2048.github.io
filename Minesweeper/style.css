@@ -216,35 +216,6 @@ body.light-mode {
   line-height: 1;
 }
 
-/* ad spot */
-.ad-spot {
-  background: rgba(30,40,55,0.4);
-  backdrop-filter: blur(8px);
-  border-radius: 2rem;
-  padding: 0.8rem 2rem;
-  margin: 1rem 0 1.5rem 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  border: 1px dashed rgba(255,215,0,0.3);
-  color: #aaa;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.light-mode .ad-spot {
-  background: rgba(255,255,255,0.4);
-  border-color: rgba(0,0,0,0.2);
-  color: #555;
-}
-
-.ad-spot span {
-  font-weight: 600;
-  color: #ffd966;
-}
-
 /* board wrapper */
 .board-wrapper {
   position: relative;
