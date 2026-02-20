@@ -50,7 +50,7 @@ let slowMoFactor = 1.0;
 // keyboard control flags
 let leftPressed = false;
 let rightPressed = false;
-const PADDLE_SPEED = 5;
+const PADDLE_SPEED = 9;
 
 // high score from localStorage
 try {
