@@ -1,4 +1,4 @@
-/* style.css - with difficulty buttons next to timer */
+/* style.css - with two-row top bar and text buttons */
 * {
   margin: 0;
   padding: 0;
@@ -84,41 +84,33 @@ body.light-mode {
   -webkit-text-fill-color: #aaa;
 }
 
-/* top bar */
-.top-bar {
+/* top area with two rows */
+.top-area {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   gap: 1rem;
   margin-bottom: 1rem;
-  padding: 1rem 1.5rem;
   background: rgba(30,40,50,0.6);
   backdrop-filter: blur(10px);
   border-radius: 3rem;
+  padding: 1.5rem 1.5rem;
   border: 1px solid rgba(255,255,255,0.1);
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
-.light-mode .top-bar {
+.light-mode .top-area {
   background: rgba(220,230,245,0.7);
   border-color: rgba(0,0,0,0.1);
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-.left-controls {
+/* first row: stats and difficulty */
+.stats-row {
   display: flex;
-  gap: 0.8rem;
-  align-items: center;
-}
-
-.stats {
-  display: flex;
-  gap: 1.5rem;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  flex: 1 1 auto;
+  gap: 1.5rem;
 }
 
 .stat-item {
@@ -191,9 +183,52 @@ body.light-mode {
   color: white;
 }
 
-.right-placeholder {
-  width: 100px; /* same as left-controls width approx to maintain centering */
-  visibility: hidden;
+/* second row: action buttons (restart & dark mode) */
+.action-row {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 0.5rem;
+}
+
+.action-btn {
+  background: rgba(20,30,40,0.8);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: inherit;
+  padding: 0.7rem 2rem;
+  border-radius: 3rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.2,0.9,0.3,1.2);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 5px 0 rgba(0,0,0,0.3);
+}
+
+.light-mode .action-btn {
+  background: rgba(240,245,255,0.8);
+  border-color: rgba(0,0,0,0.2);
+  color: #1a2634;
+  box-shadow: 0 5px 0 #b0c4de;
+}
+
+.action-btn:hover {
+  background: rgba(70,100,130,0.9);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 0 rgba(0,0,0,0.3), 0 0 20px #4a90e2;
+}
+
+.light-mode .action-btn:hover {
+  background: rgba(200,215,255,0.9);
+  box-shadow: 0 8px 0 #9bb0cc, 0 0 20px #4a90e2;
+}
+
+.action-btn .btn-icon {
+  font-size: 1.6rem;
+  line-height: 1;
 }
 
 /* ad spot */
@@ -202,7 +237,7 @@ body.light-mode {
   backdrop-filter: blur(8px);
   border-radius: 2rem;
   padding: 0.8rem 2rem;
-  margin: 0.5rem 0 1.5rem 0;
+  margin: 1rem 0 1.5rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -420,16 +455,41 @@ body.light-mode {
 
 /* responsive */
 @media (max-width: 700px) {
-  .blog-section { grid-template-columns: 1fr; }
-  .stats { gap: 0.8rem; }
-  .stat-item { font-size: 1rem; padding: 0.3rem 0.8rem; }
-  .diff-btn { padding: 0.3rem 0.8rem; font-size: 0.8rem; }
-  .cell { width: 30px; height: 30px; font-size: 1rem; border-radius: 8px; }
-  .board { padding: 0.8rem; }
+  .stats-row {
+    gap: 0.8rem;
+  }
+  .stat-item {
+    font-size: 1rem;
+    padding: 0.3rem 0.8rem;
+  }
+  .diff-btn {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  .action-row {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .action-btn {
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+  }
+  .blog-section {
+    grid-template-columns: 1fr;
+  }
+  .cell {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    border-radius: 8px;
+  }
+  .board {
+    padding: 0.8rem;
+  }
 }
 
 @media (max-width: 480px) {
-  .top-bar { flex-direction: column; align-items: stretch; }
-  .right-placeholder { display: none; }
-  .stats { justify-content: center; }
+  .stats-row {
+    flex-direction: column;
+  }
 }
