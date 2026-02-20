@@ -19,7 +19,7 @@ const BRICK_HEIGHT = 22;
 const PADDLE_BASE_WIDTH = 110;
 const PADDLE_HEIGHT = 16;
 const BALL_RADIUS = 8;
-const BASE_BALL_SPEED = 3.5;
+const BASE_BALL_SPEED = 4.2;
 const MAX_LEVEL = 5;
 
 // power‑up types
@@ -50,7 +50,7 @@ let slowMoFactor = 1.0;
 // keyboard control flags
 let leftPressed = false;
 let rightPressed = false;
-const PADDLE_SPEED = 7;
+const PADDLE_SPEED = 5;
 
 // high score from localStorage
 try {
