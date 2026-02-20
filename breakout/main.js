@@ -15,10 +15,10 @@ const supportBtn = document.getElementById('supportBtn');
 // ----- constants & settings (adjusted for 720x540) -----
 const ROWS = 7;
 const COLS = 10;
-const BRICK_HEIGHT = 16;
-const PADDLE_BASE_WIDTH = 90;
+const BRICK_HEIGHT = 12;
+const PADDLE_BASE_WIDTH = 70;
 const PADDLE_HEIGHT = 16;
-const BALL_RADIUS = 6;
+const BALL_RADIUS = 5;
 const BASE_BALL_SPEED = 4.3;
 const MAX_LEVEL = 5;
 
@@ -174,7 +174,7 @@ function generateBricks() {
     for (let c = 0; c < cols; c++) {
       newBricks.push({
         x: startX + c * brickW,
-        y: 40 + r * (BRICK_HEIGHT + 6),
+        y: 30 + r * (BRICK_HEIGHT + 5),
         w: brickW - 4,
         h: BRICK_HEIGHT,
         active: true,
@@ -190,7 +190,7 @@ function generateBricks() {
 function resetBall() {
   balls = [{
     x: canvas.width / 2,
-    y: 400,
+    y: 330,
     dx: (Math.random() > 0.5 ? BASE_BALL_SPEED : -BASE_BALL_SPEED) * 0.9,
     dy: -BASE_BALL_SPEED * 0.9,
     r: BALL_RADIUS
@@ -199,7 +199,7 @@ function resetBall() {
 function resetPaddle() {
   paddle.width = PADDLE_BASE_WIDTH;
   paddle.x = (canvas.width - paddle.width) / 2;
-  paddle.y = canvas.height - 50;
+  paddle.y = canvas.height - 40;
   expandEnd = 0;
 }
 function resetGame(lev = 1) {
