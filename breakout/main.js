@@ -13,13 +13,13 @@ const themeToggle = document.getElementById('themeToggle');
 const supportBtn = document.getElementById('supportBtn');
 
 // ----- constants & settings (adjusted for 720x540) -----
-const ROWS = 5;
-const COLS = 8;
-const BRICK_HEIGHT = 22;
-const PADDLE_BASE_WIDTH = 110;
+const ROWS = 7;
+const COLS = 10;
+const BRICK_HEIGHT = 16;
+const PADDLE_BASE_WIDTH = 90;
 const PADDLE_HEIGHT = 16;
-const BALL_RADIUS = 8;
-const BASE_BALL_SPEED = 4.2;
+const BALL_RADIUS = 6;
+const BASE_BALL_SPEED = 4.5;
 const MAX_LEVEL = 5;
 
 // power‑up types
@@ -174,7 +174,7 @@ function generateBricks() {
     for (let c = 0; c < cols; c++) {
       newBricks.push({
         x: startX + c * brickW,
-        y: 50 + r * (BRICK_HEIGHT + 8),
+        y: 40 + r * (BRICK_HEIGHT + 6),
         w: brickW - 4,
         h: BRICK_HEIGHT,
         active: true,
@@ -190,7 +190,7 @@ function generateBricks() {
 function resetBall() {
   balls = [{
     x: canvas.width / 2,
-    y: 450,
+    y: 400,
     dx: (Math.random() > 0.5 ? BASE_BALL_SPEED : -BASE_BALL_SPEED) * 0.9,
     dy: -BASE_BALL_SPEED * 0.9,
     r: BALL_RADIUS
