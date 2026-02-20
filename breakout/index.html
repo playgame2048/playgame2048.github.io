@@ -3,29 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>LUMINA BREAKOUT · modern Arkanoid</title>
+  <title>BREAKOUT · LUMINA</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
+    <h1 class="game-title">◈ BREAKOUT ◈</h1>
     <div class="game-wrapper">
       <div class="top-bar">
         <div class="score">SCORE: <span id="score">0</span></div>
         <div class="high-score">🏆 <span id="highScore">0</span></div>
         <div class="lives">❤️ <span id="lives">3</span></div>
         <div class="level">🌠 LVL <span id="level">1</span></div>
-        <button id="themeToggle" class="theme-toggle" aria-label="Switch dark/light mode">🌙</button>
+        <div class="action-buttons">
+          <button id="restartBtn" class="icon-btn" title="Restart">↻</button>
+          <button id="themeToggle" class="icon-btn" title="Dark/Light mode">🌙</button>
+        </div>
       </div>
-      <canvas id="gameCanvas" width="800" height="600"></canvas>
-      <div class="controls">
-        <button id="restartBtn">↻ Restart</button>
-      </div>
+      <canvas id="gameCanvas" width="720" height="540"></canvas>
     </div>
 
     <div class="extra-content">
       <div class="blog-section">
         <h3>🎮 HOW TO PLAY</h3>
-        <p>Move the paddle with your mouse or finger. Bounce the ball, break all bricks, and advance. Catch falling power‑ups (⚡ expand, 🌀 multi‑ball, ⏳ slow motion).</p>
+        <p>Move the paddle with your mouse, finger, or ◀ ▶ keys. Bounce the ball, break all bricks, and catch falling power‑ups (⚡ expand, 🌀 multi‑ball, ⏳ slow motion).</p>
       </div>
       <div class="blog-section">
         <h3>💡 TIPS & STRATEGY</h3>
