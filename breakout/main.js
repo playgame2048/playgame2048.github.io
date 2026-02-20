@@ -19,7 +19,7 @@ const BRICK_HEIGHT = 16;
 const PADDLE_BASE_WIDTH = 90;
 const PADDLE_HEIGHT = 16;
 const BALL_RADIUS = 6;
-const BASE_BALL_SPEED = 4.5;
+const BASE_BALL_SPEED = 4.3;
 const MAX_LEVEL = 5;
 
 // power‑up types
