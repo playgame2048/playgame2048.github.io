@@ -466,3 +466,16 @@ footer {
   transform: translateY(-2px) !important;
   box-shadow: 0 6px 0 #0f2c5e !important;
 }
+
+.game-card {
+  height: auto !important;
+  min-height: 280px !important; /* أو قيمة مناسبة */
+}
+.card-img {
+  height: 130px !important;
+}
+.card-img img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
