@@ -497,24 +497,33 @@ function draw() {
   ctx.shadowBlur = 0;
 
   // overlays
-  if (gameState === 'gameover') {
-    ctx.fillStyle = '#0b0f17cc';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.font = 'bold 50px Inter, sans-serif';
-    ctx.fillStyle = '#f4a3a3';
-    ctx.shadowBlur = 36;
-    ctx.shadowColor = '#ff3366';
-    ctx.fillText('GAME OVER', 130, 280);
-  }
-  if (gameState === 'win') {
-    ctx.fillStyle = '#0f242ccc';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.font = 'bold 50px Inter';
-    ctx.fillStyle = '#c3e88d';
-    ctx.shadowBlur = 36;
-    ctx.shadowColor = '#a6e22e';
-    ctx.fillText('YOU WIN!', 180, 280);
-  }
+if (gameState === 'gameover') {
+  ctx.fillStyle = '#0b0f17cc';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.font = 'bold 40px "Press Start 2P", "Courier New", monospace';
+  ctx.fillStyle = '#f4a3a3';
+  ctx.shadowBlur = 36;
+  ctx.shadowColor = '#ff3366';
+  // حساب العرض لتوسيط النص
+  const text = 'GAME OVER';
+  const textWidth = ctx.measureText(text).width;
+  const x = (canvas.width - textWidth) / 2;
+  const y = canvas.height / 2; // وسط الشاشة عمودياً
+  ctx.fillText(text, x, y);
+}
+if (gameState === 'win') {
+  ctx.fillStyle = '#0f242ccc';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.font = 'bold 40px "Press Start 2P", "Courier New", monospace';
+  ctx.fillStyle = '#c3e88d';
+  ctx.shadowBlur = 36;
+  ctx.shadowColor = '#a6e22e';
+  const text = 'YOU WIN!';
+  const textWidth = ctx.measureText(text).width;
+  const x = (canvas.width - textWidth) / 2;
+  const y = canvas.height / 2;
+  ctx.fillText(text, x, y);
+}
 }
 
 // roundRect utility
