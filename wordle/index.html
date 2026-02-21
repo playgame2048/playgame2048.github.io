@@ -445,6 +445,19 @@
       transition: 0.07s;
     }
 
+       /* Fix for dark mode tile colors */
+     body.dark .tile[data-state="correct"] {
+      background-color: #34a853 !important;
+      border-color: #1e7b3c !important;
+     color: white !important;
+     }
+
+     body.dark .tile[data-state="present"] {
+      background-color: #fbbf24 !important;
+      border-color: #b7811a !important;
+      color: white !important;
+    }
+    
     .modal-btn:active {
       transform: translateY(5px);
       box-shadow: 0 3px 0 #1e3a8a;
