@@ -227,7 +227,7 @@ function nextLevel() {
     level++;
     levelSpan.textContent = level;
     balls.forEach(b => {
-      const sp = Math.hypot(b.dx, b.dy) * 1.1;
+      const sp = Math.hypot(b.dx, b.dy);
       const angle = Math.atan2(b.dy, b.dx);
       b.dx = Math.cos(angle) * sp;
       b.dy = Math.sin(angle) * sp;
@@ -256,7 +256,7 @@ function applyPowerup(type) {
       for (let i = 0; i < 2; i++) {
         let base = balls[0] || balls[balls.length-1];
         let angle = Math.atan2(base.dy, base.dx) + (i === 0 ? 0.5 : -0.7);
-        let sp = Math.hypot(base.dx, base.dy) * 1.0;
+        let sp = Math.hypot(base.dx, base.dy);
         balls.push({
           x: base.x + (i*10-5),
           y: base.y - 10,
