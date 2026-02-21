@@ -557,10 +557,10 @@ themeToggle.addEventListener('click', () => {
   const current = html.getAttribute('data-theme');
   if (current === 'light') {
     html.removeAttribute('data-theme');
-    themeToggle.textContent = '🌙';
+    themeToggle.innerHTML = '🌙 DARK MODE';
   } else {
     html.setAttribute('data-theme', 'light');
-    themeToggle.textContent = '☀️';
+    themeToggle.innerHTML = '☀️ LIGHT MODE';
   }
 });
 
