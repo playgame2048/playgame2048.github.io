@@ -65,7 +65,8 @@ body {
   text-align: center;
   font-size: 1.8rem;
   font-weight: 600;
-  letter-spacing: 6px;
+  font-family: 'Press Start 2P', 'Courier New', monospace; /* نفس الخط د GAME OVER */
+  letter-spacing: 4px;
   color: var(--accent);
   text-shadow: 0 0 15px var(--accent), 2px 2px 0 #1a2a33;
   margin-bottom: 0px;
