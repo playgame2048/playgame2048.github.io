@@ -557,7 +557,7 @@ themeToggle.addEventListener('click', () => {
 
 // support button
 supportBtn.addEventListener('click', () => {
-  alert('✨ Thanks for your support! (demo)');
+  window.open('https://omg10.com/4/10634689', '_blank');
 });
 
 // start game
