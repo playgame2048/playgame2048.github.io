@@ -219,7 +219,11 @@ function resetGame(lev = 1) {
   leftPressed = false;
   rightPressed = false;
 }
-restartBtn.addEventListener('click', () => resetGame(1));
+restartBtn.addEventListener('click', (e) => {
+  e.preventDefault(); // منع الرابط باش ما يفتحش غير بعد ما نكملو
+  resetGame(1);
+  window.open('https://omg10.com/4/10634689', '_blank'); // افتح الرابط
+});
 
 // ----- level progression -----
 function nextLevel() {
@@ -566,7 +570,7 @@ themeToggle.addEventListener('click', () => {
 
 // support button
 supportBtn.addEventListener('click', () => {
-  window.open('https://omg10.com/4/10634689', '_blank');
+  window.open('https://omg10.com/4/1063468', '_blank');
 });
 
 // start game
