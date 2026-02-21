@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-  <title>Wordle · premium SaaS edition</title>
+  <title>Wordle · premium centered header</title>
   <style>
-    /* ---------- CSS variables (light mode) ---------- */
+    /* ---------- CSS variables ---------- */
     * {
       margin: 0;
       padding: 0;
@@ -23,7 +23,7 @@
       transition: background-color 0.3s ease;
     }
 
-    /* dark mode styles – applied via body class */
+    /* dark mode */
     body.dark {
       background: #0f1825;
     }
@@ -63,7 +63,7 @@
 
     /* main glass container */
     .glass-card {
-      max-width: 760px;
+      max-width: 780px;
       width: 100%;
       background: rgba(255, 255, 255, 0.6);
       backdrop-filter: blur(16px);
@@ -75,24 +75,25 @@
       transition: background 0.3s, border 0.3s;
     }
 
-    /* header */
+    /* header with centered title and buttons below */
     .header {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
       margin-bottom: 28px;
-      flex-wrap: wrap;
-      gap: 15px;
+      width: 100%;
     }
 
     .game-title {
-      font-size: 2.3rem;
+      font-size: 3rem;          /* larger title */
       font-weight: 700;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       background: linear-gradient(145deg, #1a3b5c, #2d4f77);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      margin-bottom: 20px;       /* space below title */
+      text-align: center;
     }
 
     body.dark .game-title {
@@ -101,30 +102,34 @@
       -webkit-text-fill-color: transparent;
     }
 
-    .header-actions {
+    /* control row under title */
+    .control-row {
       display: flex;
       align-items: center;
-      gap: 15px;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
     }
 
-    /* restart button */
+    /* restart button (styled as "New Game") */
     .restart-btn {
       background: white;
       border: none;
-      padding: 12px 28px;
-      border-radius: 50px;
+      padding: 14px 36px;
+      border-radius: 60px;
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 1.2rem;
       color: #1e2f44;
       cursor: pointer;
-      box-shadow: 0 8px 16px rgba(0, 20, 40, 0.08);
-      border: 1px solid rgba(255,255,255,0.6);
+      box-shadow: 0 8px 20px rgba(0, 20, 40, 0.1);
+      border: 1px solid rgba(255,255,255,0.7);
       transition: all 0.2s;
+      min-width: 160px;
     }
 
     .restart-btn:hover {
       background: #fafdff;
-      box-shadow: 0 12px 28px -8px rgba(0, 50, 100, 0.25);
+      box-shadow: 0 15px 30px -6px rgba(0, 50, 100, 0.25);
       transform: scale(1.02);
     }
 
@@ -134,32 +139,40 @@
       border-color: #3a4a62;
     }
 
-    /* dark mode toggle (icon switch) */
+    /* dark mode toggle with text + icon */
     .theme-toggle {
       background: white;
       border: none;
-      width: 54px;
-      height: 54px;
+      padding: 14px 28px;
       border-radius: 60px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.8rem;
+      gap: 10px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #1e2f44;
       cursor: pointer;
-      box-shadow: 0 8px 16px rgba(0, 20, 40, 0.08);
-      border: 1px solid rgba(255,255,255,0.6);
+      box-shadow: 0 8px 20px rgba(0, 20, 40, 0.1);
+      border: 1px solid rgba(255,255,255,0.7);
       transition: 0.2s;
+      min-width: 160px;
     }
 
     .theme-toggle:hover {
       background: #f2f7ff;
-      transform: rotate(10deg) scale(1.05);
+      transform: scale(1.02);
     }
 
     body.dark .theme-toggle {
       background: #253445;
       color: #fcd34d;
       border-color: #3a4a62;
+    }
+
+    .theme-toggle span {
+      font-size: 1.5rem;
+      line-height: 1;
     }
 
     /* game board grid */
@@ -206,7 +219,6 @@
       100% { transform: rotateX(0deg); }
     }
 
-    /* tile state colors */
     .tile[data-state="correct"] {
       background-color: #34a853;
       border-color: #1e7b3c;
@@ -230,7 +242,7 @@
       border-color: #1f2b39;
     }
 
-    /* on‑screen keyboard */
+    /* keyboard */
     .keyboard {
       display: flex;
       flex-direction: column;
@@ -293,7 +305,7 @@
       box-shadow: 0 5px 0 #5f6c84;
     }
 
-    /* blog & support sections */
+    /* blog & support */
     .info-section {
       display: flex;
       flex-direction: column;
@@ -301,7 +313,7 @@
       margin-top: 30px;
     }
 
-    .blog-card {
+    .blog-card, .support-card {
       background: rgba(255,255,255,0.7);
       backdrop-filter: blur(8px);
       border-radius: 36px;
@@ -335,15 +347,6 @@
       color: #cad8f0;
     }
 
-    .support-card {
-      background: rgba(255,255,255,0.7);
-      backdrop-filter: blur(8px);
-      border-radius: 36px;
-      padding: 28px 30px;
-      box-shadow: 0 20px 30px -12px rgba(0,20,40,0.15);
-      border: 1px solid rgba(255,255,255,0.6);
-    }
-
     .support-card h3 {
       font-size: 1.9rem;
       font-weight: 650;
@@ -355,10 +358,6 @@
       font-size: 1.1rem;
       color: #253c5c;
       margin-bottom: 20px;
-    }
-
-    body.dark .support-card p {
-      color: #cad8f0;
     }
 
     .support-btn {
@@ -394,7 +393,7 @@
       color: #99c6ff;
     }
 
-    /* modal overlay */
+    /* modal */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -451,12 +450,17 @@
     }
 
     /* responsive */
+    @media (max-width: 650px) {
+      .game-title { font-size: 2.5rem; }
+      .control-row { flex-direction: column; width: 100%; }
+      .restart-btn, .theme-toggle { width: 100%; justify-content: center; }
+    }
+
     @media (max-width: 600px) {
       .glass-card { padding: 20px 16px; }
       .tile { width: 55px; height: 55px; font-size: 1.9rem; }
       .key-btn { min-width: 36px; height: 52px; font-size: 1.2rem; }
       .key-btn.special { min-width: 60px; }
-      .blog-card h2 { font-size: 1.8rem; }
     }
 
     @media (max-width: 420px) {
@@ -468,22 +472,24 @@
 </head>
 <body>
   <div class="glass-card" id="appContainer">
-    <!-- header with controls -->
+    <!-- header with centered title and buttons below -->
     <div class="header">
       <div class="game-title">WORDLE</div>
-      <div class="header-actions">
-        <button class="restart-btn" id="restartBtn">↻ New game</button>
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">☀️</button>
+      <div class="control-row">
+        <button class="restart-btn" id="restartBtn">🔄 New Game</button>
+        <button class="theme-toggle" id="themeToggle">
+          <span>☀️</span> Dark mode
+        </button>
       </div>
     </div>
 
-    <!-- game board 6x5 -->
+    <!-- game board -->
     <div class="board" id="board"></div>
 
     <!-- on-screen keyboard -->
     <div class="keyboard" id="keyboard"></div>
 
-    <!-- blog & support sections -->
+    <!-- blog & support -->
     <div class="info-section">
       <div class="blog-card">
         <h2>📘 How to Play Wordle</h2>
@@ -492,7 +498,6 @@
         <p><span style="color:#34a853;">Green</span> means the letter is correct and in the right spot. <span style="color:#fbbf24;">Yellow</span> means the letter is in the word but in the wrong position. <span style="color:#94a3b8;">Gray</span> means the letter is not in the word at all.</p>
         <h3>💡 Tips to Win</h3>
         <p>Start with a word that contains common vowels and consonants like "STARE" or "AUDIO". Use the feedback to eliminate letters. Remember that letters can appear twice!</p>
-        <p>Wordle sharpens your vocabulary and deductive reasoning — all in under five minutes.</p>
       </div>
 
       <div class="support-card">
@@ -504,7 +509,7 @@
     </div>
   </div>
 
-  <!-- win/lose modal -->
+  <!-- modal -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal-content">
       <h2 id="modalTitle">🎉 You won!</h2>
@@ -515,7 +520,7 @@
 
   <script>
     (function() {
-      // ---------- WORD LIST (dictionary) ----------
+      // ---------- WORD LIST (same as before) ----------
       const VALID_WORDS = [
         "ABOUT", "ALERT", "ARGUE", "BEACH", "BELOW", "BENCH", "BIRTH", "BLACK", "BLAST", "BLOOM",
         "BOOST", "BRAIN", "BREAD", "BREAK", "BRING", "BROAD", "BROOK", "BROWN", "BUILD", "CARRY",
@@ -567,15 +572,16 @@
       let answerWord = '';
       let currentRow = 0;
       let currentCol = 0;
-      let guesses = Array(6).fill('');        // raw strings for each row
+      let guesses = Array(6).fill('');
       let gameOver = false;
-      let letterStates = {};                   // e.g. {A: 'correct', B: 'absent', ...}
+      let letterStates = {};
 
-      // DOM references
+      // DOM elements
       const boardEl = document.getElementById('board');
       const keyboardEl = document.getElementById('keyboard');
       const restartBtn = document.getElementById('restartBtn');
       const themeToggle = document.getElementById('themeToggle');
+      const themeIcon = themeToggle.querySelector('span');
       const supportBtn = document.getElementById('supportBtn');
       const supportLink = document.getElementById('supportLink');
       const modalOverlay = document.getElementById('modalOverlay');
@@ -583,16 +589,18 @@
       const modalMessage = document.getElementById('modalMessage');
       const modalClose = document.getElementById('modalCloseBtn');
 
-      let tileElements = [];  // 2D array: [row][col]
+      let tileElements = [];
 
-      // ---------- DARK MODE (localStorage) ----------
+      // ---------- DARK MODE ----------
       function applyTheme(isDark) {
         if (isDark) {
           document.body.classList.add('dark');
-          themeToggle.textContent = '🌙';
+          themeIcon.textContent = '🌙';
+          themeToggle.innerHTML = '<span>🌙</span> Light mode';
         } else {
           document.body.classList.remove('dark');
-          themeToggle.textContent = '☀️';
+          themeIcon.textContent = '☀️';
+          themeToggle.innerHTML = '<span>☀️</span> Dark mode';
         }
         localStorage.setItem('wordleTheme', isDark ? 'dark' : 'light');
       }
@@ -605,7 +613,7 @@
         applyTheme(!nowDark);
       });
 
-      // ---------- UI BUILD ----------
+      // ---------- BOARD & KEYBOARD BUILD ----------
       function buildBoard() {
         boardEl.innerHTML = '';
         tileElements = [];
@@ -654,7 +662,6 @@
         });
       }
 
-      // update board text from guesses array
       function renderBoard() {
         for (let r = 0; r < 6; r++) {
           for (let c = 0; c < 5; c++) {
@@ -663,7 +670,6 @@
         }
       }
 
-      // refresh keyboard colors based on letterStates
       function refreshKeyboard() {
         document.querySelectorAll('.key-btn').forEach(btn => {
           const key = btn.dataset.key;
@@ -672,7 +678,7 @@
         });
       }
 
-      // evaluate guess for the given row
+      // evaluate guess
       function evaluateGuess(rowIdx) {
         const guess = guesses[rowIdx];
         if (guess.length !== 5) return false;
@@ -682,14 +688,12 @@
         const result = Array(5).fill('absent');
         const answerCopy = [...answerArr];
 
-        // correct matches
         for (let i = 0; i < 5; i++) {
           if (guessArr[i] === answerArr[i]) {
             result[i] = 'correct';
             answerCopy[i] = null;
           }
         }
-        // present (yellow)
         for (let i = 0; i < 5; i++) {
           if (result[i] === 'correct') continue;
           const idx = answerCopy.indexOf(guessArr[i]);
@@ -699,7 +703,6 @@
           }
         }
 
-        // update tile states & flip animation
         for (let i = 0; i < 5; i++) {
           const tile = tileElements[rowIdx][i];
           tile.dataset.state = result[i];
@@ -707,7 +710,6 @@
           setTimeout(() => tile.classList.remove('flip'), 350);
         }
 
-        // merge into global letterStates
         for (let i = 0; i < 5; i++) {
           const letter = guessArr[i];
           const newState = result[i];
@@ -731,7 +733,6 @@
         const guess = guesses[currentRow];
         if (guess.length !== 5) return;
 
-        // simple dictionary validation (optional)
         if (!VALID_WORDS.includes(guess)) {
           alert('Word not in dictionary');
           return;
@@ -750,7 +751,6 @@
         }
       }
 
-      // key press handler (both on‑screen and physical)
       function handleKeyClick(key) {
         if (gameOver) return;
 
@@ -773,7 +773,6 @@
         }
       }
 
-      // physical keyboard listener
       document.addEventListener('keydown', (e) => {
         if (gameOver) return;
         const key = e.key.toUpperCase();
@@ -789,7 +788,6 @@
         }
       });
 
-      // modal control
       function showModal(type, word) {
         modalTitle.textContent = type === 'win' ? '🎉 You won!' : '😞 Game over';
         modalMessage.textContent = type === 'win' ? `Amazing! The word was ${word}.` : `The word was ${word}. Try again.`;
@@ -803,16 +801,14 @@
         if (e.target === modalOverlay) modalOverlay.style.display = 'none';
       });
 
-      // restart game (new word)
       function restartGame() {
         answerWord = VALID_WORDS[Math.floor(Math.random() * VALID_WORDS.length)];
-        console.log('Answer:', answerWord); // for debugging (can be removed)
+        console.log('Answer:', answerWord);
         currentRow = 0;
         currentCol = 0;
         guesses = Array(6).fill('');
         gameOver = false;
         letterStates = {};
-        // clear board visuals
         for (let r = 0; r < 6; r++) {
           for (let c = 0; c < 5; c++) {
             tileElements[r][c].textContent = '';
@@ -835,18 +831,18 @@
         restartGame();
       });
 
-      // support button & link
+      // support
       supportBtn.addEventListener('click', () => {
         window.open('https://YOUR-SUPPORT-LINK.com', '_blank');
       });
       supportLink.href = 'https://YOUR-SUPPORT-LINK.com';
       supportLink.textContent = 'https://YOUR-SUPPORT-LINK.com';
 
-      // ---------- INIT GAME ----------
+      // ---------- INIT ----------
       function init() {
         buildBoard();
         buildKeyboard();
-        restartGame();  // sets answer and clears board
+        restartGame();
       }
 
       init();
