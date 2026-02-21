@@ -504,7 +504,7 @@
         <h3>🤝 Support Us</h3>
         <p>We’re dedicated to crafting beautiful, free games. Your support helps us keep creating and improving. If you enjoy Wordle, please consider backing us.</p>
         <button class="support-btn" id="supportBtn">Support Us</button>
-        <a href="#" class="custom-link" id="supportLink" target="_blank" rel="noopener">https://YOUR-SUPPORT-LINK.com</a>
+        <a href="#" class="custom-link" id="supportLink" target="_blank" rel="noopener"></a>
       </div>
     </div>
   </div>
@@ -595,12 +595,12 @@
       function applyTheme(isDark) {
         if (isDark) {
           document.body.classList.add('dark');
-          themeIcon.textContent = '🌙';
-          themeToggle.innerHTML = '<span>🌙</span> Light mode';
+          themeIcon.textContent = '☀️';
+          themeToggle.innerHTML = '<span>☀️</span> Light mode';
         } else {
           document.body.classList.remove('dark');
-          themeIcon.textContent = '☀️';
-          themeToggle.innerHTML = '<span>☀️</span> Dark mode';
+          themeIcon.textContent = '🌙';
+          themeToggle.innerHTML = '<span>🌙</span> Dark mode';
         }
         localStorage.setItem('wordleTheme', isDark ? 'dark' : 'light');
       }
@@ -825,7 +825,7 @@
         const firstClick = sessionStorage.getItem('restartFirst');
         if (!firstClick) {
           sessionStorage.setItem('restartFirst', 'true');
-          window.location.href = 'https://YOUR-LINK-HERE.com';
+          window.location.href = 'https://ko-fi.com/help_tommy';
           return;
         }
         restartGame();
@@ -833,10 +833,10 @@
 
       // support
       supportBtn.addEventListener('click', () => {
-        window.open('https://YOUR-SUPPORT-LINK.com', '_blank');
+        window.open('https://ko-fi.com/help_tommy', '_blank');
       });
-      supportLink.href = 'https://YOUR-SUPPORT-LINK.com';
-      supportLink.textContent = 'https://YOUR-SUPPORT-LINK.com';
+      supportLink.href = 'https://ko-fi.com/help_tommy';
+      supportLink.textContent = 'https://ko-fi.com/help_tommy';
 
       // ---------- INIT ----------
       function init() {
