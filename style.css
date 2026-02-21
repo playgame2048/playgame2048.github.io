@@ -479,3 +479,62 @@ footer {
   height: 100% !important;
   object-fit: contain !important;
 }
+
+/* توحيد جميع الكروت داخل الـ grid */
+.games-grid .game-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  background: rgba(18, 25, 35, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px !important;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 20px 30px -10px rgba(0,0,0,0.5);
+}
+
+.games-grid .game-card .card-img {
+  height: 130px !important;
+  background-color: #0a0e17;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.games-grid .game-card .card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+  display: block;
+}
+
+.games-grid .game-card .card-info {
+  padding: 12px 12px 16px !important;
+  background: rgba(8, 12, 19, 0.9);
+  flex: 1;
+}
+
+.games-grid .game-card .card-info h3 {
+  font-size: 1.2rem !important;
+  margin-bottom: 4px !important;
+}
+
+.games-grid .game-card .card-info p {
+  font-size: 0.75rem !important;
+  margin-bottom: 10px !important;
+  line-height: 1.4 !important;
+}
+
+.games-grid .game-card .game-badge {
+  padding: 4px 10px !important;
+  font-size: 0.65rem !important;
+}
+
+.games-grid .game-card .play-btn {
+  padding: 6px 16px !important;
+  font-size: 0.8rem !important;
+  box-shadow: 0 4px 0 #0f2c5e !important;
+}
