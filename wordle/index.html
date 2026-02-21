@@ -819,17 +819,18 @@
         modalOverlay.style.display = 'none';
       }
 
-      // ---------- RESTART BUTTON WITH FIRST‑CLICK REDIRECT ----------
-      restartBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const firstClick = sessionStorage.getItem('restartFirst');
-        if (!firstClick) {
-          sessionStorage.setItem('restartFirst', 'true');
-          window.location.href = 'https://ko-fi.com/help_tommy';
-          return;
-        }
-        restartGame();
-      });
+// ---------- RESTART BUTTON WITH FIRST‑CLICK REDIRECT (RESET ON REFRESH) ----------
+let firstClick = true;  // variable محلية reset كل مرة تتحمل الصفحة
+
+restartBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  if (firstClick) {
+    firstClick = false;
+    window.location.href = 'https://YOUR-LINK-HERE.com';  // ضع الرابط ديالك هنا
+    return;
+  }
+  restartGame();
+});
 
       // support
       supportBtn.addEventListener('click', () => {
