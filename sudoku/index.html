@@ -64,11 +64,9 @@
 .top-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 650px;
-    gap: 0.8rem;
-    flex-wrap: wrap;
+    justify-content: center;  /* لتوسيط المجموعة ككل */
+    gap: 1rem;                /* مسافة بين العناصر */
+    flex-wrap: wrap;          /* للشاشات الصغيرة */
     margin: 0.5rem 0 1.5rem;
 }
 
@@ -77,20 +75,17 @@
     background: var(--surface);
     border: 1px solid var(--border-light);
     color: var(--text-primary);
-    padding: 0.4rem 2rem 0.4rem 1rem;  /* تقليل padding */
+    padding: 0.35rem 2rem 0.35rem 1rem;
     border-radius: 40px;
     font-weight: 500;
-    font-size: 0.95rem;                /* نفس حجم الزر */
+    font-size: 0.9rem;
     cursor: pointer;
     box-shadow: var(--shadow);
-    transition: all 0.2s;
     appearance: none;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
-    background-position: right 0.7rem center;
-    background-size: 1rem;             /* تصغير حجم السهم */
-    flex: 0 1 auto;
-    min-width: 110px;
+    background-position: right 0.6rem center;
+    background-size: 0.9rem;
 }
 
         .difficulty-select:hover {
@@ -141,11 +136,12 @@
 .dark-toggle {
     display: flex;
     align-items: center;
-    gap: 0.4rem;       /* تقليل المسافة بين الكلمة والمفتاح (كانت 0.75rem) */
-    flex: 0 0 auto;  
-    min-width: 160px;
-    margin-right: 0; /* تحريك لليمين */
-    border: 2px solid red;  /* حدود حمراء مؤقتة لرؤية التغيير */
+    gap: 0.3rem;
+    background: var(--surface);        /* اختياري: خلفية خفيفة */
+    padding: 0.35rem 0.8rem;
+    border-radius: 40px;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow);
 }
         
 .difficulty-select {
@@ -154,19 +150,19 @@
     min-width: 120px;
 }
         
-      .toggle-label {
-        font-weight: 500;
-        color: var(--text-secondary);
-      }
+   .toggle-label {
+    font-weight: 500;
+    color: var(--text-secondary);
+}
 
      /* التبديلة تبقى كما هي */
-      .toggle-switch {
-        position: relative;
-        display: inline-block;
-        width: 52px;
-        height: 28px;
-      }
-
+   .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    flex-shrink: 0;
+}
        /* تنظيم الصف العلوي */
         .controls-row {
           display: flex;
@@ -223,30 +219,24 @@
             color: var(--toggle-moon);
         }
 
-  .restart-btn {
+.restart-btn {
     background: var(--button-bg);
     border: 1px solid var(--border-light);
     color: var(--text-primary);
-    padding: 0.4rem 1rem;    /* تقليل الـ padding (كان 0.6rem 1.4rem) */
+    padding: 0.35rem 1rem;
     border-radius: 40px;
     font-weight: 500;
-    font-size: 0.95rem;       /* تقليل حجم الخط قليلاً */
+    font-size: 0.9rem;
     cursor: pointer;
     box-shadow: var(--shadow);
     transition: all 0.2s ease;
-    backdrop-filter: blur(4px);
-    flex: 0 0 auto;
-    width: 110px;
-    min-width: 100px;         /* تصغير العرض الأدنى */
-    white-space: nowrap;       /* منع النص من الالتفاف */
+    white-space: nowrap;
 }
 
-
-        .restart-btn:hover {
-            background: var(--button-hover);
-            transform: translateY(-2px);
-            margin: 0 auto;  /* مهم للتوسيط */
-        }
+      .restart-btn:hover {
+    background: var(--button-hover);
+    transform: translateY(-2px);
+}
 
         /* ----- sudoku board ----- */
         .board-wrapper {
@@ -495,11 +485,9 @@
     .top-row {
         flex-direction: column;
         align-items: stretch;
-        gap: 0.5rem;
     }
     .dark-toggle, .difficulty-select, .restart-btn {
         width: 100%;
-        min-width: unset;
     }
 }
         /* responsiveness */
@@ -533,7 +521,7 @@
         </select>
 
         <!-- Restart button -->
-        <button class="restart-btn" id="restartButton">↻ New game</button>
+        <button class="restart-btn" id="restartButton">↻ Restart</button>
     </div>
 </div>
 
