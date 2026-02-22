@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku · professional edition</title>
+    <style>
+        /* ----- CSS variables (light mode default) ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            --bg-page: #f5f7fb;
+            --surface: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --border-light: #e2e8f0;
+            --board-border: #0f172a;
+            --cell-bg: #ffffff;
+            --cell-input: #1e293b;
+            --clue-cell: #0f172a;
+            --highlight-row-col: #e9f0fe;
+            --highlight-same: #d4e2fc;
+            --error-bg: #fee2e2;
+            --error-border: #ef4444;
+            --shadow: 0 20px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.02);
+            --button-bg: #f1f5f9;
+            --button-hover: #e2e8f0;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --toggle-sun: #f59e0b;
+            --toggle-moon: #334155;
+            --modal-overlay: rgba(0,0,0,0.3);
+            transition: background-color 0.3s ease, color 0.2s ease;
+        }
+
+        body.dark {
+            --bg-page: #0b1120;
+            --surface: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-light: #334155;
+            --board-border: #94a3b8;
+            --cell-bg: #0f172a;
+            --cell-input: #f8fafc;
+            --clue-cell: #f1f5f9;
+            --highlight-row-col: #1e2a44;
+            --highlight-same: #263b5a;
+            --error-bg: #4b2c2c;
+            --error-border: #f87171;
+            --shadow: 0 20px 25px -5px rgba(0,0,0,0.5), 0 8px 10px -6px rgba(0,0,0,0.4);
+            --button-bg: #334155;
+            --button-hover: #475569;
+            --accent: #3b82f6;
+            --accent-hover: #60a5fa;
+            --modal-overlay: rgba(0,0,0,0.7);
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 1.5rem 1rem;
+        }
+
+        .app {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ----- header with dark toggle & restart ----- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .dark-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--button-bg);
+            border-radius: 34px;
+            transition: 0.3s;
+            border: 1px solid var(--border-light);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "☀️";
+            font-size: 16px;
+            line-height: 22px;
+            text-align: center;
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 2px;
+            background-color: var(--surface);
+            border-radius: 50%;
+            transition: 0.3s;
+            color: var(--toggle-sun);
+        }
+
+        input:checked + .slider:before {
+            content: "🌙";
+            transform: translateX(24px);
+            color: var(--toggle-moon);
+        }
+
+        .restart-btn {
+            background: var(--button-bg);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            padding: 0.6rem 1.4rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .restart-btn:hover {
+            background: var(--button-hover);
+            transform: translateY(-2px);
+        }
+
+        /* ----- sudoku board ----- */
+        .board-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0 1.5rem;
+        }
+
+        .sudoku-board {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 2px;
+            background-color: var(--board-border);
+            border: 3px solid var(--board-border);
+            border-radius: 16px;
+            overflow: hidden;
+            width: min(65vw, 500px);
+            aspect-ratio: 1 / 1;
+            box-shadow: var(--shadow);
+        }
+
+        .cell {
+            background-color: var(--cell-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .cell input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            text-align: center;
+            font-size: clamp(1rem, 4vw, 1.6rem);
+            font-weight: 500;
+            background: transparent;
+            color: var(--cell-input);
+            outline: none;
+            caret-color: var(--accent);
+            padding: 0;
+        }
+
+        .cell input:focus {
+            background-color: transparent;
+        }
+
+        .cell input[readonly] {
+            color: var(--clue-cell);
+            font-weight: 700;
+            cursor: default;
+        }
+
+        /* highlight classes */
+        .cell.highlight-row-col {
+            background-color: var(--highlight-row-col);
+        }
+
+        .cell.highlight-same {
+            background-color: var(--highlight-same);
+        }
+
+        .cell.error {
+            background-color: var(--error-bg);
+            border: 1px solid var(--error-border);
+            z-index: 2;
+        }
+
+        /* thicker 3x3 borders */
+        .cell:nth-child(3n) {
+            border-right: 2px solid var(--board-border);
+        }
+        .cell:nth-child(9n) {
+            border-right: none;
+        }
+        .sudoku-board > :nth-child(n+19):nth-child(-n+27),
+        .sudoku-board > :nth-child(n+46):nth-child(-n+54) {
+            border-bottom: 2px solid var(--board-border);
+        }
+
+        /* ----- difficulty selector ----- */
+        .difficulty-panel {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1.8rem 0;
+        }
+
+        .difficulty-btn {
+            background: var(--surface);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            padding: 0.5rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        .difficulty-btn:hover {
+            background: var(--button-hover);
+            transform: scale(1.02);
+        }
+
+        .difficulty-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* ----- blog & support sections ----- */
+        .blog-card {
+            background: var(--surface);
+            border-radius: 32px;
+            padding: 2rem 2rem 1.8rem;
+            margin: 2.5rem 0 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+        }
+
+        .blog-card h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.8rem;
+            color: var(--accent);
+        }
+
+        .blog-subsection {
+            margin-bottom: 1.8rem;
+        }
+
+        .blog-subsection h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .blog-subsection p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .support-card {
+            background: var(--surface);
+            border-radius: 32px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow);
+        }
+
+        .support-card p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .support-btn {
+            background: var(--accent);
+            border: none;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 600;
+            padding: 1rem 3rem;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px -8px var(--accent);
+            transition: all 0.25s ease;
+            margin-bottom: 1rem;
+        }
+
+        .support-btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02) translateY(-3px);
+        }
+
+        .support-link {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            word-break: break-all;
+            background: var(--button-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        /* ----- win modal ----- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--modal-overlay);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s ease;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            padding: 2.5rem 4rem;
+            border-radius: 48px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transform: scale(0.8);
+            transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid var(--border-light);
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-content h2 {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+        }
+
+        /* responsiveness */
+        @media (max-width: 550px) {
+            .app { padding: 0; }
+            .blog-card { padding: 1.5rem; }
+            .support-btn { font-size: 1.2rem; padding: 0.8rem 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- header with dark mode toggle and restart -->
+        <div class="header">
+            <div class="dark-toggle">
+                <span style="color: var(--text-secondary);">🌓</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <button class="restart-btn" id="restartButton">↻ New game</button>
+        </div>
+
+        <!-- Sudoku board -->
+        <div class="board-wrapper">
+            <div class="sudoku-board" id="sudokuBoard"></div>
+        </div>
+
+        <!-- difficulty selector -->
+        <div class="difficulty-panel" id="difficultyPanel">
+            <button class="difficulty-btn active" data-diff="easy">Easy</button>
+            <button class="difficulty-btn" data-diff="medium">Medium</button>
+            <button class="difficulty-btn" data-diff="hard">Hard</button>
+        </div>
+
+        <!-- blog section: How to Play Sudoku -->
+        <article class="blog-card">
+            <h2>How to Play Sudoku</h2>
+            <div class="blog-subsection">
+                <h3>📋 Game Rules</h3>
+                <p>Fill the 9×9 grid so that each column, each row, and each of the nine 3×3 boxes contain the digits from 1 to 9 exactly once. The puzzle starts with some cells pre-filled (clues).</p>
+            </div>
+            <div class="blog-subsection">
+                <h3>🧩 How to Solve Sudoku</h3>
+                <p>Use logical deduction: start with cells that have only one possible number. Look for “hidden singles” in rows, columns, or boxes. Eliminate candidates using the "pencil mark" technique mentally.</p>
+            </div>
+            <div class="blog-subsection">
+                <h3>⚡ Pro Tips</h3>
+                <p>Focus on one number at a time. When stuck, scan for pairs or triples. Avoid guessing — every puzzle can be solved with logic. Practice daily to spot patterns faster.</p>
+            </div>
+        </article>
+
+        <!-- support section -->
+        <div class="support-card">
+            <p>✨ If you enjoy this Sudoku, consider supporting us — it helps us create more polished tools.</p>
+            <button class="support-btn" id="supportBtn">Support Us</button>
+            <div class="support-link">https://YOUR-SUPPORT-LINK.com</div>
+        </div>
+    </div>
+
+    <!-- win modal -->
+    <div class="modal-overlay" id="winModal">
+        <div class="modal-content">
+            <h2>✨ Victory ✨</h2>
+            <p>Perfect! You solved the puzzle.</p>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // -------------------- CONSTANTS & PUZZLE LIBRARY --------------------
+            const PUZZLES = {
+                easy: [
+                    [   // classic easy
+                        [5,3,0,0,7,0,0,0,0],
+                        [6,0,0,1,9,5,0,0,0],
+                        [0,9,8,0,0,0,0,6,0],
+                        [8,0,0,0,6,0,0,0,3],
+                        [4,0,0,8,0,3,0,0,1],
+                        [7,0,0,0,2,0,0,0,6],
+                        [0,6,0,0,0,0,2,8,0],
+                        [0,0,0,4,1,9,0,0,5],
+                        [0,0,0,0,8,0,0,7,9]
+                    ],
+                    [
+                        [0,0,4,3,0,0,2,0,9],
+                        [0,0,5,0,0,9,0,0,1],
+                        [0,7,0,0,6,0,0,4,3],
+                        [0,0,6,0,0,2,0,8,7],
+                        [1,9,0,0,0,7,4,0,0],
+                        [0,5,0,1,9,0,0,0,0],
+                        [4,0,0,0,2,0,8,0,0],
+                        [9,0,0,5,0,0,3,0,2],
+                        [2,0,8,0,0,6,0,0,0]
+                    ]
+                ],
+                medium: [
+                    [
+                        [0,6,0,0,0,0,9,0,0],
+                        [0,0,5,0,2,0,0,7,0],
+                        [1,0,0,9,0,3,0,0,8],
+                        [2,0,0,0,7,0,0,0,3],
+                        [0,9,0,2,0,1,0,4,0],
+                        [3,0,0,0,4,0,0,0,9],
+                        [5,0,0,1,0,6,0,0,7],
+                        [0,3,0,0,9,0,6,0,0],
+                        [0,0,9,0,0,0,0,1,0]
+                    ],
+                    [
+                        [0,0,7,0,0,0,4,0,0],
+                        [0,2,0,6,0,8,0,3,0],
+                        [9,0,0,0,1,0,0,0,5],
+                        [0,5,0,0,9,0,0,6,0],
+                        [1,0,3,4,0,7,2,0,9],
+                        [0,9,0,0,3,0,0,4,0],
+                        [4,0,0,0,8,0,0,0,1],
+                        [0,8,0,2,0,6,0,7,0],
+                        [0,0,2,0,0,0,3,0,0]
+                    ]
+                ],
+                hard: [
+                    [
+                        [9,0,0,0,2,0,0,6,0],
+                        [0,0,1,0,0,7,0,0,3],
+                        [0,6,0,4,0,0,9,0,0],
+                        [0,0,5,0,0,0,0,1,0],
+                        [2,0,0,8,0,1,0,0,7],
+                        [0,8,0,0,0,0,4,0,0],
+                        [0,0,9,0,0,5,0,3,0],
+                        [7,0,0,9,0,0,2,0,0],
+                        [0,4,0,0,6,0,0,0,1]
+                    ],
+                    [
+                        [0,0,0,6,0,0,2,0,0],
+                        [0,8,0,0,9,0,0,5,0],
+                        [4,0,0,0,0,3,0,0,7],
+                        [0,9,0,5,0,0,0,2,0],
+                        [7,0,0,0,1,0,0,0,8],
+                        [0,3,0,0,0,9,0,1,0],
+                        [2,0,0,7,0,0,0,0,6],
+                        [0,1,0,0,4,0,0,3,0],
+                        [0,0,5,0,0,8,0,0,0]
+                    ]
+                ]
+            };
+
+            // -------------------- STATE --------------------
+            let currentDifficulty = 'easy';
+            let originalBoard = [];        // 2D array of numbers (0 for empty)
+            let currentBoard = [];          // 2D array of numbers (as filled by user)
+            let clueMask = [];               // true if cell is original clue (readonly)
+            let cellInputs = [];              // 2D array of DOM input elements
+            let selectedRow = -1, selectedCol = -1;
+
+            // DOM elements
+            const boardEl = document.getElementById('sudokuBoard');
+            const darkToggle = document.getElementById('darkModeToggle');
+            const restartBtn = document.getElementById('restartButton');
+            const diffBtns = document.querySelectorAll('.difficulty-btn');
+            const winModal = document.getElementById('winModal');
+            const supportBtn = document.getElementById('supportBtn');
+
+            // -------------------- DARK MODE --------------------
+            function initDarkMode() {
+                const saved = localStorage.getItem('darkMode');
+                if (saved === 'true') {
+                    document.body.classList.add('dark');
+                    darkToggle.checked = true;
+                } else {
+                    document.body.classList.remove('dark');
+                    darkToggle.checked = false;
+                }
+            }
+            darkToggle.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    document.body.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                } else {
+                    document.body.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                }
+            });
+            initDarkMode();
+
+            // -------------------- RESTART (first click redirect) --------------------
+            restartBtn.addEventListener('click', () => {
+                if (!sessionStorage.getItem('restartClicked')) {
+                    sessionStorage.setItem('restartClicked', 'true');
+                    window.location.href = 'https://YOUR-LINK-HERE.com';
+                } else {
+                    resetToOriginalBoard();
+                }
+            });
+
+            // -------------------- SUPPORT BUTTON --------------------
+            supportBtn.addEventListener('click', () => {
+                window.open('https://YOUR-SUPPORT-LINK.com', '_blank');
+            });
+
+            // -------------------- BOARD RENDERING & HELPERS --------------------
+            function createBoardStructure(puzzleArray) {
+                // puzzleArray: 9x9 with numbers (0 empty)
+                originalBoard = puzzleArray.map(row => [...row]);
+                clueMask = originalBoard.map(row => row.map(value => value !== 0));
+                // currentBoard starts as copy of original (clues remain, empty cells = 0)
+                currentBoard = originalBoard.map(row => [...row]);
+
+                // clear board container
+                boardEl.innerHTML = '';
+                cellInputs = [];
+
+                for (let r = 0; r < 9; r++) {
+                    const rowInputs = [];
+                    for (let c = 0; c < 9; c++) {
+                        const cellDiv = document.createElement('div');
+                        cellDiv.className = 'cell';
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.inputMode = 'numeric';
+                        input.maxLength = 1;
+
+                        const cellValue = currentBoard[r][c];
+                        if (cellValue !== 0) {
+                            input.value = cellValue;
+                        }
+                        if (clueMask[r][c]) {
+                            input.readOnly = true;
+                        }
+
+                        // store coordinates
+                        input.dataset.row = r;
+                        input.dataset.col = c;
+
+                        // event listeners
+                        input.addEventListener('focus', onCellFocus);
+                        input.addEventListener('input', onCellInput);
+
+                        cellDiv.appendChild(input);
+                        boardEl.appendChild(cellDiv);
+                        rowInputs.push(input);
+                    }
+                    cellInputs.push(rowInputs);
+                }
+                selectedRow = -1; selectedCol = -1;
+                refreshHighlightsAndErrors();
+            }
+
+            // reset board to original (restart)
+            function resetToOriginalBoard() {
+                for (let r = 0; r < 9; r++) {
+                    for (let c = 0; c < 9; c++) {
+                        const val = originalBoard[r][c];
+                        currentBoard[r][c] = val;
+                        cellInputs[r][c].value = val !== 0 ? val : '';
+                        cellInputs[r][c].readOnly = clueMask[r][c];
+                    }
+                }
+                selectedRow = -1; selectedCol = -1;
+                refreshHighlightsAndErrors();
+                winModal.classList.remove('show');
+            }
+
+            // load random puzzle by difficulty
+            function loadRandomPuzzle(difficulty) {
+                const arr = PUZZLES[difficulty];
+                const randomIndex = Math.floor(Math.random() * arr.length);
+                const puzzle = arr[randomIndex].map(row => [...row]); // copy
+                createBoardStructure(puzzle);
+            }
+
+            // -------------------- HIGHLIGHT & ERROR LOGIC --------------------
+            function refreshHighlightsAndErrors() {
+                // Remove all extra classes
+                for (let r = 0; r < 9; r++) {
+                    for (let c = 0; c < 9; c++) {
+                        const cellDiv = cellInputs[r][c].parentElement;
+                        cellDiv.classList.remove('highlight-row-col', 'highlight-same', 'error');
+                    }
+                }
+
+                // 1) row/col highlight
+                if (selectedRow !== -1 && selectedCol !== -1) {
+                    for (let c = 0; c < 9; c++) {
+                        cellInputs[selectedRow][c].parentElement.classList.add('highlight-row-col');
+                    }
+                    for (let r = 0; r < 9; r++) {
+                        cellInputs[r][selectedCol].parentElement.classList.add('highlight-row-col');
+                    }
+                }
+
+                // 2) same number highlight
+                if (selectedRow !== -1 && selectedCol !== -1) {
+                    const selectedVal = currentBoard[selectedRow][selectedCol];
+                    if (selectedVal !== 0) {
+                        for (let r = 0; r < 9; r++) {
+                            for (let c = 0; c < 9; c++) {
+                                if (currentBoard[r][c] === selectedVal) {
+                                    cellInputs[r][c].parentElement.classList.add('highlight-same');
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 3) error validation (conflicts)
+                const conflicts = computeConflicts(currentBoard);
+                for (let r = 0; r < 9; r++) {
+                    for (let c = 0; c < 9; c++) {
+                        if (conflicts[r][c]) {
+                            cellInputs[r][c].parentElement.classList.add('error');
+                        }
+                    }
+                }
+            }
+
+            function computeConflicts(board) {
+                const conflict = Array.from({ length: 9 }, () => Array(9).fill(false));
+                for (let r = 0; r < 9; r++) {
+                    for (let c = 0; c < 9; c++) {
+                        const val = board[r][c];
+                        if (val === 0) continue;
+                        // check row
+                        for (let cc = 0; cc < 9; cc++) {
+                            if (cc !== c && board[r][cc] === val) {
+                                conflict[r][c] = true;
+                                conflict[r][cc] = true;
+                            }
+                        }
+                        // check column
+                        for (let rr = 0; rr < 9; rr++) {
+                            if (rr !== r && board[rr][c] === val) {
+                                conflict[r][c] = true;
+                                conflict[rr][c] = true;
+                            }
+                        }
+                        // check 3x3 box
+                        const boxR = Math.floor(r / 3) * 3;
+                        const boxC = Math.floor(c / 3) * 3;
+                        for (let rr = boxR; rr < boxR + 3; rr++) {
+                            for (let cc = boxC; cc < boxC + 3; cc++) {
+                                if ((rr !== r || cc !== c) && board[rr][cc] === val) {
+                                    conflict[r][c] = true;
+                                    conflict[rr][cc] = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                return conflict;
+            }
+
+            // -------------------- CELL EVENTS --------------------
+            function onCellFocus(e) {
+                const input = e.target;
+                const row = parseInt(input.dataset.row);
+                const col = parseInt(input.dataset.col);
+                selectedRow = row;
+                selectedCol = col;
+                refreshHighlightsAndErrors();
+            }
+
+            function onCellInput(e) {
+                const input = e.target;
+                const row = parseInt(input.dataset.row);
+                const col = parseInt(input.dataset.col);
+                let newVal = input.value.trim();
+
+                // Allow only 1-9, or empty
+                if (newVal.length === 1) {
+                    const digit = parseInt(newVal, 10);
+                    if (isNaN(digit) || digit < 1 || digit > 9) {
+                        input.value = currentBoard[row][col] !== 0 ? currentBoard[row][col] : '';
+                        return;
+                    }
+                    currentBoard[row][col] = digit;
+                } else {
+                    // empty / cleared
+                    currentBoard[row][col] = 0;
+                    input.value = '';
+                }
+
+                refreshHighlightsAndErrors();
+                checkWinCondition();
+            }
+
+            // -------------------- WIN CONDITION --------------------
+            function checkWinCondition() {
+                // all cells must be non-zero and no conflicts
+                for (let r = 0; r < 9; r++) {
+                    for (let c = 0; c < 9; c++) {
+                        if (currentBoard[r][c] === 0) return;
+                    }
+                }
+                const conflicts = computeConflicts(currentBoard);
+                for (let r = 0; r < 9; r++) {
+                    for (let c = 0; c < 9; c++) {
+                        if (conflicts[r][c]) return;
+                    }
+                }
+                // win!
+                winModal.classList.add('show');
+            }
+
+            // -------------------- DIFFICULTY CHANGE --------------------
+            diffBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    diffBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const diff = btn.dataset.diff;
+                    currentDifficulty = diff;
+                    loadRandomPuzzle(diff);
+                });
+            });
+
+            // -------------------- INITIAL LOAD --------------------
+            loadRandomPuzzle('easy');
+
+            // close modal when clicking outside (optional)
+            winModal.addEventListener('click', (e) => {
+                if (e.target === winModal) winModal.classList.remove('show');
+            });
+        })();
+    </script>
+</body>
+</html>
