@@ -911,16 +911,13 @@
             }
 
             // -------------------- DIFFICULTY CHANGE --------------------
-            diffBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    diffBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    const diff = btn.dataset.diff;
-                    currentDifficulty = diff;
-                    loadRandomPuzzle(diff);
-                });
-            });
+const difficultySelect = document.getElementById('difficultySelect');
 
+difficultySelect.addEventListener('change', (e) => {
+    const newDiff = e.target.value;
+    currentDifficulty = newDiff;
+    loadRandomPuzzle(newDiff);
+});
             // -------------------- INITIAL LOAD --------------------
             loadRandomPuzzle('easy');
 
