@@ -60,6 +60,41 @@
             --modal-overlay: rgba(0,0,0,0.7);
         }
 
+        /* تنسيق الصف العلوي */
+.top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 700px;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 0.5rem 0 1.5rem;
+}
+
+        /* تنسيق dropdown */
+.difficulty-select {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    color: var(--text-primary);
+    padding: 0.6rem 2rem 0.6rem 1rem;
+    border-radius: 40px;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: all 0.2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 1.2rem;
+}
+
+        .difficulty-select:hover {
+    background-color: var(--button-hover);
+}
+
         body {
             background-color: var(--bg-page);
             color: var(--text-primary);
@@ -107,8 +142,15 @@
        gap: 0.75rem;
        flex: 1;
        justify-content: flex-start;
+       min-width: 130px;
       }
 
+        
+.difficulty-select {
+    flex: 0 1 auto;
+    min-width: 120px;
+}
+        
       .toggle-label {
         font-weight: 500;
         color: var(--text-secondary);
@@ -183,8 +225,11 @@
             border: 1px solid var(--border-light);
             color: var(--text-primary);
             padding: 0.6rem 1.4rem;
+            flex: 1;
             border-radius: 40px;
             font-weight: 500;
+            min-width: 120px;
+            margin: 0; /* إزالة الـ margin التي كانت لتوسيطه */
             font-size: 1rem;
             cursor: pointer;
             box-shadow: var(--shadow);
@@ -442,6 +487,13 @@
     .header-controls {
         max-width: 100%;
     }
+        .top-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .dark-toggle, .difficulty-select, .restart-btn {
+        width: 100%;
+    }
 }
         /* responsiveness */
         @media (max-width: 550px) {
@@ -456,7 +508,8 @@
         <!-- header with dark mode toggle and restart -->
 <div class="header">
     <h1 class="game-title">Sudoku</h1>
-    <div class="controls-row">
+    <div class="top-row">
+        <!-- Dark mode -->
         <div class="dark-toggle">
             <span class="toggle-label">Dark mode</span>
             <label class="toggle-switch">
@@ -464,16 +517,17 @@
                 <span class="slider"></span>
             </label>
         </div>
-        <button class="restart-btn" id="restartButton">↻ New game</button>
-        <div class="spacer"></div> <!-- هذا يضمن توسيط الزر -->
-    </div>
-</div>
 
-<!-- أضف أزرار الصعوبة هنا، قبل board-wrapper -->
-<div class="difficulty-panel" id="difficultyPanel">
-    <button class="difficulty-btn active" data-diff="easy">Easy</button>
-    <button class="difficulty-btn" data-diff="medium">Medium</button>
-    <button class="difficulty-btn" data-diff="hard">Hard</button>
+        <!-- Difficulty dropdown -->
+        <select id="difficultySelect" class="difficulty-select">
+            <option value="easy" selected>Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+        </select>
+
+        <!-- Restart button -->
+        <button class="restart-btn" id="restartButton">↻ New game</button>
+    </div>
 </div>
 
         <!-- Sudoku board -->
