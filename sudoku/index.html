@@ -143,14 +143,14 @@
     align-items: center;
     gap: 0.4rem;       /* تقليل المسافة بين الكلمة والمفتاح (كانت 0.75rem) */
     flex: 0 0 auto;  
-    min-width: 120px;
-    margin-left: auto; 
-    margin-right: 20px; /* تحريك لليمين */
+    min-width: 160px;
+    margin-right: 0; /* تحريك لليمين */
     border: 2px solid red;  /* حدود حمراء مؤقتة لرؤية التغيير */
 }
         
 .difficulty-select {
-    flex: 0 1 auto;
+    flex: 0 0 auto;
+    width: 120px; 
     min-width: 120px;
 }
         
@@ -235,7 +235,8 @@
     box-shadow: var(--shadow);
     transition: all 0.2s ease;
     backdrop-filter: blur(4px);
-    flex: 1;
+    flex: 0 0 auto;
+    width: 110px;
     min-width: 100px;         /* تصغير العرض الأدنى */
     white-space: nowrap;       /* منع النص من الالتفاف */
 }
