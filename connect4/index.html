@@ -1,1 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CONNECT 4 · modern edition</title>
+  <style>
+    /* ----- CSS variables (light mode default) ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      transition: background-color 0.3s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
 
+    body {
+      --bg-page: #f4f7fb;
+      --text-primary: #1e293b;
+      --board-bg: #0b2b4f;        /* deep professional blue */
+      --cell-empty: #e2e8f0;
+      --cell-shadow: rgba(0,0,0,0.1);
+      --header-bg: #ffffffcc;
+      --card-bg: #ffffff;
+      --border-light: #cbd5e1;
+      --toggle-bg: #cbd5e1;
+      --toggle-circle: #f1f5f9;
+      --hover-glow: rgba(37, 99, 235, 0.3);
+      --modal-overlay: rgba(0,0,0,0.3);
+      --text-soft: #334155;
+      --accent-blue: #2563eb;
+      --accent-blue-hover: #1d4ed8;
+      --win-glow: #fde047;
+      --gradient-title: linear-gradient(135deg, #0f2b4b, #2563eb, #f59e0b);
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      backdrop-filter: blur(2px);
+    }
+
+    /* dark mode */
+    body.dark {
+      --bg-page: #0f172a;
+      --text-primary: #e2e8f0;
+      --board-bg: #0a1a2f;
+      --cell-empty: #1e293b;
+      --cell-shadow: #02061780;
+      --header-bg: #1e293bcc;
+      --card-bg: #1e293b;
+      --border-light: #475569;
+      --toggle-bg: #475569;
+      --toggle-circle: #cbd5e1;
+      --hover-glow: rgba(255,215,0,0.2);
+      --modal-overlay: rgba(0,0,0,0.7);
+      --text-soft: #cbd5e1;
+      --accent-blue: #3b82f6;
+      --accent-blue-hover: #60a5fa;
+      --win-glow: #facc15;
+    }
+
+    .app {
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    /* ----- header (title left, controls right) ----- */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      background: var(--header-bg);
+      backdrop-filter: blur(8px);
+      padding: 0.8rem 1.5rem;
+      border-radius: 60px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.2);
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 900;
+      font-family: 'Arial Black', 'Impact', sans-serif;
+      background: var(--gradient-title);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 4px 4px 0 rgba(0,20,40,0.2), 8px 8px 8px rgba(0,0,0,0.1);
+      letter-spacing: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    /* dark mode toggle (slider) */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 28px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--toggle-bg);
+      border-radius: 34px;
+      transition: 0.3s;
+      box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--toggle-circle);
+      border-radius: 50%;
+      transition: 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    /* restart button */
+    .restart-btn {
+      background: var(--accent-blue);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.5rem 1.5rem;
+      border-radius: 40px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 8px 16px -6px var(--accent-blue);
+      transition: all 0.15s ease;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .restart-btn:hover {
+      background: var(--accent-blue-hover);
+      transform: scale(1.02);
+      box-shadow: 0 12px 20px -8px var(--accent-blue);
+    }
+
+    /* mode selector */
+    .mode-panel {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0 1.2rem;
+    }
+    .mode-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--border-light);
+      color: var(--text-primary);
+      font-weight: 600;
+      padding: 0.6rem 2rem;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.15s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .mode-btn.active {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: white;
+      box-shadow: 0 8px 18px -6px var(--accent-blue);
+    }
+    .mode-btn:not(.active):hover {
+      border-color: var(--accent-blue);
+      background: color-mix(in srgb, var(--accent-blue) 8%, transparent);
+    }
+
+    /* turn indicator */
+    .turn-indicator {
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      background: var(--card-bg);
+      padding: 0.5rem 2rem;
+      border-radius: 60px;
+      display: inline-block;
+      margin-left: auto;
+      margin-right: auto;
+      width: fit-content;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-light);
+    }
+
+    /* ----- board (columns flex) ----- */
+    .board-container {
+      display: flex;
+      justify-content: center;
+      margin: 0.5rem 0 1rem;
+    }
+    .board {
+      display: flex;
+      gap: 8px;
+      background: var(--board-bg);
+      padding: 20px 18px;
+      border-radius: 48px;
+      box-shadow: 0 20px 30px -8px rgba(0,0,0,0.5), inset 0 -2px 5px rgba(255,255,255,0.1);
+      border: 1px solid #ffffff30;
+    }
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+      border-radius: 30px;
+      padding: 4px 0;
+    }
+    .column:hover {
+      transform: scale(1.02);
+      background: rgba(255,255,240,0.1);
+      box-shadow: 0 0 0 2px var(--hover-glow);
+    }
+    /* disable interactions when game over or AI turn */
+    .board.disabled .column {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .cell {
+      width: clamp(40px, 8vw, 68px);
+      height: clamp(40px, 8vw, 68px);
+      background: var(--cell-empty);
+      border-radius: 50%;
+      box-shadow: inset 0 -6px 6px rgba(0,0,0,0.2), 0 0 0 2px #1e3a5f, 0 8px 10px var(--cell-shadow);
+      transition: background 0.1s ease, transform 0.2s ease, box-shadow 0.2s;
+    }
+    .cell.player1 {
+      background: radial-gradient(circle at 30% 30%, #ff8a8a, #b22222);
+      box-shadow: inset 0 -6px 6px #3b0a0a, 0 0 0 2px gold;
+    }
+    .cell.player2 {
+      background: radial-gradient(circle at 30% 30%, #fff7b0, #d4a017);
+      box-shadow: inset 0 -6px 6px #7d5d0b, 0 0 0 2px #f1c40f;
+    }
+    .cell.winning {
+      box-shadow: 0 0 0 4px var(--win-glow), 0 0 20px gold, inset 0 -6px 6px currentColor;
+      transform: scale(1.08);
+      z-index: 2;
+      transition: all 0.2s;
+    }
+
+    /* blog & support cards */
+    .content-section {
+      margin-top: 3rem;
+      background: var(--card-bg);
+      border-radius: 32px;
+      padding: 2rem;
+      box-shadow: 0 20px 30px -10px rgba(0,0,0,0.2);
+      border: 1px solid var(--border-light);
+    }
+    .blog-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 1.8rem;
+      background: var(--gradient-title);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+    .subsections {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: space-between;
+    }
+    .card {
+      flex: 1 1 200px;
+      background: var(--bg-page);
+      padding: 1.5rem;
+      border-radius: 24px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.03), 0 8px 12px -6px rgba(0,0,0,0.2);
+    }
+    .card h3 {
+      font-size: 1.6rem;
+      margin-bottom: 0.8rem;
+      color: var(--accent-blue);
+    }
+    .card p, .card ul {
+      color: var(--text-soft);
+      line-height: 1.5;
+    }
+    .support-area {
+      margin-top: 2rem;
+      background: var(--bg-page);
+      border-radius: 28px;
+      padding: 1.8rem 2rem;
+    }
+    .support-area h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .support-btn {
+      background: var(--accent-blue);
+      border: none;
+      color: white;
+      font-size: 1.3rem;
+      font-weight: 700;
+      padding: 0.9rem 2.8rem;
+      border-radius: 60px;
+      margin: 1.2rem 0 0.8rem;
+      cursor: pointer;
+      box-shadow: 0 12px 24px -8px var(--accent-blue);
+      transition: 0.15s;
+      border: 1px solid #ffffff50;
+    }
+    .support-btn:hover {
+      background: var(--accent-blue-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 28px -8px var(--accent-blue);
+    }
+    .support-link {
+      font-size: 1rem;
+      color: var(--accent-blue);
+      word-break: break-all;
+      text-decoration: underline wavy;
+      text-underline-offset: 6px;
+    }
+
+    /* modal overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: var(--modal-overlay);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.25s ease;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      background: var(--card-bg);
+      padding: 2.2rem 3rem;
+      border-radius: 48px;
+      text-align: center;
+      box-shadow: 0 40px 70px rgba(0,0,0,0.5);
+      transform: scale(0.8);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border: 2px solid var(--accent-blue);
+    }
+    .modal-overlay.show .modal-content {
+      transform: scale(1);
+    }
+    .modal-content p {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    .modal-close {
+      background: var(--accent-blue);
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      padding: 0.5rem 2.2rem;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    hr {
+      margin: 2rem 0 1rem;
+      border: 1px solid var(--border-light);
+    }
+
+    /* responsive */
+    @media (max-width: 600px) {
+      .board { gap: 4px; padding: 12px; }
+      .cell { width: 38px; height: 38px; }
+      .header { flex-wrap: wrap; justify-content: center; gap: 0.8rem; }
+      .mode-btn { padding: 0.4rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <!-- header -->
+  <header class="header">
+    <h1>CONNECT 4</h1>
+    <div class="header-actions">
+      <!-- dark mode toggle -->
+      <label class="switch">
+        <input type="checkbox" id="darkModeToggle">
+        <span class="slider"></span>
+      </label>
+      <!-- restart button -->
+      <button class="restart-btn" id="restartBtn">↻ Restart</button>
+    </div>
+  </header>
+
+  <!-- mode selector -->
+  <div class="mode-panel">
+    <button class="mode-btn active" data-mode="twoPlayers">👥 2 Players</button>
+    <button class="mode-btn" data-mode="ai">🤖 vs AI</button>
+  </div>
+
+  <!-- turn indicator -->
+  <div class="turn-indicator" id="turnIndicator">Player 1's turn (Red)</div>
+
+  <!-- game board -->
+  <div class="board-container">
+    <div class="board" id="board"></div>
+  </div>
+
+  <!-- blog section -->
+  <section class="content-section">
+    <h2 class="blog-title">How to Play Connect 4</h2>
+    <div class="subsections">
+      <div class="card">
+        <h3>📋 Game Rules</h3>
+        <p>Players take turns dropping discs into a 7x6 grid. The disc falls to the lowest empty cell in the column. First to connect four horizontally, vertically, or diagonally wins.</p>
+      </div>
+      <div class="card">
+        <h3>🧠 Winning Strategies</h3>
+        <p>Control the center, plan ahead, block opponent’s threats. Look for "traps" where you create two winning options at once.</p>
+      </div>
+      <div class="card">
+        <h3>⚡ Pro Tips</h3>
+        <p>In AI mode, observe random moves – but you can exploit patterns. Use the diagonal lines early. Never play directly under an opponent's disc without blocking.</p>
+      </div>
+    </div>
+
+    <!-- support us -->
+    <div class="support-area">
+      <h2>🤝 Support Us</h2>
+      <p style="margin: 0.5rem 0 1rem; font-size: 1.2rem;">If you enjoy this classic, consider supporting more projects like this.</p>
+      <button class="support-btn" id="supportBtn">Support Us</button>
+      <div class="support-link" id="supportLinkDisplay">https://YOUR-SUPPORT-LINK.com</div>
+    </div>
+  </section>
+
+  <!-- win/draw modal -->
+  <div class="modal-overlay" id="gameModal">
+    <div class="modal-content">
+      <p id="modalMessage"></p>
+      <button class="modal-close" id="modalCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---------- constants & state ----------
+    const ROWS = 6;
+    const COLS = 7;
+    let board = Array(ROWS).fill().map(() => Array(COLS).fill(0)); // 0 empty, 1 P1 (red), 2 P2 (yellow)
+    let currentPlayer = 1;               // 1: red, 2: yellow
+    let gameActive = true;
+    let mode = 'twoPlayers';              // 'twoPlayers' or 'ai'
+    let winningCells = [];                // array of [r,c] coordinates of winning line
+    let aiThinking = false;
+
+    // DOM elements
+    const boardEl = document.getElementById('board');
+    const turnIndicator = document.getElementById('turnIndicator');
+    const modeBtns = document.querySelectorAll('.mode-btn');
+    const restartBtn = document.getElementById('restartBtn');
+    const darkToggle = document.getElementById('darkModeToggle');
+    const modalOverlay = document.getElementById('gameModal');
+    const modalMessage = document.getElementById('modalMessage');
+    const modalClose = document.getElementById('modalCloseBtn');
+    const supportBtn = document.getElementById('supportBtn');
+    const supportLinkDisplay = document.getElementById('supportLinkDisplay');
+
+    // ---------- helper functions ----------
+    function emptyBoard() {
+      board = Array(ROWS).fill().map(() => Array(COLS).fill(0));
+      winningCells = [];
+    }
+
+    // render board from state
+    function renderBoard() {
+      // clear board and rebuild columns (simpler than updating each cell)
+      boardEl.innerHTML = '';
+      for (let c = 0; c < COLS; c++) {
+        const colDiv = document.createElement('div');
+        colDiv.className = 'column';
+        colDiv.dataset.col = c;
+        for (let r = 0; r < ROWS; r++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          const val = board[r][c];
+          if (val === 1) cell.classList.add('player1');
+          else if (val === 2) cell.classList.add('player2');
+          // highlight winning
+          if (winningCells.some(([rw, cl]) => rw === r && cl === c)) {
+            cell.classList.add('winning');
+          }
+          colDiv.appendChild(cell);
+        }
+        boardEl.appendChild(colDiv);
+      }
+    }
+
+    // update turn message
+    function updateTurnText() {
+      if (!gameActive) return;
+      if (mode === 'ai' && currentPlayer === 2) {
+        turnIndicator.textContent = '🤖 AI thinking...';
+      } else {
+        const playerColor = currentPlayer === 1 ? 'Red' : 'Yellow';
+        turnIndicator.textContent = `Player ${currentPlayer}'s turn (${playerColor})`;
+      }
+    }
+
+    // check if column has space
+    function columnFree(col) {
+      return board[0][col] === 0; // top cell empty means column not full
+    }
+
+    // drop piece in column for player, returns row or -1 if full
+    function dropInColumn(col, player) {
+      for (let r = ROWS - 1; r >= 0; r--) {
+        if (board[r][col] === 0) {
+          board[r][col] = player;
+          return r;
+        }
+      }
+      return -1;
+    }
+
+    // win detection: return array of winning cells or empty array
+    function getWinningCells(row, col, player) {
+      const directions = [[1,0],[0,1],[1,1],[1,-1]];
+      for (let [dr, dc] of directions) {
+        let count = 1;
+        const line = [[row, col]];
+        // positive direction
+        for (let i = 1; i < 4; i++) {
+          const nr = row + dr * i, nc = col + dc * i;
+          if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS || board[nr][nc] !== player) break;
+          line.push([nr, nc]);
+          count++;
+        }
+        // negative direction
+        for (let i = 1; i < 4; i++) {
+          const nr = row - dr * i, nc = col - dc * i;
+          if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS || board[nr][nc] !== player) break;
+          line.push([nr, nc]);
+          count++;
+        }
+        if (count >= 4) return line; // return all connected cells (for highlight)
+      }
+      return [];
+    }
+
+    // check for draw
+    function isDraw() {
+      return board[0].every(cell => cell !== 0); // top row full = full board
+    }
+
+    // show modal
+    function showModal(text) {
+      modalMessage.textContent = text;
+      modalOverlay.classList.add('show');
+    }
+
+    // disable/enable board clicks (by adding class to board container)
+    function setBoardEnabled(enabled) {
+      if (enabled) boardEl.classList.remove('disabled');
+      else boardEl.classList.add('disabled');
+    }
+
+    // process end of game (win / draw)
+    function handleGameEnd(winner = null) {
+      gameActive = false;
+      setBoardEnabled(false);
+      if (winner === 1) showModal('🏆 Player 1 (Red) wins!');
+      else if (winner === 2) showModal('🏆 Player 2 (Yellow) wins!');
+      else showModal('🤝 Draw... board full');
+    }
+
+    // core move logic: called after a piece is placed (row, col, player)
+    function afterMove(row, col, player) {
+      // check win
+      const winLine = getWinningCells(row, col, player);
+      if (winLine.length >= 4) {
+        winningCells = winLine;
+        renderBoard();
+        handleGameEnd(player);
+        return true; // game ended
+      } else if (isDraw()) {
+        renderBoard();
+        handleGameEnd(null);
+        return true; // draw
+      }
+      return false; // game continues
+    }
+
+    // switch player and update UI
+    function switchPlayer() {
+      currentPlayer = currentPlayer === 1 ? 2 : 1;
+      updateTurnText();
+    }
+
+    // make a move for a player (called from click or AI)
+    function makeMove(col, player) {
+      if (!gameActive) return false;
+      if (!columnFree(col)) return false; // column full
+
+      const row = dropInColumn(col, player);
+      if (row === -1) return false;
+
+      renderBoard();
+      const ended = afterMove(row, col, player);
+      if (!ended) {
+        switchPlayer();
+      }
+      return true;
+    }
+
+    // AI move (random)
+    function aiMove() {
+      if (!gameActive || currentPlayer !== 2 || mode !== 'ai' || aiThinking) return;
+      aiThinking = true;
+      setBoardEnabled(false);
+      turnIndicator.textContent = '🤖 AI thinking...';
+
+      setTimeout(() => {
+        if (!gameActive || currentPlayer !== 2 || mode !== 'ai') {
+          aiThinking = false;
+          setBoardEnabled(gameActive);
+          return;
+        }
+        const freeCols = [];
+        for (let c = 0; c < COLS; c++) {
+          if (columnFree(c)) freeCols.push(c);
+        }
+        if (freeCols.length === 0) {
+          // draw case handled elsewhere, but just in case
+          aiThinking = false;
+          setBoardEnabled(gameActive);
+          return;
+        }
+        const randomCol = freeCols[Math.floor(Math.random() * freeCols.length)];
+        const success = makeMove(randomCol, 2); // AI is player 2
+
+        if (success && gameActive && currentPlayer === 1) {
+          // after AI move, turn goes to player 1 – enable board
+          setBoardEnabled(true);
+        } else if (!gameActive) {
+          setBoardEnabled(false);
+        } else {
+          // should not happen, but if AI still to move? no
+          setBoardEnabled(gameActive && !(mode==='ai' && currentPlayer===2));
+        }
+        aiThinking = false;
+        // re-check if AI should move again? no, currentPlayer becomes 1 after switch.
+      }, 280); // subtle delay
+    }
+
+    // reset game (keep mode)
+    function resetGame() {
+      emptyBoard();
+      currentPlayer = 1;
+      gameActive = true;
+      winningCells = [];
+      renderBoard();
+      setBoardEnabled(true);
+      updateTurnText();
+      modalOverlay.classList.remove('show');
+    }
+
+    // ---------- event listeners ----------
+    // board column click
+    boardEl.addEventListener('click', (e) => {
+      const column = e.target.closest('.column');
+      if (!column) return;
+      if (!gameActive || aiThinking) return;
+      const col = parseInt(column.dataset.col);
+      // mode AI: only allow if current player is 1 (human)
+      if (mode === 'ai' && currentPlayer !== 1) return;
+
+      const success = makeMove(col, currentPlayer);
+      if (success && mode === 'ai' && gameActive && currentPlayer === 2) {
+        // after human move, AI should play
+        aiMove();
+      }
+    });
+
+    // mode switching
+    modeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        modeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        mode = btn.dataset.mode;
+        resetGame();
+      });
+    });
+
+    // restart with first-click redirect logic
+    let firstClickHandled = sessionStorage.getItem('restartFirstDone') === 'true';
+    restartBtn.addEventListener('click', () => {
+      if (!firstClickHandled) {
+        sessionStorage.setItem('restartFirstDone', 'true');
+        firstClickHandled = true;
+        window.open('https://YOUR-LINK-HERE.com', '_blank'); // redirect in new tab (preserves page)
+        // do NOT reset game (first click only redirects)
+        return;
+      }
+      // normal restart
+      resetGame();
+    });
+
+    // dark mode toggle
+    const storedTheme = localStorage.getItem('darkMode');
+    if (storedTheme === 'enabled') {
+      document.body.classList.add('dark');
+      darkToggle.checked = true;
+    }
+    darkToggle.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        document.body.classList.add('dark');
+        localStorage.setItem('darkMode', 'enabled');
+      } else {
+        document.body.classList.remove('dark');
+        localStorage.setItem('darkMode', 'disabled');
+      }
+    });
+
+    // modal close
+    modalClose.addEventListener('click', () => {
+      modalOverlay.classList.remove('show');
+    });
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) modalOverlay.classList.remove('show');
+    });
+
+    // support button: open link
+    supportBtn.addEventListener('click', () => {
+      window.open('https://YOUR-SUPPORT-LINK.com', '_blank');
+    });
+    // display link (already in div)
+
+    // initial render
+    resetGame();
+
+    // extra: ensure board disabled state on game end
+    // also handle column hover (already in css)
+  })();
+</script>
+</body>
+</html>
