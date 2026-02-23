@@ -69,10 +69,10 @@
     }
 
     /* ----- header (title left, controls right) ----- */
-    .main-title {
+.main-title {
   text-align: center;
-  margin-bottom: 1rem;
-  font-size: clamp(2rem, 8vw, 3.5rem);
+  margin: 0 0 1rem 0;
+  font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: 900;
   font-family: 'Arial Black', 'Impact', sans-serif;
   background: var(--gradient-title);
@@ -80,7 +80,8 @@
   background-clip: text;
   color: transparent;
   text-shadow: 4px 4px 0 rgba(0,20,40,0.2), 8px 8px 8px rgba(0,0,0,0.1);
-  letter-spacing: 2px;
+  letter-spacing: 3px;
+  line-height: 1.2;
 }
     
     .header {
@@ -113,16 +114,34 @@
       align-items: center;
     }
 
-    .controls-row {
+/* Control row: flex container, centered */
+.controls-row {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   flex-wrap: wrap;
 }
     
-    /* dark mode toggle (slider) */
+ /* Dark mode control group – label + toggle */
+.dark-mode-control {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: var(--card-bg);
+  padding: 0.5rem 1.4rem;
+  border-radius: 40px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-light);
+}
+    
+    .dark-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+    
     .switch {
       position: relative;
       display: inline-block;
@@ -415,22 +434,6 @@
       border: 1px solid var(--border-light);
     }
 
-    .dark-mode-control {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  background: var(--card-bg);
-  padding: 0.4rem 1.2rem;
-  border-radius: 40px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  border: 1px solid var(--border-light);
-}
-
-.dark-label {
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
     /* responsive */
     @media (max-width: 600px) {
       .board { gap: 4px; padding: 12px; }
@@ -442,12 +445,10 @@
 </head>
 <body>
 <div class="app">
-  <!-- header -->
-  <header class="header">
-<!-- Title alone (centered) -->
+<!-- Title alone, centered -->
 <h1 class="main-title">CONNECT 4</h1>
 
-<!-- Control row below title -->
+<!-- Control row: dark mode label + toggle, and restart button -->
 <div class="controls-row">
   <div class="dark-mode-control">
     <span class="dark-label">Dark mode</span>
@@ -458,7 +459,6 @@
   </div>
   <button class="restart-btn" id="restartBtn">↻ Restart</button>
 </div>
-  </header>
 
   <!-- mode selector -->
   <div class="mode-panel">
