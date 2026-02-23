@@ -69,6 +69,20 @@
     }
 
     /* ----- header (title left, controls right) ----- */
+    .main-title {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-weight: 900;
+  font-family: 'Arial Black', 'Impact', sans-serif;
+  background: var(--gradient-title);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 4px 4px 0 rgba(0,20,40,0.2), 8px 8px 8px rgba(0,0,0,0.1);
+  letter-spacing: 2px;
+}
+    
     .header {
       display: flex;
       justify-content: space-between;
@@ -99,6 +113,15 @@
       align-items: center;
     }
 
+    .controls-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+    
     /* dark mode toggle (slider) */
     .switch {
       position: relative;
@@ -392,6 +415,22 @@
       border: 1px solid var(--border-light);
     }
 
+    .dark-mode-control {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: var(--card-bg);
+  padding: 0.4rem 1.2rem;
+  border-radius: 40px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-light);
+}
+
+.dark-label {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
     /* responsive */
     @media (max-width: 600px) {
       .board { gap: 4px; padding: 12px; }
@@ -405,16 +444,20 @@
 <div class="app">
   <!-- header -->
   <header class="header">
-    <h1>CONNECT 4</h1>
-    <div class="header-actions">
-      <!-- dark mode toggle -->
-      <label class="switch">
-        <input type="checkbox" id="darkModeToggle">
-        <span class="slider"></span>
-      </label>
-      <!-- restart button -->
-      <button class="restart-btn" id="restartBtn">↻ Restart</button>
-    </div>
+<!-- Title alone (centered) -->
+<h1 class="main-title">CONNECT 4</h1>
+
+<!-- Control row below title -->
+<div class="controls-row">
+  <div class="dark-mode-control">
+    <span class="dark-label">Dark mode</span>
+    <label class="switch">
+      <input type="checkbox" id="darkModeToggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+  <button class="restart-btn" id="restartBtn">↻ Restart</button>
+</div>
   </header>
 
   <!-- mode selector -->
