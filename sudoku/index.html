@@ -390,11 +390,18 @@
             background: var(--surface);
             border-radius: 32px;
             padding: 2rem;
-            text-align: center;
+            text-align: Left;
             border: 1px solid var(--border-light);
             box-shadow: var(--shadow);
         }
 
+        .support-card h2 {
+    font-size: 1.4rem;                   /* مثل عنوان المدونة */
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+        
         .support-card p {
             font-size: 1.2rem;
             margin-bottom: 1.5rem;
@@ -413,6 +420,7 @@
             box-shadow: 0 10px 20px -8px var(--accent);
             transition: all 0.25s ease;
             margin-bottom: 1rem;
+            margin-left: 0; 
         }
 
         .support-btn:hover {
