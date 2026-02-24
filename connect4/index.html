@@ -601,15 +601,18 @@
       }
     }
 
-    function updateTurnText() {
-      if (!gameActive) return;
-      if (mode === 'ai' && currentPlayer === 2) {
-        turnIndicator.textContent = '🤖 AI thinking...';
-      } else {
-        const playerColor = currentPlayer === 1 ? 'Red' : 'Yellow';
-        turnIndicator.textContent = `Player ${currentPlayer}'s turn (${playerColor})`;
-      }
-    }
+   function updateTurnText() {
+  if (!gameActive) return;
+  if (mode === 'ai' && currentPlayer === 2) {
+    turnIndicator.textContent = '🤖 AI thinking...';
+  } else {
+    const playerNum = currentPlayer;
+    const colorName = currentPlayer === 1 ? 'Red' : 'Yellow';
+    const playerSpan = `<span class="player${playerNum}-text">Player ${playerNum}</span>`;
+    const colorSpan = `<span class="player${playerNum}-text">${colorName}</span>`;
+    turnIndicator.innerHTML = `${playerSpan}'s turn (${colorSpan})`;
+  }
+}
 
     function columnFree(col) {
       return board[0][col] === 0;
