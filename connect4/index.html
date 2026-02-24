@@ -20,7 +20,6 @@
       --board-bg: #0b2b4f;        /* deep professional blue */
       --cell-empty: #e2e8f0;
       --cell-shadow: rgba(0,0,0,0.1);
-      --header-bg: #ffffffcc;
       --card-bg: #ffffff;
       --border-light: #cbd5e1;
       --toggle-bg: #cbd5e1;
@@ -32,7 +31,6 @@
       --accent-blue-hover: #1d4ed8;
       --win-glow: #fde047;
       --gradient-title: linear-gradient(135deg, #0f2b4b, #2563eb, #f59e0b);
-      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
       background-color: var(--bg-page);
       color: var(--text-primary);
       min-height: 100vh;
@@ -40,17 +38,14 @@
       flex-direction: column;
       align-items: center;
       padding: 1rem;
-      backdrop-filter: blur(2px);
     }
 
-    /* dark mode */
     body.dark {
       --bg-page: #0f172a;
       --text-primary: #e2e8f0;
       --board-bg: #0a1a2f;
       --cell-empty: #1e293b;
       --cell-shadow: #02061780;
-      --header-bg: #1e293bcc;
       --card-bg: #1e293b;
       --border-light: #475569;
       --toggle-bg: #475569;
@@ -68,36 +63,11 @@
       width: 100%;
     }
 
-    /* ----- header (title left, controls right) ----- */
-.main-title {
-  text-align: center;
-  margin: 0 0 1rem 0;
-  font-size: clamp(2.5rem, 8vw, 4rem);
-  font-weight: 900;
-  font-family: 'Arial Black', 'Impact', sans-serif;
-  background: var(--gradient-title);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 4px 4px 0 rgba(0,20,40,0.2), 8px 8px 8px rgba(0,0,0,0.1);
-  letter-spacing: 3px;
-  line-height: 1.2;
-}
-    
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      background: var(--header-bg);
-      backdrop-filter: blur(8px);
-      padding: 0.8rem 1.5rem;
-      border-radius: 60px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.2);
-    }
-
-    h1 {
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
+    /* ----- title alone (centered) ----- */
+    .main-title {
+      text-align: center;
+      margin: 0 0 1rem 0;
+      font-size: clamp(2.5rem, 8vw, 4rem);
       font-weight: 900;
       font-family: 'Arial Black', 'Impact', sans-serif;
       background: var(--gradient-title);
@@ -105,43 +75,38 @@
       background-clip: text;
       color: transparent;
       text-shadow: 4px 4px 0 rgba(0,20,40,0.2), 8px 8px 8px rgba(0,0,0,0.1);
-      letter-spacing: 2px;
+      letter-spacing: 3px;
+      line-height: 1.2;
     }
 
-    .header-actions {
+    /* ----- control row (dark mode + restart) ----- */
+    .controls-row {
       display: flex;
-      gap: 1rem;
+      justify-content: center;
       align-items: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
     }
 
-/* Control row: flex container, centered */
-.controls-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-    
- /* Dark mode control group – label + toggle */
-.dark-mode-control {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  background: var(--card-bg);
-  padding: 0.5rem 1.4rem;
-  border-radius: 40px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  border: 1px solid var(--border-light);
-}
-    
+    .dark-mode-control {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: var(--card-bg);
+      padding: 0.5rem 1.4rem;
+      border-radius: 40px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-light);
+    }
+
     .dark-label {
-  font-weight: 600;
-  color: var(--text-primary);
-  font-size: 1rem;
-}
-    
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    /* toggle switch */
     .switch {
       position: relative;
       display: inline-block;
@@ -184,9 +149,9 @@
       border: none;
       color: white;
       font-weight: 600;
-      padding: 0.5rem 1.5rem;
+      padding: 0.5rem 1.8rem;
       border-radius: 40px;
-      font-size: 1rem;
+      font-size: 1.1rem;
       cursor: pointer;
       box-shadow: 0 8px 16px -6px var(--accent-blue);
       transition: all 0.15s ease;
@@ -198,54 +163,22 @@
       box-shadow: 0 12px 20px -8px var(--accent-blue);
     }
 
-    /* mode selector */
-    .mode-panel {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin: 1rem 0 1.2rem;
-    }
-    .mode-btn {
-      background: var(--card-bg);
-      border: 2px solid var(--border-light);
-      color: var(--text-primary);
-      font-weight: 600;
-      padding: 0.6rem 2rem;
-      border-radius: 40px;
-      cursor: pointer;
-      font-size: 1.1rem;
-      transition: all 0.15s;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-    .mode-btn.active {
-      background: var(--accent-blue);
-      border-color: var(--accent-blue);
-      color: white;
-      box-shadow: 0 8px 18px -6px var(--accent-blue);
-    }
-    .mode-btn:not(.active):hover {
-      border-color: var(--accent-blue);
-      background: color-mix(in srgb, var(--accent-blue) 8%, transparent);
-    }
-
-    /* turn indicator */
+    /* turn indicator (above board) */
     .turn-indicator {
       text-align: center;
       font-size: 1.3rem;
       font-weight: 600;
-      margin-bottom: 1rem;
+      margin: 0 auto 1rem auto;
       background: var(--card-bg);
       padding: 0.5rem 2rem;
       border-radius: 60px;
       display: inline-block;
-      margin-left: auto;
-      margin-right: auto;
       width: fit-content;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
       border: 1px solid var(--border-light);
     }
 
-    /* ----- board (columns flex) ----- */
+    /* board */
     .board-container {
       display: flex;
       justify-content: center;
@@ -274,7 +207,6 @@
       background: rgba(255,255,240,0.1);
       box-shadow: 0 0 0 2px var(--hover-glow);
     }
-    /* disable interactions when game over or AI turn */
     .board.disabled .column {
       pointer-events: none;
       opacity: 0.7;
@@ -300,12 +232,41 @@
       box-shadow: 0 0 0 4px var(--win-glow), 0 0 20px gold, inset 0 -6px 6px currentColor;
       transform: scale(1.08);
       z-index: 2;
-      transition: all 0.2s;
     }
 
-    /* blog & support cards */
+    /* mode buttons (below board) */
+    .mode-panel {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1.5rem 0 2rem;
+    }
+    .mode-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--border-light);
+      color: var(--text-primary);
+      font-weight: 700;
+      padding: 0.8rem 2.5rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1.3rem;
+      transition: all 0.15s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .mode-btn.active {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: white;
+      box-shadow: 0 8px 18px -6px var(--accent-blue);
+    }
+    .mode-btn:not(.active):hover {
+      border-color: var(--accent-blue);
+      background: color-mix(in srgb, var(--accent-blue) 8%, transparent);
+    }
+
+    /* blog & support (unchanged) */
     .content-section {
-      margin-top: 3rem;
+      margin-top: 2rem;
       background: var(--card-bg);
       border-radius: 32px;
       padding: 2rem;
@@ -382,7 +343,7 @@
       text-underline-offset: 6px;
     }
 
-    /* modal overlay */
+    /* modal */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -429,44 +390,31 @@
       font-weight: 600;
     }
 
-    hr {
-      margin: 2rem 0 1rem;
-      border: 1px solid var(--border-light);
-    }
-
-    /* responsive */
     @media (max-width: 600px) {
       .board { gap: 4px; padding: 12px; }
       .cell { width: 38px; height: 38px; }
-      .header { flex-wrap: wrap; justify-content: center; gap: 0.8rem; }
-      .mode-btn { padding: 0.4rem 1.2rem; }
+      .mode-btn { padding: 0.6rem 1.5rem; font-size: 1.1rem; }
     }
   </style>
 </head>
 <body>
 <div class="app">
-<!-- Title alone, centered -->
-<h1 class="main-title">CONNECT 4</h1>
+  <!-- title alone, centered -->
+  <h1 class="main-title">CONNECT 4</h1>
 
-<!-- Control row: dark mode label + toggle, and restart button -->
-<div class="controls-row">
-  <div class="dark-mode-control">
-    <span class="dark-label">Dark mode</span>
-    <label class="switch">
-      <input type="checkbox" id="darkModeToggle">
-      <span class="slider"></span>
-    </label>
-  </div>
-  <button class="restart-btn" id="restartBtn">↻ Restart</button>
-</div>
-
-  <!-- mode selector -->
-  <div class="mode-panel">
-    <button class="mode-btn active" data-mode="twoPlayers">👥 2 Players</button>
-    <button class="mode-btn" data-mode="ai">🤖 vs AI</button>
+  <!-- control row: dark mode with label + restart -->
+  <div class="controls-row">
+    <div class="dark-mode-control">
+      <span class="dark-label">Dark mode</span>
+      <label class="switch">
+        <input type="checkbox" id="darkModeToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <button class="restart-btn" id="restartBtn">↻ Restart</button>
   </div>
 
-  <!-- turn indicator -->
+  <!-- turn indicator (above board) -->
   <div class="turn-indicator" id="turnIndicator">Player 1's turn (Red)</div>
 
   <!-- game board -->
@@ -474,7 +422,13 @@
     <div class="board" id="board"></div>
   </div>
 
-  <!-- blog section -->
+  <!-- mode buttons (below board) -->
+  <div class="mode-panel">
+    <button class="mode-btn active" data-mode="twoPlayers">👥 2 Players</button>
+    <button class="mode-btn" data-mode="ai">🤖 vs AI</button>
+  </div>
+
+  <!-- blog & support sections (unchanged) -->
   <section class="content-section">
     <h2 class="blog-title">How to Play Connect 4</h2>
     <div class="subsections">
@@ -492,7 +446,6 @@
       </div>
     </div>
 
-    <!-- support us -->
     <div class="support-area">
       <h2>🤝 Support Us</h2>
       <p style="margin: 0.5rem 0 1rem; font-size: 1.2rem;">If you enjoy this classic, consider supporting more projects like this.</p>
@@ -515,11 +468,11 @@
     // ---------- constants & state ----------
     const ROWS = 6;
     const COLS = 7;
-    let board = Array(ROWS).fill().map(() => Array(COLS).fill(0)); // 0 empty, 1 P1 (red), 2 P2 (yellow)
-    let currentPlayer = 1;               // 1: red, 2: yellow
+    let board = Array(ROWS).fill().map(() => Array(COLS).fill(0));
+    let currentPlayer = 1;
     let gameActive = true;
-    let mode = 'twoPlayers';              // 'twoPlayers' or 'ai'
-    let winningCells = [];                // array of [r,c] coordinates of winning line
+    let mode = 'twoPlayers';
+    let winningCells = [];
     let aiThinking = false;
 
     // DOM elements
@@ -540,9 +493,7 @@
       winningCells = [];
     }
 
-    // render board from state
     function renderBoard() {
-      // clear board and rebuild columns (simpler than updating each cell)
       boardEl.innerHTML = '';
       for (let c = 0; c < COLS; c++) {
         const colDiv = document.createElement('div');
@@ -554,7 +505,6 @@
           const val = board[r][c];
           if (val === 1) cell.classList.add('player1');
           else if (val === 2) cell.classList.add('player2');
-          // highlight winning
           if (winningCells.some(([rw, cl]) => rw === r && cl === c)) {
             cell.classList.add('winning');
           }
@@ -564,7 +514,6 @@
       }
     }
 
-    // update turn message
     function updateTurnText() {
       if (!gameActive) return;
       if (mode === 'ai' && currentPlayer === 2) {
@@ -575,12 +524,10 @@
       }
     }
 
-    // check if column has space
     function columnFree(col) {
-      return board[0][col] === 0; // top cell empty means column not full
+      return board[0][col] === 0;
     }
 
-    // drop piece in column for player, returns row or -1 if full
     function dropInColumn(col, player) {
       for (let r = ROWS - 1; r >= 0; r--) {
         if (board[r][col] === 0) {
@@ -591,84 +538,74 @@
       return -1;
     }
 
-    // win detection: return array of winning cells or empty array
     function getWinningCells(row, col, player) {
       const directions = [[1,0],[0,1],[1,1],[1,-1]];
       for (let [dr, dc] of directions) {
         let count = 1;
         const line = [[row, col]];
-        // positive direction
         for (let i = 1; i < 4; i++) {
           const nr = row + dr * i, nc = col + dc * i;
           if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS || board[nr][nc] !== player) break;
           line.push([nr, nc]);
           count++;
         }
-        // negative direction
         for (let i = 1; i < 4; i++) {
           const nr = row - dr * i, nc = col - dc * i;
           if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS || board[nr][nc] !== player) break;
           line.push([nr, nc]);
           count++;
         }
-        if (count >= 4) return line; // return all connected cells (for highlight)
+        if (count >= 4) return line;
       }
       return [];
     }
 
-    // check for draw
     function isDraw() {
-      return board[0].every(cell => cell !== 0); // top row full = full board
+      return board[0].every(cell => cell !== 0);
     }
 
-    // show modal
     function showModal(text) {
       modalMessage.textContent = text;
       modalOverlay.classList.add('show');
     }
 
-    // disable/enable board clicks (by adding class to board container)
     function setBoardEnabled(enabled) {
       if (enabled) boardEl.classList.remove('disabled');
       else boardEl.classList.add('disabled');
     }
 
-    // process end of game (win / draw)
     function handleGameEnd(winner = null) {
       gameActive = false;
       setBoardEnabled(false);
       if (winner === 1) showModal('🏆 Player 1 (Red) wins!');
       else if (winner === 2) showModal('🏆 Player 2 (Yellow) wins!');
       else showModal('🤝 Draw... board full');
+      updateTurnText(); // will show nothing because gameActive = false? we can leave it
     }
 
-    // core move logic: called after a piece is placed (row, col, player)
     function afterMove(row, col, player) {
-      // check win
       const winLine = getWinningCells(row, col, player);
       if (winLine.length >= 4) {
         winningCells = winLine;
         renderBoard();
         handleGameEnd(player);
-        return true; // game ended
+        return true;
       } else if (isDraw()) {
         renderBoard();
         handleGameEnd(null);
-        return true; // draw
+        return true;
       }
-      return false; // game continues
+      return false;
     }
 
-    // switch player and update UI
     function switchPlayer() {
       currentPlayer = currentPlayer === 1 ? 2 : 1;
       updateTurnText();
     }
 
-    // make a move for a player (called from click or AI)
     function makeMove(col, player) {
       if (!gameActive) return false;
-      if (!columnFree(col)) return false; // column full
+      if (!columnFree(col)) return false;
 
       const row = dropInColumn(col, player);
       if (row === -1) return false;
@@ -681,17 +618,17 @@
       return true;
     }
 
-    // AI move (random)
     function aiMove() {
       if (!gameActive || currentPlayer !== 2 || mode !== 'ai' || aiThinking) return;
       aiThinking = true;
       setBoardEnabled(false);
-      turnIndicator.textContent = '🤖 AI thinking...';
+      updateTurnText();
 
       setTimeout(() => {
         if (!gameActive || currentPlayer !== 2 || mode !== 'ai') {
           aiThinking = false;
           setBoardEnabled(gameActive);
+          updateTurnText();
           return;
         }
         const freeCols = [];
@@ -699,29 +636,19 @@
           if (columnFree(c)) freeCols.push(c);
         }
         if (freeCols.length === 0) {
-          // draw case handled elsewhere, but just in case
           aiThinking = false;
           setBoardEnabled(gameActive);
+          updateTurnText();
           return;
         }
         const randomCol = freeCols[Math.floor(Math.random() * freeCols.length)];
-        const success = makeMove(randomCol, 2); // AI is player 2
-
-        if (success && gameActive && currentPlayer === 1) {
-          // after AI move, turn goes to player 1 – enable board
-          setBoardEnabled(true);
-        } else if (!gameActive) {
-          setBoardEnabled(false);
-        } else {
-          // should not happen, but if AI still to move? no
-          setBoardEnabled(gameActive && !(mode==='ai' && currentPlayer===2));
-        }
+        const success = makeMove(randomCol, 2);
         aiThinking = false;
-        // re-check if AI should move again? no, currentPlayer becomes 1 after switch.
-      }, 280); // subtle delay
+        setBoardEnabled(gameActive && !(mode === 'ai' && currentPlayer === 2));
+        updateTurnText();
+      }, 280);
     }
 
-    // reset game (keep mode)
     function resetGame() {
       emptyBoard();
       currentPlayer = 1;
@@ -734,23 +661,19 @@
     }
 
     // ---------- event listeners ----------
-    // board column click
     boardEl.addEventListener('click', (e) => {
       const column = e.target.closest('.column');
       if (!column) return;
       if (!gameActive || aiThinking) return;
       const col = parseInt(column.dataset.col);
-      // mode AI: only allow if current player is 1 (human)
       if (mode === 'ai' && currentPlayer !== 1) return;
 
       const success = makeMove(col, currentPlayer);
       if (success && mode === 'ai' && gameActive && currentPlayer === 2) {
-        // after human move, AI should play
         aiMove();
       }
     });
 
-    // mode switching
     modeBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         modeBtns.forEach(b => b.classList.remove('active'));
@@ -760,17 +683,15 @@
       });
     });
 
-    // restart with first-click redirect logic
+    // restart with first-click redirect
     let firstClickHandled = sessionStorage.getItem('restartFirstDone') === 'true';
     restartBtn.addEventListener('click', () => {
       if (!firstClickHandled) {
         sessionStorage.setItem('restartFirstDone', 'true');
         firstClickHandled = true;
-        window.open('https://YOUR-LINK-HERE.com', '_blank'); // redirect in new tab (preserves page)
-        // do NOT reset game (first click only redirects)
+        window.open('https://YOUR-LINK-HERE.com', '_blank');
         return;
       }
-      // normal restart
       resetGame();
     });
 
@@ -790,7 +711,6 @@
       }
     });
 
-    // modal close
     modalClose.addEventListener('click', () => {
       modalOverlay.classList.remove('show');
     });
@@ -798,17 +718,12 @@
       if (e.target === modalOverlay) modalOverlay.classList.remove('show');
     });
 
-    // support button: open link
     supportBtn.addEventListener('click', () => {
       window.open('https://YOUR-SUPPORT-LINK.com', '_blank');
     });
-    // display link (already in div)
 
     // initial render
     resetGame();
-
-    // extra: ensure board disabled state on game end
-    // also handle column hover (already in css)
   })();
 </script>
 </body>
