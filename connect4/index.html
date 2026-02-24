@@ -198,141 +198,52 @@
       box-shadow: 0 12px 20px -8px var(--accent-blue);
     }
 
-    /* الحاوية الرئيسية للعبة */
-.game-layout {
-  display: flex;
-  gap: 2rem;
-  align-items: flex-start;
-  justify-content: center;
-  margin-top: 1rem;
-  flex-wrap: wrap;
-}
+    /* mode selector */
+    .mode-panel {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0 1.2rem;
+    }
+    .mode-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--border-light);
+      color: var(--text-primary);
+      font-weight: 600;
+      padding: 0.6rem 2rem;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.15s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .mode-btn.active {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: white;
+      box-shadow: 0 8px 18px -6px var(--accent-blue);
+    }
+    .mode-btn:not(.active):hover {
+      border-color: var(--accent-blue);
+      background: color-mix(in srgb, var(--accent-blue) 8%, transparent);
+    }
 
-/* الشريط الجانبي للزرارات */
-.mode-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  min-width: 180px;
-  background: var(--card-bg);
-  padding: 2rem 1rem;
-  border-radius: 32px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  border: 1px solid var(--border-light);
-  align-items: stretch;
-}
-
-/* الزرارات الكبيرة */
-.mode-btn.large-mode {
-  font-size: 1.4rem;
-  padding: 1rem 0.5rem;
-  border-radius: 50px;
-  background: var(--bg-page);
-  border: 2px solid var(--border-light);
-  color: var(--text-primary);
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s;
-  text-align: center;
-}
-
-.mode-btn.large-mode.active {
-  background: var(--accent-blue);
-  border-color: var(--accent-blue);
-  color: white;
-  box-shadow: 0 8px 18px -4px var(--accent-blue);
-}
-
-/* المنطقة الوسطى */
-.board-main {
-  flex: 1;
-  min-width: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* بطاقات اللاعبين */
-.player-indicators {
-  display: flex;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
-  justify-content: center;
-  width: 100%;
-}
-
-.player-card {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  background: var(--card-bg);
-  padding: 0.8rem 1.8rem;
-  border-radius: 60px;
-  border: 2px solid transparent;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: all 0.2s;
-  min-width: 160px;
-  justify-content: center;
-}
-
-.player-card.active {
-  border-color: var(--accent-blue);
-  transform: scale(1.05);
-  box-shadow: 0 10px 20px -8px var(--accent-blue);
-}
-
-.player-color {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  box-shadow: inset 0 -3px 3px rgba(0,0,0,0.2);
-}
-
-.player-name {
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: var(--text-primary);
-}
-
-.turn-badge {
-  background: var(--accent-blue);
-  color: white;
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.2rem 0.6rem;
-  border-radius: 40px;
-  text-transform: uppercase;
-  display: none; /* مخفي حتى يبان اللي دورو */
-}
-
-.player-card.active .turn-badge {
-  display: inline-block;
-}
-
-/* حالة التفكير ديال AI */
-.player-card.ai-thinking .player-name::after {
-  content: " (AI thinking)";
-  font-weight: 400;
-  font-size: 0.9rem;
-  color: var(--text-soft);
-}
-
-/* للشاشات الصغيرة */
-@media (max-width: 700px) {
-  .game-layout {
-    flex-direction: column;
-    align-items: center;
-  }
-  .mode-sidebar {
-    flex-direction: row;
-    width: auto;
-    padding: 1rem 2rem;
-  }
-  .player-card {
-    min-width: 130px;
-    padding: 0.5rem 1rem;
-  }
-}
+    /* turn indicator */
+    .turn-indicator {
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      background: var(--card-bg);
+      padding: 0.5rem 2rem;
+      border-radius: 60px;
+      display: inline-block;
+      margin-left: auto;
+      margin-right: auto;
+      width: fit-content;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid var(--border-light);
+    }
 
     /* ----- board (columns flex) ----- */
     .board-container {
@@ -549,36 +460,14 @@
   <button class="restart-btn" id="restartBtn">↻ Restart</button>
 </div>
 
-<!-- Main game area with sidebar and board -->
-<div class="game-layout">
-  <!-- Left sidebar: mode buttons -->
-  <aside class="mode-sidebar">
-    <button class="mode-btn large-mode active" data-mode="twoPlayers">👥 2 Players</button>
-    <button class="mode-btn large-mode" data-mode="ai">🤖 vs AI</button>
-  </aside>
-
-  <!-- Center area: turn indicators + board -->
-  <div class="board-main">
-    <!-- Player indicator cards -->
-    <div class="player-indicators">
-      <div class="player-card" id="player1Card">
-        <div class="player-color" style="background: #e53e3e;"></div>
-        <span class="player-name">Player 1</span>
-        <span class="turn-badge" id="p1Badge">Your turn</span>
-      </div>
-      <div class="player-card" id="player2Card">
-        <div class="player-color" style="background: #fbbf24;"></div>
-        <span class="player-name">Player 2</span>
-        <span class="turn-badge" id="p2Badge">Your turn</span>
-      </div>
-    </div>
-
-    <!-- Existing board container (keep exactly as before) -->
-    <div class="board-container">
-      <div class="board" id="board"></div>
-    </div>
+  <!-- mode selector -->
+  <div class="mode-panel">
+    <button class="mode-btn active" data-mode="twoPlayers">👥 2 Players</button>
+    <button class="mode-btn" data-mode="ai">🤖 vs AI</button>
   </div>
-</div>
+
+  <!-- turn indicator -->
+  <div class="turn-indicator" id="turnIndicator">Player 1's turn (Red)</div>
 
   <!-- game board -->
   <div class="board-container">
@@ -675,40 +564,16 @@
       }
     }
 
-function updatePlayerIndicators() {
-  const p1Card = document.getElementById('player1Card');
-  const p2Card = document.getElementById('player2Card');
-  const p1Badge = document.getElementById('p1Badge');
-  const p2Badge = document.getElementById('p2Badge');
-
-  p1Card.classList.remove('active');
-  p2Card.classList.remove('active');
-  p2Card.classList.remove('ai-thinking');
-
-  if (!gameActive) {
-    p1Badge.style.display = 'none';
-    p2Badge.style.display = 'none';
-    return;
-  }
-
-  if (mode === 'ai' && currentPlayer === 2) {
-    // دور AI
-    p2Card.classList.add('active', 'ai-thinking');
-    p1Card.classList.remove('active');
-    p2Badge.textContent = 'Thinking...';
-  } else {
-    // دور لاعب عادي
-    if (currentPlayer === 1) {
-      p1Card.classList.add('active');
-      p2Card.classList.remove('active');
-      p1Badge.textContent = 'Your turn';
-    } else {
-      p2Card.classList.add('active');
-      p1Card.classList.remove('active');
-      p2Badge.textContent = 'Your turn';
+    // update turn message
+    function updateTurnText() {
+      if (!gameActive) return;
+      if (mode === 'ai' && currentPlayer === 2) {
+        turnIndicator.textContent = '🤖 AI thinking...';
+      } else {
+        const playerColor = currentPlayer === 1 ? 'Red' : 'Yellow';
+        turnIndicator.textContent = `Player ${currentPlayer}'s turn (${playerColor})`;
+      }
     }
-  }
-}
 
     // check if column has space
     function columnFree(col) {
@@ -817,36 +682,44 @@ function updatePlayerIndicators() {
     }
 
     // AI move (random)
-function aiMove() {
-  if (!gameActive || currentPlayer !== 2 || mode !== 'ai' || aiThinking) return;
-  aiThinking = true;
-  setBoardEnabled(false);
-  updatePlayerIndicators(); // باش يبان "AI thinking"
+    function aiMove() {
+      if (!gameActive || currentPlayer !== 2 || mode !== 'ai' || aiThinking) return;
+      aiThinking = true;
+      setBoardEnabled(false);
+      turnIndicator.textContent = '🤖 AI thinking...';
 
-  setTimeout(() => {
-    if (!gameActive || currentPlayer !== 2 || mode !== 'ai') {
-      aiThinking = false;
-      setBoardEnabled(gameActive);
-      updatePlayerIndicators();
-      return;
+      setTimeout(() => {
+        if (!gameActive || currentPlayer !== 2 || mode !== 'ai') {
+          aiThinking = false;
+          setBoardEnabled(gameActive);
+          return;
+        }
+        const freeCols = [];
+        for (let c = 0; c < COLS; c++) {
+          if (columnFree(c)) freeCols.push(c);
+        }
+        if (freeCols.length === 0) {
+          // draw case handled elsewhere, but just in case
+          aiThinking = false;
+          setBoardEnabled(gameActive);
+          return;
+        }
+        const randomCol = freeCols[Math.floor(Math.random() * freeCols.length)];
+        const success = makeMove(randomCol, 2); // AI is player 2
+
+        if (success && gameActive && currentPlayer === 1) {
+          // after AI move, turn goes to player 1 – enable board
+          setBoardEnabled(true);
+        } else if (!gameActive) {
+          setBoardEnabled(false);
+        } else {
+          // should not happen, but if AI still to move? no
+          setBoardEnabled(gameActive && !(mode==='ai' && currentPlayer===2));
+        }
+        aiThinking = false;
+        // re-check if AI should move again? no, currentPlayer becomes 1 after switch.
+      }, 280); // subtle delay
     }
-    const freeCols = [];
-    for (let c = 0; c < COLS; c++) {
-      if (columnFree(c)) freeCols.push(c);
-    }
-    if (freeCols.length === 0) {
-      aiThinking = false;
-      setBoardEnabled(gameActive);
-      updatePlayerIndicators();
-      return;
-    }
-    const randomCol = freeCols[Math.floor(Math.random() * freeCols.length)];
-    const success = makeMove(randomCol, 2);
-    aiThinking = false;
-    setBoardEnabled(gameActive && !(mode === 'ai' && currentPlayer === 2));
-    updatePlayerIndicators();
-  }, 280);
-}
 
     // reset game (keep mode)
     function resetGame() {
