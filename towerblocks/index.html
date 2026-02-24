@@ -1,1 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOWER BLOCKS · pro stacking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            transition: background-color 0.3s ease, border-color 0.2s ease, box-shadow 0.2s;
+        }
 
+        /* Light mode (default) */
+        body {
+            --bg-page: #f0f5fa;
+            --text-primary: #1e2b3a;
+            --card-bg: #ffffff;
+            --border-light: #d0dbe8;
+            --accent-blue: #2a6df4;
+            --accent-hover: #1a55c0;
+            --block-colors: linear-gradient(145deg, #f4a261, #e76f51);
+            --tower-shadow: rgba(0,0,0,0.1);
+            --modal-overlay: rgba(0,0,0,0.3);
+            background-color: var(--bg-page);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        body.dark {
+            --bg-page: #121826;
+            --text-primary: #e6edf5;
+            --card-bg: #1e2638;
+            --border-light: #2f3a4e;
+            --accent-blue: #4b7ef5;
+            --accent-hover: #6a9aff;
+            --block-colors: linear-gradient(145deg, #b88b4a, #a1583a);
+            --tower-shadow: rgba(0,0,0,0.4);
+            --modal-overlay: rgba(0,0,0,0.7);
+        }
+
+        .app {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* Title */
+        .main-title {
+            text-align: center;
+            margin: 0 0 1rem 0;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 900;
+            font-family: 'Arial Black', 'Impact', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a6df4, #f4a261);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 4px 4px 0 rgba(0,20,40,0.2), 8px 8px 12px rgba(0,0,0,0.2);
+            letter-spacing: 3px;
+        }
+
+        /* Control row (dark mode + restart) */
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dark-mode-control {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: var(--card-bg);
+            padding: 0.5rem 1.4rem;
+            border-radius: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-light);
+        }
+
+        .dark-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--border-light);
+            border-radius: 34px;
+            transition: 0.3s;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        input:checked + .slider {
+            background-color: var(--accent-blue);
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        .restart-btn {
+            background: var(--accent-blue);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.6rem 2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 8px 16px -6px var(--accent-blue);
+            transition: all 0.15s;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .restart-btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+            box-shadow: 0 12px 20px -8px var(--accent-blue);
+        }
+
+        /* Score row */
+        .score-row {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: var(--card-bg);
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            border: 1px solid var(--border-light);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .score, .high-score {
+            color: var(--accent-blue);
+        }
+
+        /* Game canvas container */
+        .game-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 1rem 0 2rem;
+        }
+        canvas {
+            background: var(--card-bg);
+            border-radius: 40px;
+            box-shadow: 0 20px 30px -10px var(--tower-shadow);
+            border: 2px solid var(--border-light);
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            cursor: pointer;
+            display: block;
+        }
+
+        /* Blog section */
+        .blog-section {
+            margin: 2rem 0;
+            background: var(--card-bg);
+            border-radius: 40px;
+            padding: 2rem;
+            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-light);
+        }
+        .blog-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #1e3c72, #2a6df4, #f4a261);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+        .blog-cards {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .blog-card {
+            flex: 1 1 200px;
+            background: var(--bg-page);
+            padding: 1.5rem;
+            border-radius: 28px;
+            box-shadow: inset 0 1px 3px rgba(255,255,255,0.1), 0 8px 16px -8px rgba(0,0,0,0.2);
+            border: 1px solid var(--border-light);
+        }
+        .blog-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.8rem;
+            color: var(--accent-blue);
+        }
+        .blog-card p {
+            color: var(--text-primary);
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Support section */
+        .support-section {
+            margin: 2rem 0;
+            background: var(--card-bg);
+            border-radius: 40px;
+            padding: 2rem;
+            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-light);
+        }
+        .support-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--text-primary);
+        }
+        .support-section p {
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+            color: var(--text-primary);
+            opacity: 0.8;
+        }
+        .support-btn {
+            background: var(--accent-blue);
+            border: none;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            padding: 0.9rem 3rem;
+            border-radius: 60px;
+            margin: 0.5rem 0 1rem;
+            cursor: pointer;
+            box-shadow: 0 12px 24px -8px var(--accent-blue);
+            transition: 0.15s;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .support-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-3px);
+        }
+        .support-link {
+            font-size: 1rem;
+            color: var(--accent-blue);
+            word-break: break-all;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--modal-overlay);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.25s;
+            backdrop-filter: blur(4px);
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: var(--card-bg);
+            padding: 2.5rem 4rem;
+            border-radius: 60px;
+            text-align: center;
+            box-shadow: 0 40px 70px rgba(0,0,0,0.5);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid var(--accent-blue);
+        }
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+        .modal-content p {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .modal-close {
+            background: var(--accent-blue);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            padding: 0.5rem 2.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .blog-cards {
+                flex-direction: column;
+            }
+            .score-row {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <!-- Title -->
+    <h1 class="main-title">TOWER BLOCKS</h1>
+
+    <!-- Control row: dark mode + restart -->
+    <div class="controls-row">
+        <div class="dark-mode-control">
+            <span class="dark-label">Dark mode</span>
+            <label class="switch">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <button class="restart-btn" id="restartBtn">↻ Restart</button>
+    </div>
+
+    <!-- Score display -->
+    <div class="score-row">
+        <div>Score: <span id="scoreDisplay" class="score">0</span></div>
+        <div>High Score: <span id="highScoreDisplay" class="high-score">0</span></div>
+    </div>
+
+    <!-- Game canvas -->
+    <div class="game-wrapper">
+        <canvas id="gameCanvas" width="600" height="600"></canvas>
+    </div>
+
+    <!-- Blog section -->
+    <section class="blog-section">
+        <h2 class="blog-title">How to Play Tower Blocks</h2>
+        <div class="blog-cards">
+            <div class="blog-card">
+                <h3>📋 Game Rules</h3>
+                <p>A block moves left-right. Click to drop it onto the tower. If it aligns, it stacks; if not, the overhanging parts are cut. Game ends when a block completely misses or becomes too narrow.</p>
+            </div>
+            <div class="blog-card">
+                <h3>🧠 Winning Strategies</h3>
+                <p>Watch the movement rhythm. Try to drop when the block is centered. The tower gets narrower, so precision matters. Patience is key.</p>
+            </div>
+            <div class="blog-card">
+                <h3>⚡ Pro Tips</h3>
+                <p>Predict the overlap by focusing on one edge. Build a mental anchor. High scores require consistent near‑perfect drops.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support section -->
+    <section class="support-section">
+        <h2>🤝 Support Us</h2>
+        <p>Enjoy the game? Support us to create more awesome projects!</p>
+        <button class="support-btn" id="supportBtn">Support Us</button>
+        <div class="support-link" id="supportLink">https://YOUR-SUPPORT-LINK.com</div>
+    </section>
+
+    <!-- Game over modal -->
+    <div class="modal-overlay" id="gameModal">
+        <div class="modal-content">
+            <p id="modalMessage">Game Over</p>
+            <button class="modal-close" id="modalClose">Play Again</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ---------- CONFIG ----------
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreSpan = document.getElementById('scoreDisplay');
+        const highScoreSpan = document.getElementById('highScoreDisplay');
+        const restartBtn = document.getElementById('restartBtn');
+        const darkToggle = document.getElementById('darkModeToggle');
+        const modalOverlay = document.getElementById('gameModal');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalClose = document.getElementById('modalClose');
+        const supportBtn = document.getElementById('supportBtn');
+        const supportLink = document.getElementById('supportLink');
+
+        // Game state
+        let tower = [];                // each block: { x, width, color }
+        let movingBlock = {
+            x: 0,
+            y: 0,
+            width: 150,
+            speed: 3,
+            direction: 1
+        };
+        let gameActive = true;
+        let score = 0;
+        let highScore = localStorage.getItem('towerHighScore') ? parseInt(localStorage.getItem('towerHighScore')) : 0;
+        let animationFrame;
+        let gameOverFlag = false;
+
+        // Dark mode
+        const storedTheme = localStorage.getItem('darkMode');
+        if (storedTheme === 'enabled') {
+            document.body.classList.add('dark');
+            darkToggle.checked = true;
+        }
+
+        // Restart first-click handling
+        let firstClickHandled = sessionStorage.getItem('restartFirstDone') === 'true';
+
+        // ---------- HELPER FUNCTIONS ----------
+        function updateScoreUI() {
+            scoreSpan.textContent = score;
+            highScoreSpan.textContent = highScore;
+        }
+
+        // Draw everything
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw tower (stacked blocks)
+            for (let i = 0; i < tower.length; i++) {
+                const b = tower[i];
+                // gradient per block for colorful effect
+                const gradient = ctx.createLinearGradient(b.x, 0, b.x + b.width, 0);
+                gradient.addColorStop(0, `hsl(${(i * 30) % 360}, 80%, 60%)`);
+                gradient.addColorStop(1, `hsl(${(i * 30 + 40) % 360}, 80%, 55%)`);
+                ctx.fillStyle = gradient;
+                ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                ctx.shadowBlur = 10;
+                ctx.shadowOffsetY = 4;
+                ctx.fillRect(b.x, b.y, b.width, 40);
+            }
+
+            // Draw moving block (semi-transparent, with glow)
+            if (gameActive && !gameOverFlag) {
+                ctx.shadowColor = 'rgba(255,255,255,0.5)';
+                ctx.shadowBlur = 20;
+                ctx.shadowOffsetY = 0;
+                ctx.fillStyle = 'rgba(255,215,0,0.9)';
+                ctx.fillRect(movingBlock.x, movingBlock.y, movingBlock.width, 40);
+                ctx.shadowBlur = 0;
+            }
+
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+        }
+
+        // Update moving block position (called in animation loop)
+        function update() {
+            if (!gameActive || gameOverFlag) return;
+
+            movingBlock.x += movingBlock.speed * movingBlock.direction;
+            // Bounce off edges
+            if (movingBlock.x < 0) {
+                movingBlock.x = 0;
+                movingBlock.direction = 1;
+            } else if (movingBlock.x + movingBlock.width > canvas.width) {
+                movingBlock.x = canvas.width - movingBlock.width;
+                movingBlock.direction = -1;
+            }
+        }
+
+        // Animation loop
+        function gameLoop() {
+            update();
+            draw();
+            animationFrame = requestAnimationFrame(gameLoop);
+        }
+
+        // Initialize a new game
+        function resetGame() {
+            gameActive = true;
+            gameOverFlag = false;
+            score = 0;
+            // Base tower: one block at the bottom
+            tower = [{
+                x: canvas.width/2 - 75,
+                y: canvas.height - 100,
+                width: 150
+            }];
+            // Moving block above
+            movingBlock = {
+                x: 0,
+                y: canvas.height - 140,
+                width: 150,
+                speed: 3 + Math.random() * 2, // randomize speed
+                direction: 1
+            };
+            updateScoreUI();
+            modalOverlay.classList.remove('show');
+        }
+
+        // Check drop
+        function dropBlock() {
+            if (!gameActive || gameOverFlag) return;
+
+            const topBlock = tower[tower.length - 1];
+            const overlapLeft = Math.max(movingBlock.x, topBlock.x);
+            const overlapRight = Math.min(movingBlock.x + movingBlock.width, topBlock.x + topBlock.width);
+            const overlapWidth = overlapRight - overlapLeft;
+
+            if (overlapWidth <= 0) {
+                // Miss – game over
+                gameActive = false;
+                gameOverFlag = true;
+                modalMessage.textContent = `Game Over! Score: ${score}`;
+                modalOverlay.classList.add('show');
+                return;
+            }
+
+            // Add new block to tower with overlap width
+            const newBlock = {
+                x: overlapLeft,
+                y: topBlock.y - 40,
+                width: overlapWidth
+            };
+            tower.push(newBlock);
+            score++;
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('towerHighScore', highScore);
+            }
+            updateScoreUI();
+
+            // Create next moving block with the same width as overlap
+            movingBlock = {
+                x: 0,
+                y: newBlock.y - 40,
+                width: overlapWidth,
+                speed: 3 + Math.random() * 3,
+                direction: 1
+            };
+        }
+
+        // ---------- EVENT LISTENERS ----------
+        canvas.addEventListener('click', (e) => {
+            e.preventDefault();
+            dropBlock();
+        });
+
+        restartBtn.addEventListener('click', () => {
+            if (!firstClickHandled) {
+                sessionStorage.setItem('restartFirstDone', 'true');
+                firstClickHandled = true;
+                window.open('https://YOUR-LINK-HERE.com', '_blank');
+                // Still reset the game
+                resetGame();
+                return;
+            }
+            resetGame();
+        });
+
+        darkToggle.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                document.body.classList.add('dark');
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+
+        modalClose.addEventListener('click', () => {
+            modalOverlay.classList.remove('show');
+            resetGame();
+        });
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('show');
+                resetGame();
+            }
+        });
+
+        supportBtn.addEventListener('click', () => {
+            window.open('https://YOUR-SUPPORT-LINK.com', '_blank');
+        });
+
+        // Set high score display initially
+        highScoreSpan.textContent = highScore;
+
+        // Start the game
+        resetGame();
+        gameLoop();
+
+        // Cleanup on page unload (optional)
+        window.addEventListener('beforeunload', () => {
+            if (animationFrame) cancelAnimationFrame(animationFrame);
+        });
+    })();
+</script>
+</body>
+</html>
