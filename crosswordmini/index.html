@@ -3,196 +3,186 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crossword Mini · professional edition</title>
+  <title>Crossword Mini · premium edition</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    /* CSS variables – elegant light palette & dark override */
+    /* CSS variables – modern, elegant palette */
     :root {
-      --bg: #f8fafc;
-      --surface: #ffffff;
+      --bg-gradient: linear-gradient(145deg, #f1f5f9 0%, #eef2f6 100%);
+      --surface: rgba(255,255,255,0.75);
+      --surface-solid: #ffffff;
       --text-primary: #1e293b;
       --text-secondary: #475569;
-      --border-light: #e2e8f0;
-      --border-soft: #cbd5e1;
+      --border-light: rgba(203, 213, 225, 0.6);
       --accent: #3b82f6;
       --accent-soft: #dbeafe;
-      --highlight-word: #e6f0ff;
-      --highlight-letter: #fef9c3;
+      --highlight-row: rgba(59, 130, 246, 0.08);
+      --highlight-col: rgba(59, 130, 246, 0.05);
+      --error: #f87171;
       --error-bg: #fee2e2;
-      --error-border: #ef4444;
-      --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-      --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-      --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
-      --card-radius: 20px;
-      --grid-gap: 6px;
-      --transition: all 0.2s ease;
+      --shadow-sm: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,20,40,0.02);
+      --shadow-md: 0 20px 30px -10px rgba(0,20,40,0.1);
+      --shadow-lg: 0 30px 40px -15px rgba(0,20,40,0.15);
+      --glass-bg: rgba(255,255,255,0.6);
+      --glass-border: rgba(255,255,255,0.8);
+      --backdrop-blur: blur(12px);
+      --transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
     }
 
     body.dark {
-      --bg: #0f172a;
-      --surface: #1e293b;
+      --bg-gradient: linear-gradient(145deg, #0b1423 0%, #101b2b 100%);
+      --surface: rgba(30, 41, 59, 0.7);
+      --surface-solid: #1e293b;
       --text-primary: #f1f5f9;
       --text-secondary: #cbd5e1;
-      --border-light: #334155;
-      --border-soft: #475569;
+      --border-light: rgba(71, 85, 105, 0.5);
       --accent: #60a5fa;
       --accent-soft: #1e3a5f;
-      --highlight-word: #2a3a5a;
-      --highlight-letter: #5f5b2b;
+      --highlight-row: rgba(96, 165, 250, 0.15);
+      --highlight-col: rgba(96, 165, 250, 0.1);
+      --error: #fca5a5;
       --error-bg: #451a1a;
-      --error-border: #f87171;
-      --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+      --glass-bg: rgba(15, 23, 42, 0.6);
+      --glass-border: rgba(71, 85, 105, 0.4);
     }
 
     body {
-      background: var(--bg);
+      background: var(--bg-gradient);
       color: var(--text-primary);
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      padding: 2rem 1rem;
-      transition: background 0.3s, color 0.2s;
+      align-items: center;
+      padding: 2rem 1.5rem;
+      transition: background 0.4s ease, color 0.3s ease;
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-font-smoothing: antialiased;
     }
 
-    .app-container {
+    .app-wrapper {
       max-width: 1300px;
       width: 100%;
     }
 
-    /* header with timer, dark toggle, restart */
-    .game-header {
+    /* header */
+    .header-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
       flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .timer {
-      background: var(--surface);
-      padding: 0.5rem 1.2rem;
-      border-radius: 40px;
-      box-shadow: var(--shadow-sm);
-      font-weight: 600;
-      font-size: 1.3rem;
-      letter-spacing: 1px;
-      border: 1px solid var(--border-light);
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    /* dark mode toggle – animated switch */
-    .theme-switch {
-      position: relative;
-      display: inline-block;
-      width: 56px;
-      height: 28px;
-    }
-    .theme-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #cbd5e1;
-      transition: 0.3s;
-      border-radius: 34px;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 22px;
-      width: 22px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: 0.3s;
-      border-radius: 50%;
-      box-shadow: var(--shadow-sm);
-    }
-    input:checked + .slider {
-      background-color: #3b82f6;
-    }
-    input:checked + .slider:before {
-      transform: translateX(28px);
-    }
-    body.dark .slider {
-      background-color: #475569;
+      gap: 1.2rem;
     }
 
     .restart-btn {
       background: var(--surface);
-      border: 1px solid var(--border-soft);
-      padding: 0.5rem 1.5rem;
-      border-radius: 40px;
-      font-weight: 500;
+      border: 1px solid var(--border-light);
+      backdrop-filter: blur(8px);
+      padding: 0.7rem 2rem;
+      border-radius: 60px;
+      font-weight: 550;
+      font-size: 1rem;
       color: var(--text-primary);
       cursor: pointer;
       box-shadow: var(--shadow-sm);
       transition: var(--transition);
+      letter-spacing: -0.2px;
     }
+
     .restart-btn:hover {
       background: var(--accent-soft);
       border-color: var(--accent);
+      transform: scale(1.02);
+      box-shadow: var(--shadow-md);
     }
 
-    /* main game area: grid + clues sidebar */
+    /* dark mode toggle with icons */
+    .theme-toggle {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      backdrop-filter: blur(8px);
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .theme-toggle span {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 30px;
+      font-size: 1.3rem;
+      transition: 0.2s;
+      color: var(--text-secondary);
+    }
+
+    .theme-toggle .active {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    /* main game area */
     .game-area {
       display: flex;
       flex-direction: row;
-      gap: 2.5rem;
+      gap: 2.2rem;
       flex-wrap: wrap;
       justify-content: center;
-      margin-bottom: 3rem;
+      margin-bottom: 3.5rem;
     }
 
     .crossword-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: var(--grid-gap);
+      gap: 8px;
       background: var(--surface);
-      padding: 1.5rem;
-      border-radius: var(--card-radius);
+      backdrop-filter: blur(16px);
+      padding: 1.8rem;
+      border-radius: 36px;
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border-light);
-      max-width: 500px;
+      max-width: 550px;
       width: fit-content;
-      margin: 0 auto;
+      transition: background 0.3s;
     }
 
     .cell {
       aspect-ratio: 1 / 1;
-      min-width: 48px;
-      background: var(--surface);
-      border: 2px solid var(--border-soft);
-      border-radius: 12px;
+      width: 60px;
+      background: var(--surface-solid);
+      border: 2px solid var(--border-light);
+      border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      font-size: 1.5rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: var(--text-primary);
-      transition: background 0.1s, border 0.15s;
+      transition: border 0.15s, box-shadow 0.2s, transform 0.1s;
       box-shadow: var(--shadow-sm);
+    }
+
+    .cell.numbered::before {
+      content: attr(data-number);
+      position: absolute;
+      top: 4px;
+      left: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      opacity: 0.8;
+      pointer-events: none;
     }
 
     .cell input {
@@ -201,67 +191,57 @@
       border: none;
       background: transparent;
       text-align: center;
-      font-size: 1.5rem;
-      font-weight: 600;
+      font-size: 1.7rem;
+      font-weight: 550;
       text-transform: uppercase;
-      color: inherit;
+      color: var(--text-primary);
       outline: none;
-      border-radius: 10px;
+      border-radius: 16px;
+      caret-color: var(--accent);
     }
 
-    .cell.numbered::before {
-      content: attr(data-number);
-      position: absolute;
-      top: 2px;
-      left: 4px;
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      pointer-events: none;
-    }
-
-    /* highlight active word (row + col) */
-    .cell.highlight-word {
-      background-color: var(--highlight-word);
-      border-color: var(--accent);
-    }
-
-    /* matching letters (same as current typed letter, not empty) */
-    .cell.highlight-letter {
-      background-color: var(--highlight-letter);
-      border-color: #fbbf24;
-    }
-
-    /* validation error */
-    .cell.error {
-      background-color: var(--error-bg);
-      border-color: var(--error-border);
-    }
-
+    /* focus animation */
     .cell:focus-within {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-soft);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+      transform: scale(1.02);
     }
 
-    /* clues sidebar */
+    /* highlight for active word (row + col) */
+    .cell.highlight-row {
+      background-color: var(--highlight-row);
+    }
+    .cell.highlight-col {
+      background-color: var(--highlight-col);
+    }
+
+    /* error state */
+    .cell.error {
+      background-color: var(--error-bg);
+      border-color: var(--error);
+    }
+
+    /* clues panel */
     .clues-panel {
       background: var(--surface);
-      border-radius: var(--card-radius);
-      padding: 1.8rem 1.8rem;
+      backdrop-filter: blur(16px);
+      border-radius: 36px;
+      padding: 2rem 2rem;
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border-light);
-      min-width: 260px;
-      flex: 1 1 260px;
+      min-width: 270px;
+      flex: 1 1 280px;
+      transition: background 0.3s;
     }
 
     .clues-panel h3 {
       font-weight: 600;
       font-size: 1.2rem;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.4rem;
       letter-spacing: -0.2px;
-      border-bottom: 2px solid var(--accent-soft);
-      padding-bottom: 0.4rem;
       display: inline-block;
+      border-bottom: 3px solid var(--accent-soft);
+      padding-bottom: 0.3rem;
     }
 
     .clue-section {
@@ -273,12 +253,13 @@
     }
 
     .clue-list li {
-      padding: 0.5rem 0.5rem 0.5rem 0;
+      padding: 0.5rem 0;
       border-bottom: 1px dashed var(--border-light);
       font-size: 0.95rem;
       display: flex;
       gap: 0.8rem;
       color: var(--text-secondary);
+      line-height: 1.5;
     }
 
     .clue-number {
@@ -287,15 +268,15 @@
       min-width: 28px;
     }
 
-    /* blog & support cards */
+    /* blog cards */
     .blog-section {
-      margin: 3rem 0 2rem;
+      margin: 4rem 0 2.5rem;
     }
 
     .blog-section h2 {
       font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
+      font-weight: 650;
+      margin-bottom: 2rem;
       letter-spacing: -0.02em;
     }
 
@@ -307,86 +288,93 @@
 
     .blog-card {
       background: var(--surface);
-      padding: 1.8rem;
-      border-radius: 24px;
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 30px;
       box-shadow: var(--shadow-md);
       border: 1px solid var(--border-light);
-      flex: 1 1 200px;
-      transition: transform 0.15s;
+      flex: 1 1 250px;
+      transition: var(--transition);
     }
 
     .blog-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-6px);
       box-shadow: var(--shadow-lg);
     }
 
     .blog-card h3 {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       font-weight: 600;
-      margin-bottom: 0.75rem;
+      margin-bottom: 1rem;
+      color: var(--accent);
     }
 
     .blog-card p {
       color: var(--text-secondary);
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
+    /* support glass card */
     .support-card {
-      background: var(--surface);
-      border-radius: 28px;
-      padding: 2.5rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      border-radius: 48px;
+      padding: 3rem 2.5rem;
       box-shadow: var(--shadow-lg);
-      border: 1px solid var(--border-light);
+      border: 1px solid var(--glass-border);
       text-align: center;
-      max-width: 600px;
-      margin: 2.5rem auto 0;
+      max-width: 700px;
+      margin: 3rem auto 0;
     }
 
     .support-card p {
-      font-size: 1.2rem;
-      margin-bottom: 1.8rem;
-      color: var(--text-secondary);
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      color: var(--text-primary);
+      font-weight: 450;
     }
 
-    .support-btn {
+    .premium-btn {
       background: var(--accent);
       border: none;
       color: white;
       font-size: 1.3rem;
       font-weight: 600;
-      padding: 1rem 3rem;
-      border-radius: 50px;
+      padding: 1.2rem 3.5rem;
+      border-radius: 60px;
       cursor: pointer;
-      box-shadow: var(--shadow-md);
-      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 10px 20px -5px rgba(59,130,246,0.4);
+      transition: 0.2s;
       border: 1px solid rgba(255,255,255,0.2);
     }
 
-    .support-btn:hover {
+    .premium-btn:hover {
       background: #2563eb;
       transform: scale(1.02);
+      box-shadow: 0 20px 25px -5px rgba(59,130,246,0.5);
     }
 
     .support-link {
-      margin-top: 1.2rem;
+      margin-top: 1.5rem;
       font-size: 0.9rem;
       color: var(--text-secondary);
       word-break: break-all;
+      opacity: 0.8;
     }
 
     /* win modal */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1000;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s;
+      transition: opacity 0.4s;
     }
 
     .modal-overlay.show {
@@ -395,69 +383,71 @@
     }
 
     .win-modal {
-      background: var(--surface);
-      padding: 2.5rem 3rem;
-      border-radius: 48px;
+      background: var(--surface-solid);
+      padding: 3rem 4rem;
+      border-radius: 60px;
       box-shadow: var(--shadow-lg);
       text-align: center;
-      max-width: 400px;
+      max-width: 450px;
       border: 1px solid var(--border-light);
-      animation: modalPop 0.4s ease;
+      animation: slideUp 0.5s ease;
     }
 
-    @keyframes modalPop {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+    @keyframes slideUp {
+      0% { transform: translateY(30px) scale(0.95); opacity: 0; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
     }
 
     .win-modal h2 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
+      font-size: 2.8rem;
+      margin-bottom: 1.2rem;
       color: var(--accent);
+      font-weight: 700;
     }
 
     .win-modal p {
       font-size: 1.2rem;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      color: var(--text-secondary);
     }
 
     .win-modal button {
       background: var(--accent);
       border: none;
       color: white;
-      font-size: 1.2rem;
-      padding: 0.8rem 2.5rem;
-      border-radius: 40px;
+      font-size: 1.3rem;
+      padding: 1rem 3rem;
+      border-radius: 50px;
       cursor: pointer;
       font-weight: 600;
     }
 
-    /* utility */
-    .text-muted { color: var(--text-secondary); }
-    .flex { display: flex; align-items: center; gap: 0.6rem; }
+    /* responsive */
+    @media (max-width: 700px) {
+      .cell { width: 45px; }
+      .crossword-grid { padding: 1rem; gap: 5px; }
+    }
+    @media (max-width: 500px) {
+      .cell { width: 38px; }
+      .cell input { font-size: 1.3rem; }
+    }
   </style>
 </head>
 <body>
-<div class="app-container">
+<div class="app-wrapper">
 
-  <!-- header with timer & actions -->
-  <div class="game-header">
-    <div class="timer" id="timerDisplay">00:00</div>
-    <div class="header-actions">
-      <label class="theme-switch">
-        <input type="checkbox" id="darkModeToggle">
-        <span class="slider"></span>
-      </label>
-      <button class="restart-btn" id="restartBtn">↻ Restart</button>
+  <!-- header -->
+  <div class="header-bar">
+    <button class="restart-btn" id="restartBtn">↻ Restart</button>
+    <div class="theme-toggle" id="themeToggle">
+      <span id="lightIcon">☀️</span>
+      <span id="darkIcon">🌙</span>
     </div>
   </div>
 
-  <!-- main grid + clues -->
+  <!-- game grid + clues -->
   <div class="game-area">
-    <!-- crossword grid injected via js -->
     <div id="gridContainer" class="crossword-grid"></div>
-
-    <!-- clues sidebar -->
     <div class="clues-panel">
       <div class="clue-section">
         <h3>Across</h3>
@@ -472,35 +462,35 @@
 
   <!-- blog section -->
   <div class="blog-section">
-    <h2>📘 How to Play Crossword Mini</h2>
+    <h2>How to play Crossword Mini</h2>
     <div class="blog-cards">
       <div class="blog-card">
-        <h3>Basic Rules</h3>
-        <p>Fill the 7x7 grid with letters so that every row and column forms a valid word. Use the clues on the right. Numbered cells indicate start of an answer.</p>
+        <h3>📋 Basic rules</h3>
+        <p>Fill the 7x7 grid so every row and column forms a valid word. Each white cell accepts one letter. Numbers show where a word starts. Use the clues on the right.</p>
       </div>
       <div class="blog-card">
-        <h3>Solving Techniques</h3>
-        <p>Start with words you're sure about. Use crossing letters to narrow down possibilities. Highlight active word to see constraints.</p>
+        <h3>⚡ Tips to solve faster</h3>
+        <p>Start with words you’re certain about. Use crossing letters to eliminate options. The highlighted row/col helps you focus on one word at a time.</p>
       </div>
       <div class="blog-card">
-        <h3>Common Mistakes</h3>
-        <p>Don't guess randomly — check real‑time validation (red border). Use the matching‑letter highlight to spot duplicates.</p>
+        <h3>🧩 Pro techniques</h3>
+        <p>Look for high‑frequency letters (E, T, A). If a cell turns red, double‑check the clue. The puzzle is solved when all cells are green-free (no red).</p>
       </div>
     </div>
   </div>
 
   <!-- support card -->
   <div class="support-card">
-    <p>✨ Enjoying the puzzle? Support our work and help us create more minimal, elegant crosswords.</p>
-    <button class="support-btn" id="supportBtn">Support Us</button>
+    <p>✨ We pour love into every puzzle. If you enjoy the experience, consider supporting us — it helps us create more elegant crosswords.</p>
+    <button class="premium-btn" id="supportBtn">Support Us</button>
     <div class="support-link">https://YOUR-SUPPORT-LINK.com</div>
   </div>
 
   <!-- win modal -->
   <div class="modal-overlay" id="winModal">
     <div class="win-modal">
-      <h2>✨ Puzzle complete!</h2>
-      <p id="winTime">Time: 00:00</p>
+      <h2>Solved!</h2>
+      <p>Congratulations, puzzle complete.</p>
       <button id="closeModalBtn">Continue</button>
     </div>
   </div>
@@ -508,8 +498,7 @@
 
 <script>
   (function() {
-    // --- CONSTANTS & PUZZLE DEFINITION (preloaded, 7x7) ---
-    // solution grid (made‑up but consistent with clues below)
+    // --- PREMIUM 7x7 PUZZLE (solution) ---
     const SOLUTION = [
       ['C','R','O','S','S','E','S'],
       ['R','A','D','I','A','L','S'],
@@ -520,95 +509,90 @@
       ['S','T','R','A','N','D','S']
     ];
 
-    // numbering: cell (0,0)=1; (0,1)=2; ... (0,6)=7; (1,0)=8; (2,0)=9; (3,0)=10; (4,0)=11; (5,0)=12; (6,0)=13.
+    // numbering: (0,0)=1, (0,1)=2 ... (0,6)=7, (1,0)=8, (2,0)=9, (3,0)=10, (4,0)=11, (5,0)=12, (6,0)=13
     const getCellNumber = (r, c) => {
-      if (r === 0 && c === 0) return 1;
-      if (r === 0) return c + 1;          // columns 1..7
-      if (c === 0) return 7 + r;           // rows 2..7 → 8..13
+      if (r === 0 && c >= 0 && c <= 6) return c + 1;          // 1..7
+      if (c === 0 && r >= 1 && r <= 6) return 7 + r;          // 8..13
       return null;
     };
 
-    // clues (matching numbers)
+    // clues (descriptive, elegant)
     const acrossClues = {
-      1: 'Crosses, signs',
-      8: 'Radiant beams',
-      9: 'Overlap layers',
-      10: 'Evening skies',
-      11: 'Detection devices',
-      12: 'Basic unit',
-      13: 'Twists together'
+      1: 'Row 1: Sunday paper section?',
+      8: 'Row 2: like spokes from a hub',
+      9: 'Row 3: to extend over',
+      10: 'Row 4: day’s end in the sky',
+      11: 'Row 5: detection devices',
+      12: 'Row 6: basic chemical unit',
+      13: 'Row 7: locks of hair or rope'
     };
     const downClues = {
-      1: 'First column (C R O S S E S)',
-      2: 'Second column word',
-      3: 'Third column',
-      4: 'Fourth column',
-      5: 'Fifth column',
-      6: 'Sixth column',
-      7: 'Seventh column'
+      1: 'Column 1: start of a puzzle',
+      2: 'Column 2: through the air',
+      3: 'Column 3: ocean motion',
+      4: 'Column 4: celestial body',
+      5: 'Column 5: perceive with eyes',
+      6: 'Column 6: being present',
+      7: 'Column 7: final letters'
     };
 
-    // --- STATE ---
-    let gridValues = Array(7).fill().map(() => Array(7).fill(''));   // current user input
-    let timerInterval = null;
-    let secondsElapsed = 0;
-    let timerStarted = false;
+    // --- state ---
+    let userGrid = Array(7).fill().map(() => Array(7).fill(''));
     let puzzleCompleted = false;
-    let restartFirstClick = true;          // first restart redirects
-    const DARK_STORAGE_KEY = 'crosswordDarkMode';
+    let firstRestart = true;               // first click redirect
+    let activeRow = null, activeCol = null;
 
     // DOM elements
     const gridContainer = document.getElementById('gridContainer');
-    const timerDisplay = document.getElementById('timerDisplay');
     const restartBtn = document.getElementById('restartBtn');
-    const darkToggle = document.getElementById('darkModeToggle');
+    const themeToggle = document.getElementById('themeToggle');
+    const lightIcon = document.getElementById('lightIcon');
+    const darkIcon = document.getElementById('darkIcon');
     const acrossList = document.getElementById('acrossCluesList');
     const downList = document.getElementById('downCluesList');
     const winModal = document.getElementById('winModal');
-    const winTimeSpan = document.getElementById('winTime');
     const closeModalBtn = document.getElementById('closeModalBtn');
     const supportBtn = document.getElementById('supportBtn');
 
     // --- helper functions ---
-    function formatTime(sec) {
-      const m = Math.floor(sec / 60).toString().padStart(2, '0');
-      const s = (sec % 60).toString().padStart(2, '0');
-      return `${m}:${s}`;
+    function removeHighlights() {
+      document.querySelectorAll('.cell').forEach(cell => {
+        cell.classList.remove('highlight-row', 'highlight-col');
+      });
     }
 
-    function stopTimer() {
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
+    function highlightWord(row, col) {
+      removeHighlights();
+      if (row === undefined || col === undefined) return;
+      document.querySelectorAll(`.cell[data-row="${row}"]`).forEach(c => c.classList.add('highlight-row'));
+      document.querySelectorAll(`.cell[data-col="${col}"]`).forEach(c => c.classList.add('highlight-col'));
+    }
+
+    function validateCell(row, col) {
+      const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+      const input = cell?.querySelector('input');
+      if (!input) return;
+      const val = input.value.toUpperCase();
+      if (val && val !== SOLUTION[row][col]) {
+        cell.classList.add('error');
+      } else {
+        cell.classList.remove('error');
       }
     }
 
-    function startTimerOnFirstInteraction() {
-      if (!timerStarted && !puzzleCompleted) {
-        timerStarted = true;
-        timerInterval = setInterval(() => {
-          secondsElapsed++;
-          timerDisplay.textContent = formatTime(secondsElapsed);
-        }, 1000);
+    function validateAll() {
+      for (let r = 0; r < 7; r++) {
+        for (let c = 0; c < 7; c++) {
+          validateCell(r, c);
+        }
       }
     }
 
-    // reset timer (stop and set to 0)
-    function resetTimer() {
-      stopTimer();
-      secondsElapsed = 0;
-      timerStarted = false;
-      timerDisplay.textContent = formatTime(0);
-    }
-
-    // check win condition
     function checkWin() {
       for (let r = 0; r < 7; r++) {
         for (let c = 0; c < 7; c++) {
           const cell = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"] input`);
-          if (!cell) return false;
-          const val = cell.value.toUpperCase();
-          if (val !== SOLUTION[r][c]) return false;
+          if (!cell || cell.value.toUpperCase() !== SOLUTION[r][c]) return false;
         }
       }
       return true;
@@ -617,61 +601,20 @@
     function handleWin() {
       if (puzzleCompleted) return;
       puzzleCompleted = true;
-      stopTimer();
-      winTimeSpan.textContent = `Time: ${formatTime(secondsElapsed)}`;
       winModal.classList.add('show');
     }
 
-    // highlight active word (row + col) and matching letters
-    function updateHighlights(activeRow, activeCol, currentValue) {
-      // remove existing highlights
-      document.querySelectorAll('.cell').forEach(cell => {
-        cell.classList.remove('highlight-word', 'highlight-letter');
-      });
-
-      if (activeRow === undefined || activeCol === undefined) return;
-
-      // highlight row & col (active word)
-      document.querySelectorAll(`.cell[data-row="${activeRow}"]`).forEach(c => c.classList.add('highlight-word'));
-      document.querySelectorAll(`.cell[data-col="${activeCol}"]`).forEach(c => c.classList.add('highlight-word'));
-
-      // highlight matching letters (if current cell has a letter)
-      if (currentValue && currentValue.match(/[A-Z]/i)) {
-        const letter = currentValue.toUpperCase();
-        document.querySelectorAll('.cell input').forEach(inp => {
-          if (inp.value.toUpperCase() === letter) {
-            inp.closest('.cell').classList.add('highlight-letter');
-          }
-        });
-      }
-    }
-
-    // real‑time validation – mark errors
-    function validateAllCells() {
-      document.querySelectorAll('.cell').forEach(cell => {
-        const row = parseInt(cell.dataset.row);
-        const col = parseInt(cell.dataset.col);
-        const input = cell.querySelector('input');
-        if (!input) return;
-        const val = input.value.toUpperCase();
-        if (val && val !== SOLUTION[row][col]) {
-          cell.classList.add('error');
-        } else {
-          cell.classList.remove('error');
-        }
-      });
-    }
-
-    // rebuild grid from state (used on restart)
+    // rebuild grid from userGrid
     function renderGrid() {
       gridContainer.innerHTML = '';
       for (let r = 0; r < 7; r++) {
         for (let c = 0; c < 7; c++) {
           const cell = document.createElement('div');
           cell.className = 'cell';
-          if (getCellNumber(r, c)) {
+          const num = getCellNumber(r, c);
+          if (num) {
             cell.classList.add('numbered');
-            cell.setAttribute('data-number', getCellNumber(r, c));
+            cell.setAttribute('data-number', num);
           }
           cell.dataset.row = r;
           cell.dataset.col = c;
@@ -679,45 +622,51 @@
           const input = document.createElement('input');
           input.type = 'text';
           input.maxLength = 1;
-          input.value = gridValues[r][c] || '';
+          input.value = userGrid[r][c] || '';
 
-          // event handlers
+          // focus event – highlight word
           input.addEventListener('focus', (e) => {
             const row = parseInt(e.target.closest('.cell').dataset.row);
             const col = parseInt(e.target.closest('.cell').dataset.col);
-            const val = e.target.value;
-            updateHighlights(row, col, val);
+            activeRow = row; activeCol = col;
+            highlightWord(row, col);
           });
 
-          input.addEventListener('blur', () => {
-            // remove highlights? we keep active word highlight only on focus – but blur could clear.
-            // instead we keep word highlight from last focus, but it's fine.
-          });
-
+          // input handling
           input.addEventListener('input', (e) => {
             const row = parseInt(e.target.closest('.cell').dataset.row);
             const col = parseInt(e.target.closest('.cell').dataset.col);
             let val = e.target.value.toUpperCase().replace(/[^A-Z]/g, '');
             if (val.length > 1) val = val.charAt(0);
             e.target.value = val;
-            gridValues[row][col] = val;
+            userGrid[row][col] = val;
 
-            // start timer on first keystroke
-            if (!timerStarted && !puzzleCompleted) startTimerOnFirstInteraction();
-
-            // revalidate & check win
-            validateAllCells();
+            validateCell(row, col);
             if (checkWin()) handleWin();
+            // keep highlight
+            if (activeRow !== null && activeCol !== null) highlightWord(activeRow, activeCol);
+          });
 
-            // update highlights with current value
-            updateHighlights(row, col, val);
+          // keyboard navigation (arrow keys)
+          input.addEventListener('keydown', (e) => {
+            const row = parseInt(e.target.closest('.cell').dataset.row);
+            const col = parseInt(e.target.closest('.cell').dataset.col);
+            let newRow = row, newCol = col;
+            if (e.key === 'ArrowUp') newRow = Math.max(0, row-1);
+            else if (e.key === 'ArrowDown') newRow = Math.min(6, row+1);
+            else if (e.key === 'ArrowLeft') newCol = Math.max(0, col-1);
+            else if (e.key === 'ArrowRight') newCol = Math.min(6, col+1);
+            else return;
+
+            e.preventDefault();
+            const nextCell = document.querySelector(`.cell[data-row="${newRow}"][data-col="${newCol}"] input`);
+            if (nextCell) nextCell.focus();
           });
 
           cell.appendChild(input);
           gridContainer.appendChild(cell);
         }
       }
-
       // populate clues
       acrossList.innerHTML = '';
       downList.innerHTML = '';
@@ -737,74 +686,72 @@
       }
     }
 
-    // restart game (reset grid, timer, flags)
     function restartGame() {
-      // reset state
-      gridValues = Array(7).fill().map(() => Array(7).fill(''));
+      userGrid = Array(7).fill().map(() => Array(7).fill(''));
       puzzleCompleted = false;
-      resetTimer();
       renderGrid();
+      removeHighlights();
       winModal.classList.remove('show');
-      // remove any leftover highlights
-      updateHighlights(undefined, undefined);
+      activeRow = activeCol = null;
     }
 
     // --- event listeners ---
     restartBtn.addEventListener('click', () => {
-      if (restartFirstClick) {
-        restartFirstClick = false;
+      if (firstRestart) {
+        firstRestart = false;
         window.location.href = 'https://YOUR-LINK-HERE.com';
       } else {
         restartGame();
       }
     });
 
-    // dark mode
-    darkToggle.addEventListener('change', (e) => {
-      if (e.target.checked) {
-        document.body.classList.add('dark');
-        localStorage.setItem(DARK_STORAGE_KEY, 'dark');
+    // dark mode with localStorage
+    const body = document.body;
+    const LIGHT_ACTIVE = '☀️';
+    const DARK_ACTIVE = '🌙';
+    function setTheme(theme) {
+      if (theme === 'dark') {
+        body.classList.add('dark');
+        lightIcon.classList.remove('active');
+        darkIcon.classList.add('active');
       } else {
-        document.body.classList.remove('dark');
-        localStorage.setItem(DARK_STORAGE_KEY, 'light');
+        body.classList.remove('dark');
+        darkIcon.classList.remove('active');
+        lightIcon.classList.add('active');
       }
-    });
-
-    // load saved theme
-    const savedTheme = localStorage.getItem(DARK_STORAGE_KEY);
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      darkToggle.checked = true;
-    } else {
-      document.body.classList.remove('dark');
-      darkToggle.checked = false;
+      localStorage.setItem('crosswordTheme', theme);
     }
+    // init theme
+    const savedTheme = localStorage.getItem('crosswordTheme') || 'light';
+    setTheme(savedTheme);
+    themeToggle.addEventListener('click', () => {
+      const newTheme = body.classList.contains('dark') ? 'light' : 'dark';
+      setTheme(newTheme);
+    });
 
     // support button
     supportBtn.addEventListener('click', () => {
       window.open('https://YOUR-SUPPORT-LINK.com', '_blank');
     });
 
-    // modal close
+    // close modal
     closeModalBtn.addEventListener('click', () => {
       winModal.classList.remove('show');
     });
-
-    // optional: click outside modal closes it (but keep overlay)
     winModal.addEventListener('click', (e) => {
       if (e.target === winModal) winModal.classList.remove('show');
     });
 
-    // initial render
-    renderGrid();
-
-    // focus out handler: we want to clear word highlight when focus leaves grid? optional, but keep simple.
+    // remove highlights when clicking outside grid
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.cell')) {
-        // remove all word highlights, keep error and letter if any
-        document.querySelectorAll('.cell').forEach(c => c.classList.remove('highlight-word'));
+        removeHighlights();
+        activeRow = activeCol = null;
       }
     });
+
+    // initial render
+    renderGrid();
   })();
 </script>
 </body>
