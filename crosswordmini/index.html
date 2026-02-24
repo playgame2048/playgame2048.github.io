@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crossword Mini · premium edition</title>
+  <title>Crossword Mini · احترافي</title>
   <style>
     * {
       margin: 0;
@@ -12,177 +12,168 @@
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    /* CSS variables – modern, elegant palette */
     :root {
-      --bg-gradient: linear-gradient(145deg, #f1f5f9 0%, #eef2f6 100%);
-      --surface: rgba(255,255,255,0.75);
-      --surface-solid: #ffffff;
-      --text-primary: #1e293b;
-      --text-secondary: #475569;
-      --border-light: rgba(203, 213, 225, 0.6);
-      --accent: #3b82f6;
-      --accent-soft: #dbeafe;
-      --highlight-row: rgba(59, 130, 246, 0.08);
-      --highlight-col: rgba(59, 130, 246, 0.05);
-      --error: #f87171;
-      --error-bg: #fee2e2;
-      --shadow-sm: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,20,40,0.02);
-      --shadow-md: 0 20px 30px -10px rgba(0,20,40,0.1);
-      --shadow-lg: 0 30px 40px -15px rgba(0,20,40,0.15);
-      --glass-bg: rgba(255,255,255,0.6);
-      --glass-border: rgba(255,255,255,0.8);
-      --backdrop-blur: blur(12px);
-      --transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+      --bg-light: #f4f7fc;
+      --surface-light: #ffffff;
+      --text-light: #1a2b3c;
+      --text-soft-light: #33475b;
+      --border-light: #d9e2ec;
+      --accent-light: #2c6e9c;
+      --accent-soft-light: #d6e6f5;
+      --highlight-row-light: rgba(44,110,156,0.05);
+      --highlight-col-light: rgba(44,110,156,0.03);
+      --error-light: #bc4b4b;
+      --error-bg-light: #ffebeb;
+      --shadow-sm: 0 8px 18px -8px rgba(0,30,50,0.08);
+      --shadow-md: 0 16px 28px -12px rgba(0,40,70,0.15);
+      --shadow-lg: 0 30px 45px -20px rgba(0,40,70,0.2);
+      --glass-bg: rgba(255,255,255,0.5);
+      --transition: all 0.2s ease;
     }
 
     body.dark {
-      --bg-gradient: linear-gradient(145deg, #0b1423 0%, #101b2b 100%);
-      --surface: rgba(30, 41, 59, 0.7);
-      --surface-solid: #1e293b;
-      --text-primary: #f1f5f9;
-      --text-secondary: #cbd5e1;
-      --border-light: rgba(71, 85, 105, 0.5);
-      --accent: #60a5fa;
-      --accent-soft: #1e3a5f;
-      --highlight-row: rgba(96, 165, 250, 0.15);
-      --highlight-col: rgba(96, 165, 250, 0.1);
-      --error: #fca5a5;
-      --error-bg: #451a1a;
-      --glass-bg: rgba(15, 23, 42, 0.6);
-      --glass-border: rgba(71, 85, 105, 0.4);
+      --bg-light: #121c28;
+      --surface-light: #1f2e3f;
+      --text-light: #e6f0fa;
+      --text-soft-light: #bfd3e8;
+      --border-light: #314d68;
+      --accent-light: #6da5d1;
+      --accent-soft-light: #254462;
+      --highlight-row-light: rgba(109,165,209,0.15);
+      --highlight-col-light: rgba(109,165,209,0.1);
+      --error-light: #e18982;
+      --error-bg-light: #392a2a;
+      --glass-bg: rgba(25, 40, 55, 0.7);
     }
 
     body {
-      background: var(--bg-gradient);
-      color: var(--text-primary);
+      background: var(--bg-light);
+      color: var(--text-light);
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center;
       padding: 2rem 1.5rem;
-      transition: background 0.4s ease, color 0.3s ease;
-      backdrop-filter: var(--backdrop-blur);
-      -webkit-font-smoothing: antialiased;
+      transition: background 0.3s, color 0.2s;
+      line-height: 1.5;
     }
 
-    .app-wrapper {
-      max-width: 1300px;
+    .app-container {
+      max-width: 1200px;
       width: 100%;
     }
 
-    /* header */
-    .header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2.5rem;
-      flex-wrap: wrap;
-      gap: 1.2rem;
+    /* ----- العنوان الكبير في الوسط ----- */
+    .main-title {
+      text-align: center;
+      font-size: 3.2rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 1.2rem;
+      color: var(--text-light);
     }
 
-    .restart-btn {
-      background: var(--surface);
+    /* ----- شريط الأزرار تحت العنوان ----- */
+    .action-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2.8rem;
+      flex-wrap: wrap;
+    }
+
+    /* زر dark mode مع نص */
+    .theme-toggle-btn {
+      background: var(--surface-light);
       border: 1px solid var(--border-light);
-      backdrop-filter: blur(8px);
-      padding: 0.7rem 2rem;
       border-radius: 60px;
+      padding: 0.6rem 1.5rem 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .theme-toggle-btn:hover {
+      background: var(--accent-soft-light);
+      border-color: var(--accent-light);
+    }
+
+    .theme-toggle-btn span {
+      font-size: 1.3rem;
+    }
+
+    /* زر restart مع نص */
+    .restart-btn {
+      background: var(--surface-light);
+      border: 1px solid var(--border-light);
+      border-radius: 60px;
+      padding: 0.6rem 1.8rem;
       font-weight: 550;
       font-size: 1rem;
-      color: var(--text-primary);
+      color: var(--text-light);
       cursor: pointer;
       box-shadow: var(--shadow-sm);
       transition: var(--transition);
-      letter-spacing: -0.2px;
     }
 
     .restart-btn:hover {
-      background: var(--accent-soft);
-      border-color: var(--accent);
+      background: var(--accent-soft-light);
+      border-color: var(--accent-light);
       transform: scale(1.02);
-      box-shadow: var(--shadow-md);
     }
 
-    /* dark mode toggle with icons */
-    .theme-toggle {
-      background: var(--surface);
-      border: 1px solid var(--border-light);
-      backdrop-filter: blur(8px);
-      border-radius: 40px;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      padding: 0.2rem;
-      cursor: pointer;
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
-    }
-
-    .theme-toggle span {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 30px;
-      font-size: 1.3rem;
-      transition: 0.2s;
-      color: var(--text-secondary);
-    }
-
-    .theme-toggle .active {
-      background: var(--accent-soft);
-      color: var(--accent);
-    }
-
-    /* main game area */
-    .game-area {
+    /* ----- منطقة اللعب: grid + clues متجاورين و متقاربين ----- */
+    .game-layout {
       display: flex;
       flex-direction: row;
-      gap: 2.2rem;
+      gap: 1.5rem; /* متقاربين */
       flex-wrap: wrap;
       justify-content: center;
       margin-bottom: 3.5rem;
     }
 
+    /* الشبكة مصغرة و متقاربة */
     .crossword-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-      background: var(--surface);
-      backdrop-filter: blur(16px);
-      padding: 1.8rem;
-      border-radius: 36px;
+      gap: 4px; /* متقاربة جداً */
+      background: var(--surface-light);
+      backdrop-filter: blur(8px);
+      padding: 1.2rem;
+      border-radius: 28px;
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border-light);
-      max-width: 550px;
+      max-width: 480px;
       width: fit-content;
-      transition: background 0.3s;
     }
 
     .cell {
       aspect-ratio: 1 / 1;
-      width: 60px;
-      background: var(--surface-solid);
+      width: 52px; /* أصغر قليلاً */
+      background: var(--surface-light);
       border: 2px solid var(--border-light);
-      border-radius: 18px;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      transition: border 0.15s, box-shadow 0.2s, transform 0.1s;
+      transition: border 0.15s, box-shadow 0.2s;
       box-shadow: var(--shadow-sm);
     }
 
     .cell.numbered::before {
       content: attr(data-number);
       position: absolute;
-      top: 4px;
-      left: 6px;
-      font-size: 0.7rem;
+      top: 2px;
+      left: 4px;
+      font-size: 0.65rem;
       font-weight: 600;
-      color: var(--text-secondary);
+      color: var(--text-soft-light);
       opacity: 0.8;
-      pointer-events: none;
     }
 
     .cell input {
@@ -191,61 +182,56 @@
       border: none;
       background: transparent;
       text-align: center;
-      font-size: 1.7rem;
+      font-size: 1.6rem;
       font-weight: 550;
       text-transform: uppercase;
-      color: var(--text-primary);
+      color: var(--text-light);
       outline: none;
-      border-radius: 16px;
-      caret-color: var(--accent);
+      border-radius: 14px;
+      caret-color: var(--accent-light);
     }
 
-    /* focus animation */
     .cell:focus-within {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 4px var(--accent-soft);
-      transform: scale(1.02);
+      border-color: var(--accent-light);
+      box-shadow: 0 0 0 3px var(--accent-soft-light);
+      transform: scale(1.01);
     }
 
-    /* highlight for active word (row + col) */
     .cell.highlight-row {
-      background-color: var(--highlight-row);
+      background-color: var(--highlight-row-light);
     }
     .cell.highlight-col {
-      background-color: var(--highlight-col);
+      background-color: var(--highlight-col-light);
     }
 
-    /* error state */
     .cell.error {
-      background-color: var(--error-bg);
-      border-color: var(--error);
+      background-color: var(--error-bg-light);
+      border-color: var(--error-light);
     }
 
-    /* clues panel */
+    /* لوحة clues مصغرة (45% من المساحة) */
     .clues-panel {
-      background: var(--surface);
-      backdrop-filter: blur(16px);
-      border-radius: 36px;
-      padding: 2rem 2rem;
+      background: var(--surface-light);
+      backdrop-filter: blur(8px);
+      border-radius: 28px;
+      padding: 1.5rem 1.2rem;
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border-light);
-      min-width: 270px;
-      flex: 1 1 280px;
-      transition: background 0.3s;
+      width: 280px; /* ثابت و صغير */
+      flex-shrink: 0;
     }
 
     .clues-panel h3 {
       font-weight: 600;
-      font-size: 1.2rem;
-      margin-bottom: 1.4rem;
-      letter-spacing: -0.2px;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      border-bottom: 3px solid var(--accent-soft-light);
       display: inline-block;
-      border-bottom: 3px solid var(--accent-soft);
-      padding-bottom: 0.3rem;
+      padding-bottom: 0.2rem;
     }
 
     .clue-section {
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .clue-list {
@@ -253,120 +239,123 @@
     }
 
     .clue-list li {
-      padding: 0.5rem 0;
+      padding: 0.3rem 0;
       border-bottom: 1px dashed var(--border-light);
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       display: flex;
-      gap: 0.8rem;
-      color: var(--text-secondary);
-      line-height: 1.5;
+      gap: 0.5rem;
+      color: var(--text-soft-light);
     }
 
     .clue-number {
       font-weight: 700;
-      color: var(--accent);
-      min-width: 28px;
+      color: var(--accent-light);
+      min-width: 24px;
     }
 
-    /* blog cards */
+    /* ----- BLOG SECTION مع تقسيم احترافي: Basic Rules / Pro Techniques / Tips ----- */
     .blog-section {
-      margin: 4rem 0 2.5rem;
+      margin: 3.5rem 0 2.5rem;
     }
 
     .blog-section h2 {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 650;
       margin-bottom: 2rem;
-      letter-spacing: -0.02em;
+      text-align: left;
     }
 
-    .blog-cards {
-      display: flex;
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 1.8rem;
-      flex-wrap: wrap;
     }
 
     .blog-card {
-      background: var(--surface);
-      backdrop-filter: blur(10px);
-      padding: 2rem;
-      border-radius: 30px;
+      background: var(--surface-light);
+      backdrop-filter: blur(8px);
+      padding: 1.8rem;
+      border-radius: 28px;
       box-shadow: var(--shadow-md);
       border: 1px solid var(--border-light);
-      flex: 1 1 250px;
       transition: var(--transition);
     }
 
     .blog-card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-4px);
       box-shadow: var(--shadow-lg);
     }
 
     .blog-card h3 {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 600;
-      margin-bottom: 1rem;
-      color: var(--accent);
+      margin-bottom: 1.2rem;
+      color: var(--accent-light);
     }
 
     .blog-card p {
-      color: var(--text-secondary);
+      color: var(--text-soft-light);
       line-height: 1.6;
+      font-size: 0.95rem;
     }
 
-    /* support glass card */
+    .blog-card ul {
+      margin-top: 0.8rem;
+      padding-left: 1.2rem;
+      color: var(--text-soft-light);
+    }
+    .blog-card li {
+      margin-bottom: 0.4rem;
+    }
+
+    /* ----- SUPPORT CARD ----- */
     .support-card {
       background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      border-radius: 48px;
-      padding: 3rem 2.5rem;
+      backdrop-filter: blur(12px);
+      border-radius: 40px;
+      padding: 2.5rem 2rem;
       box-shadow: var(--shadow-lg);
-      border: 1px solid var(--glass-border);
+      border: 1px solid var(--border-light);
       text-align: center;
-      max-width: 700px;
-      margin: 3rem auto 0;
+      max-width: 680px;
+      margin: 2.5rem auto 1rem;
     }
 
     .support-card p {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       margin-bottom: 2rem;
-      color: var(--text-primary);
-      font-weight: 450;
+      color: var(--text-light);
     }
 
-    .premium-btn {
-      background: var(--accent);
+    .support-btn {
+      background: var(--accent-light);
       border: none;
       color: white;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 600;
-      padding: 1.2rem 3.5rem;
-      border-radius: 60px;
+      padding: 1rem 3rem;
+      border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 10px 20px -5px rgba(59,130,246,0.4);
+      box-shadow: 0 8px 18px -6px var(--accent-light);
       transition: 0.2s;
-      border: 1px solid rgba(255,255,255,0.2);
     }
 
-    .premium-btn:hover {
-      background: #2563eb;
+    .support-btn:hover {
+      background: #1f5a9e;
       transform: scale(1.02);
-      box-shadow: 0 20px 25px -5px rgba(59,130,246,0.5);
     }
 
     .support-link {
-      margin-top: 1.5rem;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      word-break: break-all;
-      opacity: 0.8;
+      margin-top: 1.2rem;
+      font-size: 0.85rem;
+      color: var(--text-soft-light);
     }
 
-    /* win modal */
+    /* ----- WIN MODAL ----- */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.3);
+      background: rgba(0,0,0,0.25);
       backdrop-filter: blur(10px);
       display: flex;
       align-items: center;
@@ -383,70 +372,61 @@
     }
 
     .win-modal {
-      background: var(--surface-solid);
-      padding: 3rem 4rem;
-      border-radius: 60px;
+      background: var(--surface-light);
+      padding: 2.8rem 3.5rem;
+      border-radius: 56px;
       box-shadow: var(--shadow-lg);
       text-align: center;
-      max-width: 450px;
+      max-width: 420px;
       border: 1px solid var(--border-light);
-      animation: slideUp 0.5s ease;
+      animation: modalPop 0.4s ease;
     }
 
-    @keyframes slideUp {
-      0% { transform: translateY(30px) scale(0.95); opacity: 0; }
-      100% { transform: translateY(0) scale(1); opacity: 1; }
+    @keyframes modalPop {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     .win-modal h2 {
       font-size: 2.8rem;
-      margin-bottom: 1.2rem;
-      color: var(--accent);
-      font-weight: 700;
-    }
-
-    .win-modal p {
-      font-size: 1.2rem;
-      margin-bottom: 2.5rem;
-      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      color: var(--accent-light);
     }
 
     .win-modal button {
-      background: var(--accent);
+      background: var(--accent-light);
       border: none;
       color: white;
-      font-size: 1.3rem;
-      padding: 1rem 3rem;
+      font-size: 1.2rem;
+      padding: 0.8rem 2.5rem;
       border-radius: 50px;
       cursor: pointer;
-      font-weight: 600;
     }
 
     /* responsive */
-    @media (max-width: 700px) {
-      .cell { width: 45px; }
-      .crossword-grid { padding: 1rem; gap: 5px; }
-    }
-    @media (max-width: 500px) {
-      .cell { width: 38px; }
-      .cell input { font-size: 1.3rem; }
+    @media (max-width: 800px) {
+      .blog-grid { grid-template-columns: 1fr; }
+      .game-layout { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
 <body>
-<div class="app-wrapper">
+<div class="app-container">
 
-  <!-- header -->
-  <div class="header-bar">
-    <button class="restart-btn" id="restartBtn">↻ Restart</button>
-    <div class="theme-toggle" id="themeToggle">
-      <span id="lightIcon">☀️</span>
-      <span id="darkIcon">🌙</span>
+  <!-- عنوان كبير في الوسط -->
+  <h1 class="main-title">Crossword Mini</h1>
+
+  <!-- شريط الأزرار: dark mode + restart -->
+  <div class="action-bar">
+    <div class="theme-toggle-btn" id="themeToggle">
+      <span id="themeIcon">☀️</span>
+      <span id="themeText">Dark mode</span>
     </div>
+    <button class="restart-btn" id="restartBtn">↻ Restart</button>
   </div>
 
-  <!-- game grid + clues -->
-  <div class="game-area">
+  <!-- منطقة اللعب: grid + clues (متقاربين) -->
+  <div class="game-layout">
     <div id="gridContainer" class="crossword-grid"></div>
     <div class="clues-panel">
       <div class="clue-section">
@@ -460,29 +440,44 @@
     </div>
   </div>
 
-  <!-- blog section -->
+  <!-- blog section مقسمة: Basic Rules / Pro Techniques / Tips -->
   <div class="blog-section">
-    <h2>How to play Crossword Mini</h2>
-    <div class="blog-cards">
+    <h2>📘 How to Play Crossword Mini</h2>
+    <div class="blog-grid">
       <div class="blog-card">
-        <h3>📋 Basic rules</h3>
-        <p>Fill the 7x7 grid so every row and column forms a valid word. Each white cell accepts one letter. Numbers show where a word starts. Use the clues on the right.</p>
+        <h3>Basic Rules</h3>
+        <p>Fill the 7×7 grid with letters so every row and column forms a word. Numbers indicate start of a word. Use the clues on the left.</p>
+        <ul>
+          <li>One letter per white cell</li>
+          <li>No skipping cells</li>
+          <li>All words are valid</li>
+        </ul>
       </div>
       <div class="blog-card">
-        <h3>⚡ Tips to solve faster</h3>
-        <p>Start with words you’re certain about. Use crossing letters to eliminate options. The highlighted row/col helps you focus on one word at a time.</p>
+        <h3>Pro Techniques</h3>
+        <p>Use crossing letters to your advantage. Start with words you know, then use the intersecting letters to guess others.</p>
+        <ul>
+          <li>Look for common prefixes</li>
+          <li>Vowels appear often</li>
+          <li>Check word length</li>
+        </ul>
       </div>
       <div class="blog-card">
-        <h3>🧩 Pro techniques</h3>
-        <p>Look for high‑frequency letters (E, T, A). If a cell turns red, double‑check the clue. The puzzle is solved when all cells are green-free (no red).</p>
+        <h3>Smart Tips</h3>
+        <p>The highlighted row/column helps you focus. If a cell turns red, double‑check the clue. Practice daily to improve speed.</p>
+        <ul>
+          <li>Solve with pencil (mentally)</li>
+          <li>Use process of elimination</li>
+          <li>Keep a steady pace</li>
+        </ul>
       </div>
     </div>
   </div>
 
   <!-- support card -->
   <div class="support-card">
-    <p>✨ We pour love into every puzzle. If you enjoy the experience, consider supporting us — it helps us create more elegant crosswords.</p>
-    <button class="premium-btn" id="supportBtn">Support Us</button>
+    <p>✨ We craft every puzzle with care. If you enjoy Crosswords Mini, support us — it helps us create more elegant challenges.</p>
+    <button class="support-btn" id="supportBtn">Support Us</button>
     <div class="support-link">https://YOUR-SUPPORT-LINK.com</div>
   </div>
 
@@ -490,7 +485,7 @@
   <div class="modal-overlay" id="winModal">
     <div class="win-modal">
       <h2>Solved!</h2>
-      <p>Congratulations, puzzle complete.</p>
+      <p>Puzzle complete.</p>
       <button id="closeModalBtn">Continue</button>
     </div>
   </div>
@@ -498,7 +493,7 @@
 
 <script>
   (function() {
-    // --- PREMIUM 7x7 PUZZLE (solution) ---
+    // ---------- PUZZLE 7x7 ----------
     const SOLUTION = [
       ['C','R','O','S','S','E','S'],
       ['R','A','D','I','A','L','S'],
@@ -509,52 +504,48 @@
       ['S','T','R','A','N','D','S']
     ];
 
-    // numbering: (0,0)=1, (0,1)=2 ... (0,6)=7, (1,0)=8, (2,0)=9, (3,0)=10, (4,0)=11, (5,0)=12, (6,0)=13
     const getCellNumber = (r, c) => {
-      if (r === 0 && c >= 0 && c <= 6) return c + 1;          // 1..7
-      if (c === 0 && r >= 1 && r <= 6) return 7 + r;          // 8..13
+      if (c === 0) return r + 1;
+      if (r === 0 && c > 0) return 7 + c;
       return null;
     };
 
-    // clues (descriptive, elegant)
     const acrossClues = {
-      1: 'Row 1: Sunday paper section?',
-      8: 'Row 2: like spokes from a hub',
-      9: 'Row 3: to extend over',
-      10: 'Row 4: day’s end in the sky',
-      11: 'Row 5: detection devices',
-      12: 'Row 6: basic chemical unit',
-      13: 'Row 7: locks of hair or rope'
+      1: 'Row 1: Sunday section?',
+      2: 'Row 2: like spokes',
+      3: 'Row 3: to extend over',
+      4: 'Row 4: day’s end',
+      5: 'Row 5: detectors',
+      6: 'Row 6: basic unit',
+      7: 'Row 7: locks or rope'
     };
     const downClues = {
-      1: 'Column 1: start of a puzzle',
-      2: 'Column 2: through the air',
-      3: 'Column 3: ocean motion',
-      4: 'Column 4: celestial body',
-      5: 'Column 5: perceive with eyes',
-      6: 'Column 6: being present',
-      7: 'Column 7: final letters'
+      1: 'Column 1: start',
+      8: 'Column 2: through air',
+      9: 'Column 3: ocean motion',
+      10: 'Column 4: celestial',
+      11: 'Column 5: perceive',
+      12: 'Column 6: present',
+      13: 'Column 7: final letters'
     };
 
-    // --- state ---
     let userGrid = Array(7).fill().map(() => Array(7).fill(''));
     let puzzleCompleted = false;
-    let firstRestart = true;               // first click redirect
     let activeRow = null, activeCol = null;
 
-    // DOM elements
+    let firstClickDone = sessionStorage.getItem('crosswordRestartFirst') === 'true';
+
     const gridContainer = document.getElementById('gridContainer');
     const restartBtn = document.getElementById('restartBtn');
     const themeToggle = document.getElementById('themeToggle');
-    const lightIcon = document.getElementById('lightIcon');
-    const darkIcon = document.getElementById('darkIcon');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeText = document.getElementById('themeText');
     const acrossList = document.getElementById('acrossCluesList');
     const downList = document.getElementById('downCluesList');
     const winModal = document.getElementById('winModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
     const supportBtn = document.getElementById('supportBtn');
 
-    // --- helper functions ---
     function removeHighlights() {
       document.querySelectorAll('.cell').forEach(cell => {
         cell.classList.remove('highlight-row', 'highlight-col');
@@ -582,9 +573,7 @@
 
     function validateAll() {
       for (let r = 0; r < 7; r++) {
-        for (let c = 0; c < 7; c++) {
-          validateCell(r, c);
-        }
+        for (let c = 0; c < 7; c++) validateCell(r, c);
       }
     }
 
@@ -604,7 +593,15 @@
       winModal.classList.add('show');
     }
 
-    // rebuild grid from userGrid
+    function resetGame() {
+      userGrid = Array(7).fill().map(() => Array(7).fill(''));
+      puzzleCompleted = false;
+      renderGrid();
+      removeHighlights();
+      activeRow = activeCol = null;
+      winModal.classList.remove('show');
+    }
+
     function renderGrid() {
       gridContainer.innerHTML = '';
       for (let r = 0; r < 7; r++) {
@@ -624,7 +621,6 @@
           input.maxLength = 1;
           input.value = userGrid[r][c] || '';
 
-          // focus event – highlight word
           input.addEventListener('focus', (e) => {
             const row = parseInt(e.target.closest('.cell').dataset.row);
             const col = parseInt(e.target.closest('.cell').dataset.col);
@@ -632,7 +628,6 @@
             highlightWord(row, col);
           });
 
-          // input handling
           input.addEventListener('input', (e) => {
             const row = parseInt(e.target.closest('.cell').dataset.row);
             const col = parseInt(e.target.closest('.cell').dataset.col);
@@ -643,11 +638,9 @@
 
             validateCell(row, col);
             if (checkWin()) handleWin();
-            // keep highlight
             if (activeRow !== null && activeCol !== null) highlightWord(activeRow, activeCol);
           });
 
-          // keyboard navigation (arrow keys)
           input.addEventListener('keydown', (e) => {
             const row = parseInt(e.target.closest('.cell').dataset.row);
             const col = parseInt(e.target.closest('.cell').dataset.col);
@@ -657,7 +650,6 @@
             else if (e.key === 'ArrowLeft') newCol = Math.max(0, col-1);
             else if (e.key === 'ArrowRight') newCol = Math.min(6, col+1);
             else return;
-
             e.preventDefault();
             const nextCell = document.querySelector(`.cell[data-row="${newRow}"][data-col="${newCol}"] input`);
             if (nextCell) nextCell.focus();
@@ -667,17 +659,17 @@
           gridContainer.appendChild(cell);
         }
       }
-      // populate clues
+
       acrossList.innerHTML = '';
       downList.innerHTML = '';
-      for (let i = 1; i <= 13; i++) {
+      for (let i = 1; i <= 7; i++) {
         if (acrossClues[i]) {
           const li = document.createElement('li');
           li.innerHTML = `<span class="clue-number">${i}</span> ${acrossClues[i]}`;
           acrossList.appendChild(li);
         }
       }
-      for (let i = 1; i <= 7; i++) {
+      for (let i = 1; i <= 13; i++) {
         if (downClues[i]) {
           const li = document.createElement('li');
           li.innerHTML = `<span class="clue-number">${i}</span> ${downClues[i]}`;
@@ -686,42 +678,31 @@
       }
     }
 
-    function restartGame() {
-      userGrid = Array(7).fill().map(() => Array(7).fill(''));
-      puzzleCompleted = false;
-      renderGrid();
-      removeHighlights();
-      winModal.classList.remove('show');
-      activeRow = activeCol = null;
-    }
-
-    // --- event listeners ---
+    // restart with first-click redirect
     restartBtn.addEventListener('click', () => {
-      if (firstRestart) {
-        firstRestart = false;
+      if (!firstClickDone) {
+        firstClickDone = true;
+        sessionStorage.setItem('crosswordRestartFirst', 'true');
         window.location.href = 'https://YOUR-LINK-HERE.com';
       } else {
-        restartGame();
+        resetGame();
       }
     });
 
-    // dark mode with localStorage
+    // dark mode toggle with text
     const body = document.body;
-    const LIGHT_ACTIVE = '☀️';
-    const DARK_ACTIVE = '🌙';
     function setTheme(theme) {
       if (theme === 'dark') {
         body.classList.add('dark');
-        lightIcon.classList.remove('active');
-        darkIcon.classList.add('active');
+        themeIcon.textContent = '🌙';
+        themeText.textContent = 'Light mode';
       } else {
         body.classList.remove('dark');
-        darkIcon.classList.remove('active');
-        lightIcon.classList.add('active');
+        themeIcon.textContent = '☀️';
+        themeText.textContent = 'Dark mode';
       }
       localStorage.setItem('crosswordTheme', theme);
     }
-    // init theme
     const savedTheme = localStorage.getItem('crosswordTheme') || 'light';
     setTheme(savedTheme);
     themeToggle.addEventListener('click', () => {
@@ -729,12 +710,10 @@
       setTheme(newTheme);
     });
 
-    // support button
     supportBtn.addEventListener('click', () => {
       window.open('https://YOUR-SUPPORT-LINK.com', '_blank');
     });
 
-    // close modal
     closeModalBtn.addEventListener('click', () => {
       winModal.classList.remove('show');
     });
@@ -742,7 +721,6 @@
       if (e.target === winModal) winModal.classList.remove('show');
     });
 
-    // remove highlights when clicking outside grid
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.cell')) {
         removeHighlights();
@@ -750,7 +728,6 @@
       }
     });
 
-    // initial render
     renderGrid();
   })();
 </script>
