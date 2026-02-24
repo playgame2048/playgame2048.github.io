@@ -177,8 +177,11 @@
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
+      width: fit-content;
+      min-width: 280px; 
       background: var(--card-bg);
       padding: 2rem 1.5rem;
+      align-self: center;
       border-radius: 40px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       margin-top: 70px; 
@@ -190,10 +193,12 @@
       border: 2px solid var(--border-light);
       color: var(--text-primary);
       font-weight: 800;
-      padding: 1rem 0.8rem;
+      padding: 1rem 2.5rem;
       border-radius: 60px;
       cursor: pointer;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
+      white-space: nowrap;
+      width: 100%;  
       transition: all 0.15s;
       box-shadow: 0 8px 15px rgba(0,0,0,0.1);
       text-align: center;
