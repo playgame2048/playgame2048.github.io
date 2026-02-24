@@ -343,20 +343,38 @@
       display: inline-block;
     }
 
-    .subsections {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-top: 1.5rem;
-}
-
-   .card {
-  background: var(--bg-page);
-  padding: 1.8rem 1.5rem;
-  border-radius: 28px;
+  .subsections {
+  background: var(--bg-page);           /* نفس خلفية support */
+  border-radius: 28px;                   /* نفس الحواف المدورة */
+  padding: 2rem;                          /* نفس البادينغ */
   box-shadow: 0 8px 20px rgba(0,0,0,0.05), inset 0 1px 3px rgba(255,255,255,0.3);
   border: 1px solid var(--border-light);
-  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;                 /* العناصر تحت بعض */
+  gap: 2rem;                               /* مسافة بين الأقسام */
+  margin-top: 1rem;
+}
+
+.card {
+  background: transparent;                /* شفاف باش يبان لون الخلفية */
+  padding: 0;                              /* البادينغ من الحاوية الكبيرة */
+  box-shadow: none;                        /* لا ظل */
+  border: none;                            /* لا حدود */
+}
+
+.card h3 {
+  font-size: 1.6rem;
+  margin-bottom: 0.8rem;
+  color: var(--accent-blue);
+  border-bottom: 2px solid var(--accent-blue);
+  padding-bottom: 0.3rem;
+  display: inline-block;
+}
+
+.card p, .card ul {
+  color: var(--text-soft);
+  line-height: 1.6;
+  margin-top: 0.5rem;
 }
 
     .card:hover {
@@ -364,22 +382,6 @@
   box-shadow: 0 15px 30px rgba(0,0,0,0.1);
 }
     
-.card h3 {
-  font-size: 1.6rem;
-  margin-bottom: 1rem;
-  color: var(--accent-blue);
-  border-bottom: 2px solid var(--accent-blue);
-  padding-bottom: 0.5rem;
-  display: inline-block;
-}
-    
- .card p, .card ul {
-  color: var(--text-soft);
-  line-height: 1.6;
-  font-size: 1rem;
-}
-
-
     .support-area {
       margin-top: 2rem;
       background: var(--bg-page);
@@ -476,9 +478,9 @@
 
     /* responsive: stack on small screens */
   /* للشاشات الصغيرة */
-    @media (max-width: 700px) {
+@media (max-width: 700px) {
   .subsections {
-    grid-template-columns: 1fr;
+    padding: 1.5rem;
     gap: 1.5rem;
   }
 }
@@ -558,14 +560,14 @@
       </div>
       <div class="card">
         <h3>⚡ Pro Tips</h3>
-        <p>In AI mode, observe random moves – but you can exploit patterns. Use the diagonal lines early. Never play directly under an opponent's disc without blocking.</p>
+        <p>In AI mode, observe random moves, but you can exploit patterns. Use the diagonal lines early. Never play directly under an opponent's disc without blocking.</p>
       </div>
     </div>
 
     <div class="support-area">
       <h2>🤝 Support Us</h2>
       <p style="margin: 0.5rem 0 1rem; font-size: 1.2rem;">If you enjoy this classic, consider supporting more projects like this.</p>
-      <button class="support-btn" id="supportBtn">Support Us</button>
+      <button class="support-btn" id="supportBtn">💖 Support Us</button>
     </div>
   </section>
 
