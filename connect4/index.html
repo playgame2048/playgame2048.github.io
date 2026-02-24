@@ -739,37 +739,93 @@
       return true;
     }
 
-    function aiMove() {
-      if (!gameActive || currentPlayer !== 2 || mode !== 'ai' || aiThinking) return;
-      aiThinking = true;
-      setBoardEnabled(false);
-      updateTurnText();
+    // 1. هاد الدالة كترجع ليك أول سطر خاوي فعامود (من تحت)
+function getLowestEmptyRow(col) {
+  for (let r = ROWS - 1; r >= 0; r--) {
+    if (board[r][col] === 0) return r;
+  }
+  return -1;
+}
 
-      setTimeout(() => {
-        if (!gameActive || currentPlayer !== 2 || mode !== 'ai') {
-          aiThinking = false;
-          setBoardEnabled(gameActive);
-          updateTurnText();
-          return;
-        }
-        const freeCols = [];
-        for (let c = 0; c < COLS; c++) {
-          if (columnFree(c)) freeCols.push(c);
-        }
-        if (freeCols.length === 0) {
-          aiThinking = false;
-          setBoardEnabled(gameActive);
-          updateTurnText();
-          return;
-        }
-        const randomCol = freeCols[Math.floor(Math.random() * freeCols.length)];
-        const success = makeMove(randomCol, 2);
-        aiThinking = false;
-        setBoardEnabled(gameActive && !(mode === 'ai' && currentPlayer === 2));
-        updateTurnText();
-      }, 280);
+// 2. هاد الدالة كتشوف واش كاين عامود يربح بيه player (1 ولا 2)
+function getWinningMoveForPlayer(player) {
+  for (let col = 0; col < COLS; col++) {
+    if (!columnFree(col)) continue;               // العامود عامر
+    let row = getLowestEmptyRow(col);
+    if (row === -1) continue;
+    
+    // نحطو قطعة تجريبية
+    board[row][col] = player;
+    let win = getWinningCells(row, col, player).length >= 4;
+    board[row][col] = 0;                          // نحيوها
+
+    if (win) return col;
+  }
+  return null; // ما لقيناش عامود يربح
+}
+
+function aiMove() {
+  if (!gameActive || currentPlayer !== 2 || mode !== 'ai' || aiThinking) return;
+  aiThinking = true;
+  setBoardEnabled(false);
+  updateTurnText();
+
+  setTimeout(() => {
+    if (!gameActive || currentPlayer !== 2 || mode !== 'ai') {
+      aiThinking = false;
+      setBoardEnabled(gameActive);
+      updateTurnText();
+      return;
     }
 
+    let moveCol = null;
+
+    // 1. نحاولو نربحو (AI)
+    moveCol = getWinningMoveForPlayer(2);
+
+    // 2. إيلا ما لقيناش، نحولو نصدو اللاعب باش مايربحش
+    if (moveCol === null) {
+      moveCol = getWinningMoveForPlayer(1);
+    }
+
+    // 3. إيلا ما كانتش فرصة ربح ولا صد، نختارو عامود عشوائي ولكن القلوب (3 و 4) عندهم فرصة أكبر
+    if (moveCol === null) {
+      const freeCols = [];
+      for (let c = 0; c < COLS; c++) {
+        if (columnFree(c)) freeCols.push(c);
+      }
+      if (freeCols.length === 0) {
+        aiThinking = false;
+        setBoardEnabled(gameActive);
+        return;
+      }
+
+      // لكل عامود وزن: القلوب (3,4) وزنهم 3, الطرفان (0,6) وزنهم 0.5
+      const weights = [0.5, 1, 2, 3, 3, 2, 0.5];
+      let totalWeight = 0;
+      freeCols.forEach(c => totalWeight += weights[c]);
+      let rand = Math.random() * totalWeight;
+      for (let c of freeCols) {
+        rand -= weights[c];
+        if (rand <= 0) {
+          moveCol = c;
+          break;
+        }
+      }
+      // فالحالة ما اختارش (احتياطي)
+      if (moveCol === null) moveCol = freeCols[0];
+    }
+
+    if (moveCol !== null) {
+      makeMove(moveCol, 2);
+    }
+
+    aiThinking = false;
+    setBoardEnabled(gameActive && !(mode === 'ai' && currentPlayer === 2));
+    updateTurnText();
+  }, 280);
+}
+    
     function resetGame() {
       emptyBoard();
       currentPlayer = 1;
