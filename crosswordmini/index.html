@@ -126,37 +126,37 @@
       transform: scale(1.02);
     }
 
-    /* ----- منطقة اللعب: grid + clues متجاورين و متقاربين ----- */
+    /* ----- منطقة اللعب: grid + clues متجاورين بشكل أقرب ----- */
     .game-layout {
       display: flex;
       flex-direction: row;
-      gap: 1.5rem; /* متقاربين */
+      gap: 0.6rem; /* متقاربين جداً كما طلبت */
       flex-wrap: wrap;
       justify-content: center;
       margin-bottom: 3.5rem;
     }
 
-    /* الشبكة مصغرة و متقاربة */
+    /* الشبكة مضغوطة */
     .crossword-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px; /* متقاربة جداً */
+      gap: 4px;
       background: var(--surface-light);
       backdrop-filter: blur(8px);
-      padding: 1.2rem;
+      padding: 1rem;
       border-radius: 28px;
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border-light);
-      max-width: 480px;
+      max-width: 460px;
       width: fit-content;
     }
 
     .cell {
       aspect-ratio: 1 / 1;
-      width: 52px; /* أصغر قليلاً */
+      width: 50px; /* أصغر قليلاً لتتناسب مع التقارب */
       background: var(--surface-light);
       border: 2px solid var(--border-light);
-      border-radius: 16px;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -169,8 +169,8 @@
       content: attr(data-number);
       position: absolute;
       top: 2px;
-      left: 4px;
-      font-size: 0.65rem;
+      left: 3px;
+      font-size: 0.6rem;
       font-weight: 600;
       color: var(--text-soft-light);
       opacity: 0.8;
@@ -182,12 +182,12 @@
       border: none;
       background: transparent;
       text-align: center;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 550;
       text-transform: uppercase;
       color: var(--text-light);
       outline: none;
-      border-radius: 14px;
+      border-radius: 12px;
       caret-color: var(--accent-light);
     }
 
@@ -209,29 +209,29 @@
       border-color: var(--error-light);
     }
 
-    /* لوحة clues مصغرة (45% من المساحة) */
+    /* لوحة clues أصغر حجماً وملاصقة للشبكة */
     .clues-panel {
       background: var(--surface-light);
       backdrop-filter: blur(8px);
-      border-radius: 28px;
-      padding: 1.5rem 1.2rem;
+      border-radius: 24px;
+      padding: 1.2rem 1rem;
       box-shadow: var(--shadow-lg);
       border: 1px solid var(--border-light);
-      width: 280px; /* ثابت و صغير */
+      width: 260px; /* أضيق قليلاً */
       flex-shrink: 0;
     }
 
     .clues-panel h3 {
       font-weight: 600;
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
       border-bottom: 3px solid var(--accent-soft-light);
       display: inline-block;
       padding-bottom: 0.2rem;
     }
 
     .clue-section {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
     }
 
     .clue-list {
@@ -239,9 +239,9 @@
     }
 
     .clue-list li {
-      padding: 0.3rem 0;
+      padding: 0.25rem 0;
       border-bottom: 1px dashed var(--border-light);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       display: flex;
       gap: 0.5rem;
       color: var(--text-soft-light);
@@ -250,10 +250,10 @@
     .clue-number {
       font-weight: 700;
       color: var(--accent-light);
-      min-width: 24px;
+      min-width: 22px;
     }
 
-    /* ----- BLOG SECTION مع تقسيم احترافي: Basic Rules / Pro Techniques / Tips ----- */
+    /* ----- BLOG SECTION مع تقسيم احترافي ----- */
     .blog-section {
       margin: 3.5rem 0 2.5rem;
     }
@@ -268,7 +268,7 @@
     .blog-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1.8rem;
+      gap: 1.5rem;
     }
 
     .blog-card {
@@ -287,25 +287,21 @@
     }
 
     .blog-card h3 {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 600;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
       color: var(--accent-light);
     }
 
-    .blog-card p {
+    .blog-card p, .blog-card ul {
       color: var(--text-soft-light);
       line-height: 1.6;
       font-size: 0.95rem;
     }
 
     .blog-card ul {
-      margin-top: 0.8rem;
+      margin-top: 0.6rem;
       padding-left: 1.2rem;
-      color: var(--text-soft-light);
-    }
-    .blog-card li {
-      margin-bottom: 0.4rem;
     }
 
     /* ----- SUPPORT CARD ----- */
@@ -373,11 +369,11 @@
 
     .win-modal {
       background: var(--surface-light);
-      padding: 2.8rem 3.5rem;
+      padding: 2.5rem 3rem;
       border-radius: 56px;
       box-shadow: var(--shadow-lg);
       text-align: center;
-      max-width: 420px;
+      max-width: 400px;
       border: 1px solid var(--border-light);
       animation: modalPop 0.4s ease;
     }
@@ -388,8 +384,8 @@
     }
 
     .win-modal h2 {
-      font-size: 2.8rem;
-      margin-bottom: 1rem;
+      font-size: 2.5rem;
+      margin-bottom: 0.8rem;
       color: var(--accent-light);
     }
 
@@ -407,6 +403,7 @@
     @media (max-width: 800px) {
       .blog-grid { grid-template-columns: 1fr; }
       .game-layout { flex-direction: column; align-items: center; }
+      .cell { width: 45px; }
     }
   </style>
 </head>
@@ -425,7 +422,7 @@
     <button class="restart-btn" id="restartBtn">↻ Restart</button>
   </div>
 
-  <!-- منطقة اللعب: grid + clues (متقاربين) -->
+  <!-- منطقة اللعب: grid + clues (متقاربين جداً) -->
   <div class="game-layout">
     <div id="gridContainer" class="crossword-grid"></div>
     <div class="clues-panel">
@@ -446,7 +443,7 @@
     <div class="blog-grid">
       <div class="blog-card">
         <h3>Basic Rules</h3>
-        <p>Fill the 7×7 grid with letters so every row and column forms a word. Numbers indicate start of a word. Use the clues on the left.</p>
+        <p>Fill the 7×7 grid so every row and column forms a word. Numbers indicate start of a word. Use the clues on the left.</p>
         <ul>
           <li>One letter per white cell</li>
           <li>No skipping cells</li>
