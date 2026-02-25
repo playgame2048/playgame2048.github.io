@@ -103,16 +103,17 @@
 .back-button:hover {
     transform: translateY(-5px) scale(1.02);
     background: linear-gradient(145deg, var(--accent), var(--accent-hover));
-    color: white;
     box-shadow: 0 20px 30px -8px var(--accent),
                 0 0 0 2px rgba(255,255,255,0.3) inset;
     border-color: transparent;
+    color: #000000;  /* يبقى أسود */
 }
 
 .back-button:hover .back-arrow,
 .back-button:hover .back-text {
     color: white;
     text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    color: #000000;  /* السهم والنص يبقيا أسود */
 }
 
 .back-arrow {
@@ -120,6 +121,7 @@
     line-height: 1;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
     transition: transform 0.3s ease;
+    color: #000000;  /* أسود */
 }
 
 .back-button:hover .back-arrow {
@@ -130,6 +132,7 @@
     font-size: 1.6rem;
     font-weight: 600;
     transition: transform 0.3s ease;
+    color: #000000;  /* أسود */
 }
 
 /* تأثير إضافي عند الضغط */
