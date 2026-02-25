@@ -102,6 +102,26 @@
       flex-wrap: wrap;
     }
 
+      /* باش تزين الزرار الجديد */
+.back-btn {
+    background: transparent;
+    border: 2px solid var(--accent-blue);
+    color: var(--accent-blue);
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border-radius: 40px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+      
+.back-btn:hover {
+    background: var(--accent-blue);
+    color: white;
+    transform: scale(1.02);
+    box-shadow: 0 8px 16px -6px var(--accent-blue);
+}
     .dark-mode-control {
       display: flex;
       align-items: center;
@@ -523,6 +543,8 @@
 
   <!-- control row: dark mode with label + restart -->
   <div class="controls-row">
+      <!-- داخل controls-row، قبل dark-mode-control -->
+<button class="back-btn" id="backToLandingBtn">← Back</button>
     <div class="dark-mode-control">
       <span class="dark-label">Dark mode</span>
       <label class="switch">
@@ -913,6 +935,11 @@ function aiMove() {
       window.open('https://omg10.com/4/10649169', '_blank');
     });
 
+      // فـ نهاية script (مع باقي الـ event listeners)
+document.getElementById('backToLandingBtn').addEventListener('click', () => {
+    // حط هنا الرابط ديال landing page ديالك
+    window.location.href = 'https://playgame2048.github.io';
+});
     // initial render
     resetGame();
   })();
