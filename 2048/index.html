@@ -81,7 +81,7 @@
     box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.3),
                 0 0 0 1px rgba(255,255,255,0.1) inset;
     text-decoration: none;
-    color: var(--accent);
+    color: var(--back-text);
     font-weight: 700;
     font-size: 1.6rem;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -96,11 +96,11 @@
 
 .back-button:hover {
     transform: translateY(-5px) scale(1.02);
-    background: linear-gradient(145deg, var(--accent), var(--accent-hover));
+    background: var(--back-hover-bg);  /* خلفية hover حسب الوضع */
+    color: var(--back-text);           /* اللون يبقى ثابت حسب الوضع */
     box-shadow: 0 20px 30px -8px var(--accent),
                 0 0 0 2px rgba(255,255,255,0.3) inset;
     border-color: transparent;
-    color: #000000;  /* يبقى أسود */
 }
 
 .back-button:hover .back-arrow,
@@ -115,7 +115,7 @@
     line-height: 1;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
     transition: transform 0.3s ease;
-    color: #000000;  /* أسود */
+    color: var(--back-text);           /* يتبع اللون */
 }
 
 .back-button:hover .back-arrow {
@@ -126,8 +126,7 @@
     font-size: 1.6rem;
     font-weight: 600;
     transition: transform 0.3s ease;
-    color: #000000;  /* أسود */
-}
+    color: var(--back-text);           /* يتبع اللون */
 
 /* تأثير إضافي عند الضغط */
 .back-button:active {
