@@ -75,32 +75,40 @@
       padding-left: 0;       /* الحاوية الرئيسية تبدأ من اليسار */
       margin-left: 0;
     }
-/* زر العودة للصفحة الرئيسية */
 .back-button {
     position: fixed;
     top: 20px;
     left: 20px;
-    width: 48px;
-    height: 48px;
     background-color: var(--surface);
     border: 1px solid var(--border-light);
-    border-radius: 50%;
+    border-radius: 40px;
     box-shadow: var(--shadow);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
+    padding: 0.8rem 1.5rem;
     text-decoration: none;
     color: var(--accent);
     transition: all 0.2s ease;
-    z-index: 1000; /* باش يكون فوق كل شي */
+    z-index: 1000;
     backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 500;
 }
 
 .back-button:hover {
-    transform: scale(1.1);
+    transform: translateY(-2px);
     background-color: var(--button-hover);
     color: var(--accent-hover);
+}
+
+.back-arrow {
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.back-text {
+    font-size: 1.1rem;
 }
 
     /* ----- title alone (centered) ----- */
@@ -541,21 +549,28 @@
     display: none;
   }
 }
-      /* للشاشات الصغيرة: يمكن تصغير الزر شوية */
+/* للشاشات الصغيرة */
 @media (max-width: 550px) {
     .back-button {
-        width: 40px;
-        height: 40px;
-        font-size: 1.8rem;
         top: 10px;
         left: 10px;
+        padding: 0.5rem 1rem;
+    }
+    .back-arrow {
+        font-size: 1.5rem;
+    }
+    .back-text {
+        font-size: 0.9rem;
     }
 }
       
   </style>
 </head>
 <body>
-<a href="https://playgame2048.github.io" class="back-button" title="Back to Home">← Back</a>
+<a href="https://playgame2048.github.io" class="back-button" title="Back to Home">
+    <span class="back-arrow">←</span>
+    <span class="back-text">Back</span>
+</a>
 <div class="app">
   <!-- title alone, centered -->
   <h1 class="main-title">CONNECT 4</h1>
