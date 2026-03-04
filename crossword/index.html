@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Crossword Mini</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* =============================================
+   CSS VARIABLES & THEME
+   ============================================= */
+:root {
+  --bg:          #f4f1eb;
+  --bg2:         #ede9e0;
+  --surface:     #ffffff;
+  --surface2:    #faf8f4;
+  --border:      #d9d3c7;
+  --text:        #1a1714;
+  --text2:       #5a534a;
+  --text3:       #8a8279;
+  --accent:      #c4622d;
+  --accent2:     #e8844f;
+  --accent-soft: #f5ddd1;
+  --cell-empty:  #ffffff;
+  --cell-active: #fde8d8;
+  --cell-word:   #fef4ee;
+  --cell-correct:#d6f0d6;
+  --cell-black:  #1a1714;
+  --shadow:      0 4px 24px rgba(26,23,20,0.08);
+  --shadow-lg:   0 8px 48px rgba(26,23,20,0.12);
+  --radius:      12px;
+  --radius-lg:   20px;
+  --transition:  0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+[data-theme="dark"] {
+  --bg:          #1c1917;
+  --bg2:         #231f1c;
+  --surface:     #2a2522;
+  --surface2:    #322e2a;
+  --border:      #3d3732;
+  --text:        #f0ebe3;
+  --text2:       #b8b0a4;
+  --text3:       #7a7269;
+  --accent:      #e8844f;
+  --accent2:     #f4a374;
+  --accent-soft: #3d2518;
+  --cell-empty:  #2a2522;
+  --cell-active: #4a2c18;
+  --cell-word:   #3a2518;
+  --cell-correct:#1a3520;
+  --cell-black:  #0e0c0b;
+  --shadow:      0 4px 24px rgba(0,0,0,0.3);
+  --shadow-lg:   0 8px 48px rgba(0,0,0,0.4);
+}
+
+/* =============================================
+   RESET & BASE
+   ============================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  transition: background var(--transition), color var(--transition);
+}
+
+/* =============================================
+   HEADER
+   ============================================= */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 34px;
+  height: 34px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  padding: 6px;
+}
+
+.logo-icon span {
+  background: white;
+  border-radius: 2px;
+  display: block;
+}
+
+.logo-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.logo-text em {
+  color: var(--accent);
+  font-style: normal;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Dark mode toggle */
+.theme-toggle {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.theme-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggle-track {
+  position: absolute;
+  inset: 0;
+  background: var(--border);
+  border-radius: 100px;
+  transition: background var(--transition);
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  background: var(--surface);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: transform var(--transition), background var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.theme-toggle input:checked ~ .toggle-track { background: var(--accent); }
+.theme-toggle input:checked ~ .toggle-thumb { transform: translateX(24px); }
+
+/* =============================================
+   MAIN LAYOUT
+   ============================================= */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+/* =============================================
+   GAME HEADER
+   ============================================= */
+.game-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.game-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.game-subtitle {
+  color: var(--text3);
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* =============================================
+   GAME CONTAINER
+   ============================================= */
+.game-container {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: clamp(20px, 4vw, 40px);
+  margin-bottom: 48px;
+  border: 1px solid var(--border);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.game-layout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =============================================
+   CROSSWORD GRID
+   ============================================= */
+.grid-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+#crossword-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 3px;
+  background: var(--border);
+  border-radius: 10px;
+  padding: 3px;
+  box-shadow: var(--shadow);
+}
+
+.cell {
+  width: clamp(48px, 10vw, 62px);
+  height: clamp(48px, 10vw, 62px);
+  background: var(--cell-empty);
+  border-radius: 6px;
+  position: relative;
+  cursor: pointer;
+  transition: background var(--transition), transform 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell:hover:not(.black) { transform: scale(1.03); }
+
+.cell.black {
